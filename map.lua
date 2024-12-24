@@ -89,14 +89,14 @@ function darkroom()
 	memcpy(0x0,0x6000,0x2000)
 	poke(0x5f55,0x0)
 	fillp(rnd({▒,░,…}))
-	rectfill(mapx,mapy,mapx+127,mapy+127,0)
+	rectfill(mapx,mapy,mapx+128,mapy+128,0)
 	draw_torch_light()
 	draw_character_light()
 	if (raindrops) draw_rain()
 	poke(0x5f55,0x60)
 	pal({1,0,1,0,1,0,0,1,1,1,1,1,0,0,0,0})
 	if zoom_view then
-		sspr(0,0,50,50,p.x-29,p.y-31)
+		sspr(0,0,64,64,p.x-29,p.y-31)
 	else
 		sspr(0,0,128,128,mapx,mapy)
 	end

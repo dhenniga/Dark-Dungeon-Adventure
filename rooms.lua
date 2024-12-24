@@ -349,7 +349,7 @@ end
 --
 
 function load_room_objects(room_id)
-    active_objects = room_objects[room_id] or {} -- Load objects or default to empty
+    active_objects = room_objects[room_id] or {}
 end
 
 --
