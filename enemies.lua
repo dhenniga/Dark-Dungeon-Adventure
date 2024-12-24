@@ -59,6 +59,7 @@ function new_bat(x,y)
     dy=0,
     w=8,
     h=8,
+    can_fly=true,
     prox=0.2,
     angle=0,
     speed=0.5,
@@ -78,6 +79,7 @@ function new_rat(x,y)
     dy=0,
     w=8,
     h=8,
+    can_fly=false,
     prox=0.2,
     angle=0,
     speed=0.5,
@@ -97,6 +99,7 @@ function new_blob(x,y)
     dy=0,
     w=8,
     h=8,
+    can_fly=false,
     prox=0.2,
     angle=0,
     speed=0.5,
@@ -138,19 +141,27 @@ function baddie_update(b)
   new_x += b.dx*t_increment
   new_y += b.dy*t_increment
 
-  if not enemy_can_move(b) then
+  local can_move_func = b.can_fly and flying_enemy_can_move or ground_enemy_can_move
   
-  -- if map_collision(new_x,new_y) then
- 	if b.direction == BTN_R then b.direction = BTN_L left(b,b.speed) b.state="BOUNCE"
-   elseif b.direction == BTN_L then b.direction = BTN_R right(b,b.speed) b.state="BOUNCE"
-   elseif b.direction == BTN_U then b.direction = BTN_D down(b,b.speed) b.state="BOUNCE"
-   elseif b.direction == BTN_D then b.direction = BTN_U up(b,b.speed) b.state="BOUNCE"
- end
- else
-		b.x += b.dx*t_increment
-		b.y += b.dy*t_increment
- end
-
+  if not can_move_func(b) then
+    if b.direction==BTN_R then
+      b.direction=BTN_L
+      left(b,b.speed)
+    elseif b.direction == BTN_L then
+      b.direction=BTN_R
+      right(b,b.speed)
+    elseif b.direction==BTN_U then
+      b.direction=BTN_D
+      down(b,b.speed)
+    elseif b.direction==BTN_D then
+      b.direction=BTN_U
+      up(b,b.speed)
+    end
+    b.state="BOUNCE"
+  else
+    b.x+=b.dx*t_increment
+    b.y+=b.dy*t_increment
+  end
 
  	-- if sprite_collision(p, b) then
 	-- 	q.add_event("collision")

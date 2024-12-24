@@ -72,16 +72,24 @@ end
 
  --
 
- function enemy_can_move(a)
+ function ground_enemy_can_move(a)
   local nx_l,nx_r,ny_t,ny_b=a.x+a.dx,a.x+a.dx+a.w,a.y+a.dy,a.y+a.dy+a.h
 
+  if is_fall_tile(nx_l+4,ny_t+6) or is_fall_tile(nx_r-4, ny_t+6) or
+     is_fall_tile(nx_l+4,ny_b-2) or is_fall_tile(nx_r-4, ny_b-2) then
+   return false
+  end
 
-  -- if is_fall_tile(px_l+4,py_t+6) or is_fall_tile(px_r-4, py_t+6) or
-  --    is_fall_tile(px_l+4,py_b-2) or is_fall_tile(px_r-4, py_b-2) then
-  --     sfx(15)
-  --    determine_fall_direction(p)
-  --  return false
-  -- end
+  if solid(nx_l+2,ny_t+4) or solid(nx_r-2,ny_t+4) or
+     solid(nx_l+2,ny_b-2) or solid(nx_r-2,ny_b-2) then
+    return false
+  end
+
+  return true
+end
+
+function flying_enemy_can_move(a)
+  local nx_l,nx_r,ny_t,ny_b=a.x+a.dx,a.x+a.dx+a.w,a.y+a.dy,a.y+a.dy+a.h
 
   if solid(nx_l+2,ny_t+4) or solid(nx_r-2,ny_t+4) or
      solid(nx_l+2,ny_b-2) or solid(nx_r-2,ny_b-2) then

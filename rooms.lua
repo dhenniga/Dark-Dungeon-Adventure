@@ -28,7 +28,7 @@ room_objects = {
     {x=96, y=16,flags={flames=true}},{x=96+8,y=16+4,r=20,flags={light=true}},
  
     --Baddies
-    -- {x=80,y=80,flags={bat=true}},-- Bat
+    {x=80,y=80,flags={bat=true}},-- Bat
 
     {flags={dungeon=true, zoom=false, rain=false}},
 
@@ -44,8 +44,8 @@ room_objects = {
     {x=96,y=96,flags={vase=true, solid=true}},
     {x=96,y=80,flags={vase=true, solid=true}},
   
-    -- {x=20,y=90,flags={bat=true}}, -- Bat
-    -- {x=100,y=40,flags={rat=true}}, -- Rat
+    {x=20,y=90,flags={bat=true}}, -- Bat
+    {x=100,y=40,flags={rat=true}}, -- Rat
 
     {flags={sewer=true, rain=true}},
 
