@@ -95,5 +95,5 @@ function in𝘰ut𝘤ubic(t,b,c,d)
 end
 
 function out𝘤ubic(t,b,c,d)
-  return c*(pow(t/d-1,3)+1)+b
+  return c*(pow(t/d-1,3)+1)-b
 end

@@ -4,24 +4,26 @@ local inv_timer=0
 
 function draw_inventory()	
 
-	print(get_current_room(),mapx,mapy,9) -- room number
+	-- print(get_current_room(),mapx,mapy,9) -- room number
 
 -- lives
 	for i=1,p.total_hearts do
-		if iscamfollow then
-		if p.remaining_hearts>=i then
-			spr(238,mapx+shl(i,3)-8,mapy+118,1,1)
-		else
-			spr(239,mapx+shl(i,3)-8,mapy+118,1,1)
-		end
 
+		if zoom_view then
+			if p.remaining_hearts>=i then
+				sspr(96,8,3,3,p.x+shl(i,2)-32,p.y+29)
+			else
+				sspr(101,8,3,3,p.x+shl(i,2)-32,p.y+29)
+			end
+			
 		else
 			if p.remaining_hearts>=i then
-			spr(238,p.x-64+shl(i,3)-8,p.y+54,1,1)
+				spr(238,mapx+shl(i,3)-8,mapy+118,1,1)
 			else
-				spr(239,p.x-64+shl(i,3)-8,p.y+54,1,1)
+				spr(239,mapx+shl(i,3)-8,mapy+118,1,1)
 			end
 		end
+
 	end
 
 	--
@@ -34,12 +36,14 @@ function draw_inventory()
 			end
 		end	
 		if inv_timer==1 then sfx(13) end
+		p.dx=0
+		p.dy=0
 		allow_movement=false
 		show_inventory()
 	else
 		t_increment=1
-		allow_movement=true
 		inv_timer=0
+		allow_movement=true
 	end
 
 end
@@ -53,17 +57,31 @@ local right_item=0
 
 function curr_item()
 
-if iscamfollow then
-	if (item_selected==1) spr(207,mapx+8,mapy+4,1,2) --lanturn
-	if (item_selected==4) spr(110,mapx+4,mapy+4,2,2) --sword
-else 
-	if (item_selected==1) spr(207,p.x-64,p.y-64,1,2) --lanturn
-	if (item_selected==4) spr(110,p.x-64,p.y-64,2,2) --sword
-end
+if (item_selected==1) spr(207,mapx+8,mapy+4,1,2) --lanturn
+if (item_selected==4) spr(110,mapx+4,mapy+4,2,2) --sword
+
 end
 
+--
+
+function p4bonus(s,x,y,c,o) -- 34 tokens, 5.7 seconds
+  color(o)
+  ?'\-f'..s..'\^g\-h'..s..'\^g\|f'..s..'\^g\|h'..s,x,y
+  ?s,x,y,c
+end
+
+--
 
 function show_inventory()
+
+	for obj in all(active_objects) do
+    if obj.flags.name then
+			if reading==false then
+				p4bonus(get_current_room(),mapx+0,mapy+104,11,0)
+				p4bonus(obj.name,mapx+0,mapy+112,11,0)
+			end
+		end
+	end
 
 	if (btnp(BTN_U)) item_selected=1 sfx(11)
 	if (btnp(BTN_D)) item_selected=2 sfx(11)  
@@ -102,15 +120,9 @@ function show_inventory()
 	-- small key
 	if p.keys==0 then
 		fillp(█)
-		if iscamfollow then
-			circfill(mapx+121,mapy+6,6,3)
-			spr(190,mapx+118,mapy+3,1,1)
-	 	else
-	 		circfill(p.x+6-64,p.y-64+5,6,3)
-			spr(190,p.x-64+3,p.y-64+2,1,1)
-		end
+		circfill(mapx+121,mapy+6,6,3)
+		spr(190,mapx+118,mapy+3,1,1) 	
 	end
-
 
  	-- lantern
 	fillp(0x0000)

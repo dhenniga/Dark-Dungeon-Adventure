@@ -5,13 +5,14 @@ active_objects = {}
 
 room_objects = {
   ["0_0"] = {
-    {x=64, y=0,flp=false,flags={door=true, solid=true}}, --doortop
+    {name="CASTLE ENTRANCE", flags={name=true}},
+    {x=64, y=0,flp=false,flags={door=true, solid=false}}, --doortop
     {x=64,y=0,vori=true,flp=false,flags={door_arches=true}}, --door arch top
     {x=56,y=8,r=15,flags={light=true}},{x=79,y=8,r=15,flags={light=true}}, --side lights
     
-    --{x=64, y=112,flp=false,fy=1,flags={door=true, solid=true}}, --doorbottom
-    {x=64,y=120,vori=true,flp=true,flags={door_arches=true}}, --door arch bottom
-    {x=56,y=120,r=15,flags={light=true}},{x=79,y=120,r=15,flags={light=true}}, --side lights
+    -- {x=64, y=112,flp=false,fy=1,flags={door=true, solid=true}}, --doorbottom
+    {x=64,y=120,vori=true,flp=true,flags={door_arches=true, exit_room=true}}, --door arch bottom
+    -- {x=56,y=120,r=15,flags={light=true}},{x=79,y=120,r=15,flags={light=true}}, --side lights
     
     {x=33,y=5,sprite=170,text={
       "WELCOME TO THE DARK\nDUNGEONS OF THE SPOOKY\nCASTLE OF NAME. CONTAINED\nWITHIN THESE DANK WALLS ARE\nSECRETS, TRIALS...",
@@ -19,17 +20,21 @@ room_objects = {
       "ILLUMINATION, YOU MUST\nBRAVE THE TERRORS IN THE\nDARK.\nMAY GOD HAVE MERCY\nON YOUR SOUL!"},
     flags={sign=true, interactable=true, solid=true}}, --sign
 
+    {x=64,y=64,flags={standard_rock=true, solid=true}},
+    {x=80,y=64,flags={standard_rock=true, solid=true}},
+
     --Flames
     {x=16, y=16,flags={flames=true}},{x=16+8,y=16+4,r=20,flags={light=true}},
     {x=96, y=16,flags={flames=true}},{x=96+8,y=16+4,r=20,flags={light=true}},
  
     --Baddies
-    {x=80,y=80,flags={bat=true}},-- Bat
+    -- {x=80,y=80,flags={bat=true}},-- Bat
 
-    {flags={dungeon=true}},
+    {flags={dungeon=true, zoom=false, rain=false}},
 
   },
   ["0_1"] = {
+    {name="CASTLE GARDEN STORAGE", flags={name=true}},
     {x=64,y=0,flp=false,flags={door=true}}, --doortop
     {x=56,y=8,r=15,flags={light=true}},{x=87,y=8,r=15,flags={light=true}},
     {x=64,y=0,vori=true,flp=false,flags={door_arches=true}}, --door arch top
@@ -39,10 +44,10 @@ room_objects = {
     {x=96,y=96,flags={vase=true, solid=true}},
     {x=96,y=80,flags={vase=true, solid=true}},
   
-    {x=20,y=90,flags={bat=true}}, -- Bat
+    -- {x=20,y=90,flags={bat=true}}, -- Bat
     -- {x=100,y=40,flags={rat=true}}, -- Rat
 
-    {flags={sewer=true}},
+    {flags={sewer=true, rain=true}},
 
   },
   ["0_2"] = {
@@ -63,11 +68,17 @@ room_objects = {
 
   },
   ["1_0"] = {
-    {x=112,y=32,flp=true,flags={door=true, solid=true}}, --doorright
+    {name="ENTRANCE LOBBY INNER", flags={name=true}},
+    -- {x=112,y=32,flp=true,flags={door=true, solid=true}}, --doorright
     {x=118,y=22,r=15,flags={light=true}},{x=118,y=52,r=15,flags={light = true}}, --lights
     {x=120,y=32,vori=false,flp=true,flags={door_arches=true}}, --door arch
+
+    {x=32,y=96,flags={standard_rock=true, solid=true}},
+    {x=96,y=96,flags={standard_rock=true, solid=true}},
+
   },
   ["1_1"] = {
+    {name="CASTLE GARDEN STORAGE", flags={name=true}},
     {x=112,y=32,flp=true,flags={door=true}}, --doorright
     {x=118,y=22,flp=true,r=15,flags={light=true}},{x=118,y=52,r=15,flags={light = true}}, --lights
     {x=120,y=32,vori=false,flp=true,flags={door_arches=true}}, --door arch
@@ -78,15 +89,26 @@ room_objects = {
     {x=0,y=80,flags={vase=true, solid=true}},
     {x=0,y=96,flags={vase=true, solid=true}},
 
-    {flags={sewer=true}},
+    {x=96,y=16,flags={vase=true, solid=true}},
+    {x=96,y=48,flags={vase=true, solid=true}},
+
+    {x=16,y=16,flags={vase=true, solid=true}},
+    {x=32,y=16,flags={vase=true, solid=true}},
+
+    -- {x=100,y=40,flags={rat=true}}, -- Rat
+
+    {flags={sewer=true, zoom=false, rain=true}},
   },
   ["1_2"] = {
       {x = 24, y = 24, sprite = 18, flags = {interactable = true}}
   },
   ["2_0"] = {
+    {name="THE BOTTOMLESS PATHS - WEST", flags={name=true}},
     {x=0,y=32,vori=false,flp=false,flags={door_arches=true}}, --door arch
     {x=48,y=120,vori=true,flp=true,flags={door_arches=true}}, --door arch bottom
     {x=18,y=100,sprite=254,flags={key=true, interactable=true}} -- key
+
+
 
   },
   ["2_1"] = {
@@ -96,12 +118,16 @@ room_objects = {
 
     {x=48,y=0,vori=true,flp=false,flags={door_arches=true}}, --door arch top
 
-    {flags={dungeon=true}},
+    {flags={dungeon=true, zoom=true, rain=false}},
 
 
   },
+  ["3_0"] = {
+    {name="THE BOTTOMLESS PATHS - EAST", flags={name=true}},
+  },
   ["3_1"] = {
-    {sprite=13, x=50,y=40,w=2,h=2, flags={chest=true}}
+    {name="THE BOTTOMLESS PATHS - SOUTH", flags={name=true, zoom=false}},
+    {sprite=13, x=70,y=40,w=2,h=2, flags={chest=true, solid=true, interactable={true}}}
   },
   ["4_0"] = {
     {x=64, y=112,flp=false,fy=1,flags={door=true}}, --doorbottom
@@ -111,10 +137,16 @@ room_objects = {
     {x=80, y=32,flags={flames=true}},{x=80+8,y=32+4,r=30,flags={light=true}}, -- flame block
   },
   ["4_1"] = {
+    {name="MYSTERY KEY ROOM", flags={name=true}},
     {x=64,y=0,vori=true,flp=false,flags={door_arches=true}}, --door arch bottom
-    {x=34,y=6,sprite=170,text={"THE KEY ON THE TABLE\nUNLOCKS A DOOR ON THIS\nFLOOR...\n\nBUT WHICH ONE?"},flags={sign=true, interactable=true}}, --sign
+    {x=34,y=6,sprite=170,text={"THE KEY ON THE TABLE\nUNLOCKS A DOOR ON THIS\nFLOOR...\n\nBUT WHICH ONE?"},flags={sign=true, solid=true, interactable=true}}, --sign
     {x=56,y=64,sprite=254,flags={key=true, interactable=true}} -- key
 
+  },
+  ["5_0"] = {
+    {x=32,y=16,flags={standard_rock=true, solid=true}},
+    {x=48,y=32,flags={cracked_rock=true,solid=true}},
+    {x=64,y=48,flags={standard_rock=true,solid=true}},
   }
 }
 
@@ -122,6 +154,7 @@ room_objects = {
 
 function draw_sign_dialog()
   for obj in all(active_objects) do
+
     if obj.flags.interactable then
       
       if obj.flags.sign then
@@ -132,6 +165,7 @@ function draw_sign_dialog()
           if btn(BTN_O) and reading==false and val==0 then
             dset(0, flr(p.x))
             dset(1, flr(p.y))
+            dset(2, p.remaining_hearts)
             t_increment=0.05		
             tb_init(14,obj.text)
           end
@@ -148,6 +182,13 @@ function draw_sign_dialog()
         end
       end
 
+      if obj.flags.chest then
+        local len = abs(mapx+obj.x-p.x)+abs(mapy+obj.y-p.y+6)
+        if len<20 and len>0 then
+          sspr(29,80,3,7,p.x+8,p.y-8)
+        end
+      end
+
     end
   end
 end
@@ -156,12 +197,20 @@ end
 function draw_background_sprites()
   for obj in all(active_objects) do
 
+    if obj.flags.zoom then
+      zoom_view=true
+     end
+
+     if obj.flags.zoom==false then
+      zoom_view=false
+     end
+
     if obj.flags.sewer then
-     pallette(sewer)
+     palette(sewer)
     end
 
     if obj.flags.dungeon then
-      pallette(dungeon)
+      palette(dungeon)
      end
 
     if obj.flags.vase then 
@@ -174,7 +223,7 @@ function draw_background_sprites()
 
     if obj.flags.key then
       if not btn(BTN_O) then
-      spr(obj.sprite,mapx+obj.x,mapy+obj.y,2,1)
+        spr(obj.sprite,mapx+obj.x,mapy+obj.y,2,1)
       end
     end
 
@@ -193,6 +242,24 @@ function draw_background_sprites()
     end
 
     --
+
+    if obj.flags.standard_rock then
+      spr(134,mapx+obj.x,mapy+obj.y,2,2)
+    end
+
+    --
+
+    if obj.flags.cracked_rock then
+      spr(136,mapx+obj.x,mapy+obj.y,2,2)
+    end
+
+    if obj.flags.rain then
+      raindrops=true 
+    end
+
+    if obj.flags.rain==false then
+      raindrops=false 
+    end
 
   end
 end
@@ -220,22 +287,44 @@ function draw_foreground_sprites()
       obj.spawned=true
     end
 
+
     -- Door Arches
     if obj.flags.door_arches then
       if obj.vori then
+          if (obj.flp==false) rectfill(mapx+obj.x-4,mapy+obj.y+2,mapx+obj.x+19,mapy+obj.y-6,0)
+        if (obj.flp==true) rectfill(mapx+obj.x-4,mapy+obj.y+5,mapx+obj.x+19,mapy+obj.y+13,0) 
         spr(49,mapx+obj.x+8,mapy+obj.y,1,1,false,obj.flp)
-        spr(12,mapx+obj.x,mapy+obj.y,1,1,false,obj.flp)
+        spr(49,mapx+obj.x,mapy+obj.y,1,1,true,obj.flp)
       else
-        spr(28,mapx+obj.x,mapy+obj.y,1,1,obj.flp,false)
+        --SIDE ONES
+        -- if (obj.flp==true) rectfill(mapx+obj.x+8,mapy+obj.y-16,mapx+obj.x+16,mapy+obj.y+8,9)
+        -- if (obj.flp==false) rectfill(mapx+obj.x+8,mapy+obj.y-16,mapx+obj.x+16,mapy+obj.y,10)
+        spr(51,mapx+obj.x,mapy+obj.y,1,1,obj.flp,true)
         spr(51,mapx+obj.x,mapy+obj.y+8,1,1,obj.flp,false)
       end
     end
 
-    --
-
     -- Flames
     if obj.flags.flames then
       flames(mapx+obj.x,mapy+obj.y) 
+    end
+  end
+
+
+
+end
+
+function draw_screen_wipe()
+  for obj in all(active_objects) do
+    if obj.flags.exit_room and p.y>obj.y then
+      poke(0x5f34,0x2)
+      if radius_thing>0 then
+        for i=1,1 do
+          radius_thing-=1*t_increment
+          circfill(p.x+3,p.y,radius_thing,0|0x1800)
+          -- if radius_thing==0 then radius_thing=128 end
+        end
+      end
     end
   end
 end

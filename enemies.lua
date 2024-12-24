@@ -1,7 +1,7 @@
 -- enemies
 
 function angle_between(pl,b)
-	local res=flr(atan2(b.y-pl.y,b.x-pl.x)*12/pi)
+	local res=flr(atan2(b.y-pl.y,b.x-pl.x)*12/3.1415926535)
 	if (res==0) return 2
 	if (res==1) return 1
 	if (res==2) return 3
@@ -126,12 +126,9 @@ function baddie_draw(b)
     local dir=false
     if (b.direction==1) dir=false
     if (b.direction==0) dir=true
+
     if frb<#b.fr+0.9 then frb=frb+0.10*t_increment else frb=1 end	
     spr(b.fr[flr(frb)],b.x-4,b.y-4,2,2,dir)
-    -- spr(179,b.x,b.y,1,1)
-  
-  print(b.state,b.x-4,b.y-8,14)
-  -- line(p.x,p.y,b.x,b.y,10 )
 end
 
 function baddie_update(b)
@@ -141,7 +138,7 @@ function baddie_update(b)
   new_x += b.dx*t_increment
   new_y += b.dy*t_increment
 
-  if not can_move(b,b.dx,b.dy) then
+  if not enemy_can_move(b) then
   
   -- if map_collision(new_x,new_y) then
  	if b.direction == BTN_R then b.direction = BTN_L left(b,b.speed) b.state="BOUNCE"
@@ -155,12 +152,13 @@ function baddie_update(b)
  end
 
 
- 	if sprite_collision(p, b) then
-		q.add_event("collision")
-	end
+ 	-- if sprite_collision(p, b) then
+	-- 	q.add_event("collision")
+	-- end
+  
   
   if b.ttl<=0 then
-    if sees(p,b,l_rad*1.5,0,1,1,0) then
+    if sees(b,l_rad*1.5,0,1,1,0) then
       b.state="ATTACK"
       sset(76,119,3)
       sset(74,120,3)
@@ -171,16 +169,16 @@ function baddie_update(b)
 
       b.direction=angle_between(p,b)
       if b.direction==BTN_U then
-        up(b,b.att_speed)
+          up(b,b.att_speed)
         elseif b.direction==BTN_D then
           down(b,b.att_speed)
         elseif b.direction==BTN_R then
           right(b,b.att_speed)
         elseif b.direction==BTN_L then
-        left(b,b.att_speed)
+          left(b,b.att_speed)
       end
   
-  elseif rnd()>0.2 then
+    elseif rnd()>0.2 then
     b.state="WALK"
     sset(76,119,9)
     sset(74,120,9)
