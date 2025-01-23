@@ -120,7 +120,19 @@ baddie_m.update = function()
 end
 
 baddie_m.draw = function()
-  foreach(baddie_m.baddies, function(b) baddie_draw(b) end)
+  foreach(baddie_m.baddies, function(b) 
+    baddie_draw(b) 
+  end)
+end
+
+baddie_m.map = function()
+  foreach(baddie_m.baddies, function(b) 
+    if b.state=="ATTACK" then
+    place_on_map(b,3)
+    else
+      place_on_map(b,14)
+    end
+  end)
 end
 
 
@@ -132,6 +144,7 @@ function baddie_draw(b)
 
     if frb<#b.fr+0.9 then frb=frb+0.10*t_increment else frb=1 end	
     spr(b.fr[flr(frb)],b.x-4,b.y-4,2,2,dir)
+
 end
 
 function baddie_update(b)

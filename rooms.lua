@@ -6,7 +6,7 @@ active_objects = {}
 room_objects = {
   ["0_0"] = {
     {name="CASTLE ENTRANCE", flags={name=true}},
-    {x=64, y=0,flp=false,flags={door=true, solid=false}}, --doortop
+    {x=64, y=0,flp=false,flags={door=true, solid=true}}, --doortop
     {x=64,y=0,vori=true,flp=false,flags={door_arches=true}}, --door arch top
     {x=56,y=8,r=15,flags={light=true}},{x=79,y=8,r=15,flags={light=true}}, --side lights
     
@@ -35,8 +35,8 @@ room_objects = {
   },
   ["0_1"] = {
     {name="CASTLE GARDEN STORAGE", flags={name=true}},
-    {x=64,y=0,flp=false,flags={door=true}}, --doortop
-    {x=56,y=8,r=15,flags={light=true}},{x=87,y=8,r=15,flags={light=true}},
+    -- {x=64,y=0,flp=false,flags={door=true}}, --doortop
+    -- {x=56,y=8,r=15,flags={light=true}},{x=87,y=8,r=15,flags={light=true}},
     {x=64,y=0,vori=true,flp=false,flags={door_arches=true}}, --door arch top
 
     {x=112,y=96,flags={vase=true, solid=true}},
@@ -76,6 +76,9 @@ room_objects = {
     {x=32,y=96,flags={standard_rock=true, solid=true}},
     {x=96,y=96,flags={standard_rock=true, solid=true}},
 
+        --Baddies
+        {x=80,y=80,flags={bat=true}},-- Bat
+
   },
   ["1_1"] = {
     {name="CASTLE GARDEN STORAGE", flags={name=true}},
@@ -106,10 +109,11 @@ room_objects = {
     {name="THE BOTTOMLESS PATHS - WEST", flags={name=true}},
     {x=0,y=32,vori=false,flp=false,flags={door_arches=true}}, --door arch
     {x=48,y=120,vori=true,flp=true,flags={door_arches=true}}, --door arch bottom
-    {x=18,y=100,sprite=254,flags={key=true, interactable=true}} -- key
+    {x=18,y=100,sprite=254,flags={key=true, interactable=true}}, -- key
 
-
-
+    --Baddies
+    {x=80,y=80,flags={bat=true}},-- Bat
+    {x=60,y=20,flags={bat=true}},-- Bat
   },
   ["2_1"] = {
     {x=0,y=32,flp=true,fx=true,flags={door=true}}, --doorleft
@@ -319,10 +323,10 @@ function draw_screen_wipe()
     if obj.flags.exit_room and p.y>obj.y then
       poke(0x5f34,0x2)
       if radius_thing>0 then
-        for i=1,1 do
+        for i=1,3 do
           radius_thing-=1*t_increment
-          circfill(p.x+3,p.y,radius_thing,0|0x1800)
-          -- if radius_thing==0 then radius_thing=128 end
+          circfill(obj.x,obj.y,radius_thing,0|0x1800)
+          if radius_thing==0 then radius_thing=128 end
         end
       end
     end

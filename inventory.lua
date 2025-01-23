@@ -55,10 +55,14 @@ local bottom_item=0
 local left_item=0
 local right_item=0
 
+function place_on_map(obj,col)
+	pset(mapx+96+obj.x/16,mapy+96+obj.y/16,col)
+end
+
 function curr_item()
 
 if (item_selected==1) spr(207,mapx+8,mapy+4,1,2) --lanturn
-if (item_selected==4) spr(110,mapx+4,mapy+4,2,2) --sword
+if (item_selected==4) spr(72,mapx+4,mapy+4,2,2) --sword
 
 end
 
@@ -118,21 +122,21 @@ function show_inventory()
 	spr(192,p.x-4,p.y-6,2,2,p.direction)
 	
 	-- small key
-	if p.keys==0 then
+	if p.keys==1 then
 		fillp(█)
 		circfill(mapx+121,mapy+6,6,3)
-		spr(190,mapx+118,mapy+3,1,1) 	
+		spr(206,mapx+118,mapy+3,1,1) 	
 	end
 
  	-- lantern
 	fillp(0x0000)
 	circfill(p.x+2,p.y-20,outelastic(inv_timer,0,9,50),5)
-	spr(207,p.x-1,outelastic(inv_timer,p.y,-25,25),1,2)
+	spr(207,p.x-1,outelastic(inv_timer,p.y,-25,25),1,2) -- lanturn
 		
 	-- sword
 	fillp(0x0000)
 	circfill(p.x+23,p.y,outelastic(inv_timer,0,9,50),5)
-	spr(110,outelastic(inv_timer,p.x,16,25),p.y-8,2,2)
+	spr(72,outelastic(inv_timer,p.x,16,25),p.y-8,2,2) -- sword
 
 	-- something else
 	fillp(0x0000)

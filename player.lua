@@ -17,14 +17,22 @@ p={
 	af_run={198,200,202,204},
 	total_hearts=5,
 	remaining_hearts=3,
-	fall_dir=nil
+	fall_dir=nil,
+	keys=1,
 }
 
 local idol=1
 local running=1
+local player_atk=false
 lanturn_timer=0
 l_rad=40
 tp=19
+
+-- Add sword animation to the player
+p.sword_anim = {68, 70, 72, 74} -- Sword swipe animation frames
+p.sword_frame = 1 -- Current frame of the sword animation
+p.sword_timer = 0 -- Timer for frame transitions
+p.sword_playing = false -- Whether the sword animation is playing
 
 function draw_player()
 
@@ -58,15 +66,18 @@ function draw_player()
 			end
 		end
 
-
-		if isMoving then 
-			-- circ(p.x+2,p.y+2,l_rad*1.5,8) --light radius test
-			if (not p.fall_dir) spr(p.af_run[flr(running)],p.x-4,p.y-8,2,2,p.direction)
-			-- spr(162,p.x,p.y,1,1,p.direction) --collision test block
-		else
-			-- circ(p.x+2,p.y+2,l_rad*1.5,8) --light radius test
-			if (not p.fall_dir) spr(p.af_idle[flr(idol)],p.x-4,p.y-8,2,2,p.direction)
-			-- spr(162,p.x,p.y,1,1,p.direction) --collision test block
+		if not player_atk then
+			if isMoving then 
+				-- circ(p.x+2,p.y+2,l_rad*1.5,8) --light radius test
+				if (not p.fall_dir) spr(p.af_run[flr(running)],p.x-4,p.y-8,2,2,p.direction)
+				-- spr(162,p.x,p.y,1,1,p.direction) --collision test block
+			else
+				-- circ(p.x+2,p.y+2,l_rad*1.5,8) --light radius test
+				if (not p.fall_dir) spr(p.af_idle[flr(idol)],p.x-4,p.y-8,2,2,p.direction)
+				-- spr(162,p.x,p.y,1,1,p.direction) --collision test block
+			end
+		else 
+			spr(194,p.x-4,p.y-8,2,2,p.direction)
 		end
 	
 
@@ -106,11 +117,18 @@ end
 --
 
 function player_attack()
-	if item_selected==4 then
-		if btn(BTN_O) then
-			spr(110,p.x+7,p.y-8,2,2,p.direction)
-		end
+	local sword_anim={72,74,106,108}
+	if item_selected==4 and btn(BTN_O) then
+		player_atk=true
+		sfx(17)
+		local frame_index=flr(time()*(12*t_increment)%4)+1
+		spr(sword_anim[frame_index],p.x+4,p.y-10,2,2,p.direction)
+	else
+		player_atk=false
 	end
+
+	
+
 end
 
 --

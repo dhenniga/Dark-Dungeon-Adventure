@@ -57,8 +57,8 @@ end
 
 function _init()
 	cartdata("davidhennigan_dark_dungeon_1")
-  p.x = dget(0) or 64
-	p.y = dget(1) or 40
+  p.x = 64 or dget(0)
+	p.y = 40 or dget(1)
 	p.remaining_hearts = 3 or dget(2)
 
 	t_increment = 1
@@ -82,7 +82,7 @@ function _init()
 	-- q.add_sub("collision", p.handle_collision)
 
  --music(0)
- sfx(10,3)
+ --sfx(10,3)
  poke(0x5f2e,1) --keep palette changes
  palette(dungeon)
 end
@@ -129,14 +129,30 @@ function _draw()
 	draw_map()
 	draw_background_sprites()
 	baddie_m.draw()
-	draw_player()
 	player_attack()
+	draw_player()
 	draw_foreground_sprites()
 	if (darkrooms) darkroom()	
+
 	draw_inventory() -- inventory layer above darkroom layer
+
 	curr_item() -- currently selected item
+
 	draw_sign_dialog()
-	tb_draw()
+
+	tb_draw()	
+
+	fillp(0x5f5f)
+	rectfill(mapx+127,mapy+127,mapx+96,mapy+112,1)
+	fillp(0x0000)
+	rect(mapx+127,mapy+127,mapx+96,mapy+112,1)
+	camera(mapx+p.x/16-16,mapy+p.y/16-24)
+	clip(97,113,30,14)
+	sspr(0,32,47,32,mapx+96,mapy+96,47,32)
+
+	place_on_map(p,7)
+	baddie_m.map()
+
 	draw_screen_wipe()
 
 end
