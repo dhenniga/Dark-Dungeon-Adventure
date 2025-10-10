@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<head>
+  <link rel="stylesheet" href="map_style.css">
+</head>
+<html>
+    <body>
+        <div>
+            <script src="tile_editor.js"></script>
+            <h1>Thesebonesalone's Janky as Hell Pico-8 Meta Tile and Map Editor Cross Tekken Turbo Edition</h1>
+            <img id="tiles" src="map_tiles.png" hidden=true>
+            <h2>Tiles</h2>
+            <h3 id = "title">Selection</h3>
+            <input type="checkbox" name="Vertical Flip">
+            <label for="Vertical Flip">Vertical Flip</label>
+            <input type="checkbox" name="Horizontal Flip">
+            <label for="Horizontal Flip">Horizontal Flip</label>
+            <p id="tile_holder">
+            </p>
+            <p>
+                <button id="stringer">Make Strings</button>
+                
+            </p>
+            <p>
+                <textarea id="exporter"></textarea>
+                <label for="exporter">Tile String</label>
+                <textarea id="map_exporter"></textarea>
+                <label for="map_exporter">Map String</label>
+            </p>
+        </div>
+        <div>
+            <h1>Map Editor</h1>
+            <p id="map_holder">
+                <h3>Tile Selector</h3>
+                <p id="tile_select">
+                    
+                </p>
+                <h3>Mapper</h3>
+                <p id="mapper">
+                    
+                </p>
+            </p>
+            <p>
+                <button id="save_data">Save Data</button>
+                <button id="load_from_file">Load Data</button>
+                <input type="file" id="info_file" name="info_file" accept="text/txt"></input>
+            </p>
+        </div>
+    </body>
+</html>

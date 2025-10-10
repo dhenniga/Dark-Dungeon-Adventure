@@ -40,6 +40,24 @@ BTN_O = 5
 local dungeon = {{1,128},{2,7},{3,139},{4,132},{5,5},{6,6},{7,135},{8,4},{9,137},{10,138},{11,9},{12,143},{13,13},{14,14},{15,15}}
 local sewer = {{1,129},{2,7},{3,131},{4,130},{5,129},{6,131},{7,135},{8,132},{9,137},{10,139},{11,9},{12,4},{13,1},{14,14},{15,5}}
 
+local pit = {
+	{1,0},
+	{2,0},
+	{3,129},
+	{4,129},
+	{5,140}, -- light blue from light
+	{6,0}, -- ground
+	{7,129}, -- inventory highlight
+	{8,0},
+	{9,137},
+	{10,140},
+	{11,129},
+	{12,140},
+	{13,129},
+	{14,0},
+	{15,0}
+}
+
 function palette(data)
 	for i,v in ipairs(data) do
 		pal(v[1],v[2],1)
@@ -57,8 +75,10 @@ end
 
 function _init()
 	cartdata("davidhennigan_dark_dungeon_1")
-  p.x = 64 or dget(0)
-	p.y = 40 or dget(1)
+	-- p.x = 64 or dget(0)
+	-- p.y = 40 or dget(1)
+  p.x = 148 or dget(0)
+	p.y = 294 or dget(1)
 	p.remaining_hearts = 3 or dget(2)
 
 	t_increment = 1
@@ -81,8 +101,8 @@ function _init()
 	-- q.add_topics("collision")
 	-- q.add_sub("collision", p.handle_collision)
 
- --music(0)
- --sfx(10,3)
+--music(0)
+	sfx(10,3)
  poke(0x5f2e,1) --keep palette changes
  palette(dungeon)
 end
@@ -142,16 +162,16 @@ function _draw()
 
 	tb_draw()	
 
-	fillp(0x5f5f)
-	rectfill(mapx+127,mapy+127,mapx+96,mapy+112,1)
-	fillp(0x0000)
-	rect(mapx+127,mapy+127,mapx+96,mapy+112,1)
-	camera(mapx+p.x/16-16,mapy+p.y/16-24)
-	clip(97,113,30,14)
-	sspr(0,32,47,32,mapx+96,mapy+96,47,32)
+	-- fillp(0x5f5f)
+	-- rectfill(mapx+127,mapy+127,mapx+96,mapy+112,1)
+	-- fillp(0x0000)
+	-- rect(mapx+127,mapy+127,mapx+96,mapy+112,1)
+	-- camera(mapx+p.x/16-16,mapy+p.y/16-24)
+	-- clip(97,113,30,14)
+	-- sspr(0,32,47,32,mapx+96,mapy+96,47,32)
 
-	place_on_map(p,7)
-	baddie_m.map()
+	-- place_on_map(p,7)
+	-- baddie_m.map()
 
 	draw_screen_wipe()
 

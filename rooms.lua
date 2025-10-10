@@ -5,7 +5,7 @@ active_objects = {}
 
 room_objects = {
   ["0_0"] = {
-    {name="CASTLE ENTRANCE", flags={name=true}},
+    {name="CASTLE ENTRANCE", flags={name=true}},   
     {x=64, y=0,flp=false,flags={door=true, solid=true}}, --doortop
     {x=64,y=0,vori=true,flp=false,flags={door_arches=true}}, --door arch top
     {x=56,y=8,r=15,flags={light=true}},{x=79,y=8,r=15,flags={light=true}}, --side lights
@@ -103,7 +103,30 @@ room_objects = {
     {flags={sewer=true, zoom=false, rain=true}},
   },
   ["1_2"] = {
-      {x = 24, y = 24, sprite = 18, flags = {interactable = true}}
+      {name="THE PIT MAZE", flags={name=true, pit=true, zoom=false, rain=false}},
+
+      {x=16,y=16,flags={stairs_down=true, solid=true}},
+
+      {x=32,y=16,flags={standard_rock=true, solid=true}},
+      {x=32,y=32,flags={standard_rock=true, solid=true}},
+      {x=32,y=48,flags={standard_rock=true, solid=true}},
+      {x=32,y=64,flags={standard_rock=true, solid=true}},
+      {x=32,y=80,flags={standard_rock=true, solid=true}},
+
+      {x=16,y=64,flags={spike_tile=true}},
+      {x=32,y=96,flags={spike_tile=true}},
+      {x=48,y=64,flags={spike_tile=true}},
+
+      {x=64,y=16,flags={cracked_rock=true, solid=true}},
+      {x=64,y=32,flags={standard_rock=true, solid=true}},
+      {x=64,y=48,flags={standard_rock=true, solid=true}},
+      {x=64,y=64,flags={standard_rock=true, solid=true}},
+      {x=64,y=80,flags={standard_rock=true, solid=true}},
+      {x=64,y=96,flags={standard_rock=true, solid=true}},
+
+      {x=100,y=40,flags={rat=true}}, -- Rat
+
+      -- {x=16,y=96,flags={vase=true, solid=true}},
   },
   ["2_0"] = {
     {name="THE BOTTOMLESS PATHS - WEST", flags={name=true}},
@@ -145,7 +168,13 @@ room_objects = {
     {x=64,y=0,vori=true,flp=false,flags={door_arches=true}}, --door arch bottom
     {x=34,y=6,sprite=170,text={"THE KEY ON THE TABLE\nUNLOCKS A DOOR ON THIS\nFLOOR...\n\nBUT WHICH ONE?"},flags={sign=true, solid=true, interactable=true}}, --sign
     {x=56,y=64,sprite=254,flags={key=true, interactable=true}} -- key
-
+  },
+  ["4_3"] = {
+    {name="HALL OF SPIKES", flags={name=true, zoom=false}},
+    {x=15, y=95,flp=false,flags={spike_tile=true, solid=false}}, --spike tile
+    {x=47, y=79,flp=false,flags={spike_tile=true, solid=false}}, --spike tile
+    {x=63, y=79,flp=false,flags={spike_tile=true, solid=false}}, --spike tile
+    {x=95, y=95,flp=false,flags={spike_tile=true, solid=false}}, --spike tile
   },
   ["5_0"] = {
     {x=32,y=16,flags={standard_rock=true, solid=true}},
@@ -197,41 +226,37 @@ function draw_sign_dialog()
   end
 end
 
-
 function draw_background_sprites()
   for obj in all(active_objects) do
 
-    if obj.flags.zoom then
-      zoom_view=true
-     end
+    local f = obj.flags
 
-     if obj.flags.zoom==false then
-      zoom_view=false
-     end
+    if f.zoom ~= nil then zoom_view = f.zoom end
+    if f.rain ~= nil then raindrops = f.rain end
 
-    if obj.flags.sewer then
-     palette(sewer)
+    if f.sewer then
+      palette(sewer)
+    elseif f.dungeon then
+      palette(dungeon)
+    elseif f.pit then
+      palette(pit)
     end
 
-    if obj.flags.dungeon then
-      palette(dungeon)
-     end
-
-    if obj.flags.vase then 
+    if f.vase then 
       spr(172,mapx+obj.x,mapy+obj.y,2,2)
     end
     
-    if obj.flags.sign then
+    if f.sign then
       spr(obj.sprite,mapx+obj.x,mapy+obj.y,2,2)
     end
 
-    if obj.flags.key then
+    if f.key then
       if not btn(BTN_O) then
         spr(obj.sprite,mapx+obj.x,mapy+obj.y,2,1)
       end
     end
 
-    if obj.flags.door then
+    if f.door then
       if obj.flp then
         spr(168,mapx+obj.x, mapy+obj.y,2,2,obj.fx, obj.fy)
         door_lights(mapx+obj.x,mapy+obj.y,obj.fx,obj.fy,obj.flp)
@@ -241,28 +266,34 @@ function draw_background_sprites()
       end
     end
 
-    if obj.flags.chest then
+    if f.chest then
       spr(obj.sprite, mapx+obj.x, mapy+obj.y, obj.w, obj.h, obj.fx, obj.fy)
     end
 
     --
 
-    if obj.flags.standard_rock then
+    if f.standard_rock then
       spr(134,mapx+obj.x,mapy+obj.y,2,2)
     end
 
     --
 
-    if obj.flags.cracked_rock then
+    if f.stairs_down then
+      spr(130,mapx+obj.x,mapy+obj.y,2,2)
+    end
+
+    if f.stairs_up then
+      spr(132,mapx+obj.x,mapy+obj.y,2,2)
+    end
+
+    --
+
+    if f.cracked_rock then
       spr(136,mapx+obj.x,mapy+obj.y,2,2)
     end
 
-    if obj.flags.rain then
-      raindrops=true 
-    end
-
-    if obj.flags.rain==false then
-      raindrops=false 
+    if f.spike_tile then
+      animate_spikes(obj)
     end
 
   end
@@ -270,23 +301,39 @@ end
 
 --
 
+function animate_spikes(o)
+  local t = flr((time()*t_increment*3) % 4) + 1
+  local f = ({78,79,94,79})[t]
+  local x,y = mapx+o.x, mapy+o.y
+  for i=0,1 do
+    for j=0,1 do
+      spr(f,x+i*8,y+j*8)
+    end
+  end
+end
+
+
+--
+
 function draw_foreground_sprites()
   for obj in all(active_objects) do
 
+    local f = obj.flags
+
     -- Baddies - Bat
-    if obj.flags.bat and not obj.spawned then
+    if f.bat and not obj.spawned then
       add(baddie_m.baddies, new_bat(mapx+obj.x, mapy+obj.y))
       obj.spawned=true
     end
 
     -- Baddies - Rat
-    if obj.flags.rat and not obj.spawned then
+    if f.rat and not obj.spawned then
       add(baddie_m.baddies, new_rat(mapx+obj.x, mapy+obj.y))
       obj.spawned=true
     end
 
     -- Baddies - Blob
-    if obj.flags.blob and not obj.spawned then
+    if f.blob and not obj.spawned then
       add(baddie_m.baddies, new_blob(mapx+obj.x, mapy+obj.y))
       obj.spawned=true
     end

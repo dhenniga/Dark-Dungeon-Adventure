@@ -119,21 +119,43 @@ baddie_m.update = function()
   foreach(baddie_m.baddies, function(b) baddie_update(b) end)
 end
 
-baddie_m.draw = function()
-  foreach(baddie_m.baddies, function(b) 
-    baddie_draw(b) 
-  end)
-end
+-- baddie_m.draw = function()
+--   foreach(baddie_m.baddies, function(b) 
+--     baddie_draw(b) 
+--   end)
+-- end
 
-baddie_m.map = function()
-  foreach(baddie_m.baddies, function(b) 
-    if b.state=="ATTACK" then
-    place_on_map(b,3)
-    else
-      place_on_map(b,14)
+-- baddie_m.map = function()
+--   foreach(baddie_m.baddies, function(b) 
+--     if b.state=="ATTACK" then
+--     place_on_map(b,3)
+--     else
+--       place_on_map(b,14)
+--     end
+--   end)
+-- end
+
+--
+
+baddie_m.update = function()
+  foreach(baddie_m.baddies, function(b)
+    -- Only update if on screen
+    if b.x >= mapx and b.x <= mapx + 127 and b.y >= mapy and b.y <= mapy + 127 then
+      baddie_update(b)
     end
   end)
 end
+
+baddie_m.draw = function()
+  foreach(baddie_m.baddies, function(b)
+    -- Only draw if on screen
+    if b.x >= mapx and b.x <= mapx + 127 and b.y >= mapy and b.y <= mapy + 127 then
+      baddie_draw(b)
+    end
+  end)
+end
+
+--
 
 
 frb=1

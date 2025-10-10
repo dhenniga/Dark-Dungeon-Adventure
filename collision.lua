@@ -101,21 +101,35 @@ end
 
 
 function player_can_move(a)
-  local nx_l,nx_r,ny_t,ny_b=a.x+a.dx,a.x+a.dx+a.w,a.y+a.dy,a.y+a.dy+a.h
-
-  if is_fall_tile(nx_l+4,ny_t+6) or is_fall_tile(nx_r-4, ny_t+6) or
-     is_fall_tile(nx_l+4,ny_b-2) or is_fall_tile(nx_r-4, ny_b-2) then
-    sfx(15)
-    determine_fall_direction(p)
+ local nx_l,nx_r=a.x+a.dx,a.x+a.dx+a.w
+ local ny_t,ny_b=a.y+a.dy,a.y+a.dy+a.h
+ local fall_checks={
+  {nx_l+4,ny_t+6},
+  {nx_r-4,ny_t+6},
+  {nx_l+4,ny_b-2},
+  {nx_r-4,ny_b-2}
+ }
+ for i=1,4 do
+  local pos=fall_checks[i]
+  if is_fall_tile(pos[1],pos[2]) then
+   sfx(15)
+   determine_fall_direction(p)
    return false
   end
-
-  if solid(nx_l+2, ny_t+4) or solid(nx_r-2, ny_t+4) or
-     solid(nx_l+2, ny_b-2) or solid(nx_r-2, ny_b-2) then
-    return false
+ end
+ local solid_checks={
+  {nx_l+2,ny_t+4},
+  {nx_r-2,ny_t+4},
+  {nx_l+2,ny_b-2},
+  {nx_r-2,ny_b-2}
+ }
+ for i=1,4 do
+  local pos=solid_checks[i]
+  if solid(pos[1],pos[2]) then
+   return false
   end
-
-  return true
+ end
+ return true
 end
 
 --

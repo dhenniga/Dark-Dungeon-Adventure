@@ -4,7 +4,7 @@ local inv_timer=0
 
 function draw_inventory()	
 
-	-- print(get_current_room(),mapx,mapy,9) -- room number
+print(get_current_room(),mapx,mapy,9) -- room number
 
 -- lives
 	for i=1,p.total_hearts do
