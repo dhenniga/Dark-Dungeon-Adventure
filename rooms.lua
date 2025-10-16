@@ -1,11 +1,9 @@
 -- rooms
 active_objects = {}
 
---
-
 room_objects = {
   ["0_0"] = {
-    {name="CASTLE ENTRANCE", flags={name=true}},   
+    {name="CASTLE ENTRANCE", flags={name=true,dungeon=true, zoom=false, rain=false}},   
     {x=64, y=0,flp=false,flags={door=true, solid=true}}, --doortop
     {x=64,y=0,vori=true,flp=false,flags={door_arches=true}}, --door arch top
     {x=56,y=8,r=15,flags={light=true}},{x=79,y=8,r=15,flags={light=true}}, --side lights
@@ -24,19 +22,17 @@ room_objects = {
     {x=80,y=64,flags={standard_rock=true, solid=true}},
 
     --Flames
-    {x=16, y=16,flags={flames=true}},{x=16+8,y=16+4,r=20,flags={light=true}},
-    {x=96, y=16,flags={flames=true}},{x=96+8,y=16+4,r=20,flags={light=true}},
+    {x=16, y=16,flags={flames_back=true}},{x=16+8,y=16+4,r=20,flags={light=true}},
+    {x=96, y=16,flags={flames_back=true}},{x=96+8,y=16+4,r=20,flags={light=true}},
  
     --Baddies
     {x=80,y=80,flags={bat=true}},-- Bat
 
-    {flags={dungeon=true, zoom=false, rain=false}},
-
   },
   ["0_1"] = {
     {name="CASTLE GARDEN STORAGE", flags={name=true}},
-    -- {x=64,y=0,flp=false,flags={door=true}}, --doortop
-    -- {x=56,y=8,r=15,flags={light=true}},{x=87,y=8,r=15,flags={light=true}},
+    {x=64,y=0,flp=false,flags={door=true}}, --door
+    {x=56,y=8,r=15,flags={light=true}},{x=87,y=8,r=15,flags={light=true}},
     {x=64,y=0,vori=true,flp=false,flags={door_arches=true}}, --door arch top
 
     {x=112,y=96,flags={vase=true, solid=true}},
@@ -52,32 +48,32 @@ room_objects = {
   },
   ["0_2"] = {
     {x=64,y=120,vori=true,flp=true,flags={door_arches=true}}, --door arch bottom
-    {x=16, y=16,flags={flames=true}},{x=16+8,y=16+4,r=20,flags={light=true}}, -- flame block
-    {x=96, y=16,flags={flames=true}},{x=96+8,y=16+4,r=20,flags={light=true}}, -- flame block
-    {x=16, y=96,flags={flames=true}},{x=16+8,y=96+4,r=20,flags={light=true}}, -- flame block
-    {x=96, y=96,flags={flames=true}},{x=96+8,y=96+4,r=20,flags={light=true}}, -- flame block
+    {x=16, y=16,flags={flames_back=true}},{x=16+8,y=16+4,r=20,flags={light=true}}, -- flame block
+    {x=96, y=16,flags={flames_back=true}},{x=96+8,y=16+4,r=20,flags={light=true}}, -- flame block
+    {x=16, y=96,flags={flames_fore=true}},{x=16+8,y=96+4,r=20,flags={light=true}}, -- flame block
+    {x=96, y=96,flags={flames_fore=true}},{x=96+8,y=96+4,r=20,flags={light=true}}, -- flame block
   },
   ["0_3"] = {
     {x=64,y=0,flp=false,flags={door=true}}, --doortop
     {x=64,y=0,vori=true,flp=false,flags={door_arches=true}}, --door arch top
     {x=56,y=8,r=15,flags={light=true}},{x=87,y=8,r=15,flags={light = true}}, --side lights
 
-    {x=32, y=16,flags={flames=true}},{x=32+8,y=16+4,r=20,flags={light=true}}, -- flame block
-    {x=80, y=16,flags={flames=true}},{x=80+8,y=16+4,r=20,flags={light=true}}, -- flame block
+    {x=32, y=16,flags={flames_fore=true}},{x=32+8,y=16+4,r=20,flags={light=true}}, -- flame block
+    {x=80, y=16,flags={flames_fore=true}},{x=80+8,y=16+4,r=20,flags={light=true}}, -- flame block
     {x=18,y=70,sprite=170,text={"AHEAD LIES YOUR GREATEST\nCHALLENGE SO FAR...\n\n...THE DREADED BOSSNAME","HE'S TOUGH AND FAST BUT HE\nDOESN'T SEE TO WELL IN\nTHE DARK.  THAT COULD MAKE\nALL THE DIFFERENCE."},flags={sign=true, interactable=true}}, --sign
 
   },
   ["1_0"] = {
     {name="ENTRANCE LOBBY INNER", flags={name=true}},
-    -- {x=112,y=32,flp=true,flags={door=true, solid=true}}, --doorright
+    {x=112,y=32,flp=true,flags={door=true, solid=false}}, --doorright
     {x=118,y=22,r=15,flags={light=true}},{x=118,y=52,r=15,flags={light = true}}, --lights
     {x=120,y=32,vori=false,flp=true,flags={door_arches=true}}, --door arch
 
     {x=32,y=96,flags={standard_rock=true, solid=true}},
     {x=96,y=96,flags={standard_rock=true, solid=true}},
 
-        --Baddies
-        {x=80,y=80,flags={bat=true}},-- Bat
+    --Baddies
+    {x=80,y=80,flags={bat=true}},-- Bat
 
   },
   ["1_1"] = {
@@ -132,6 +128,7 @@ room_objects = {
     {name="THE BOTTOMLESS PATHS - WEST", flags={name=true}},
     {x=0,y=32,vori=false,flp=false,flags={door_arches=true}}, --door arch
     {x=48,y=120,vori=true,flp=true,flags={door_arches=true}}, --door arch bottom
+     {x=8,y=22,r=15,flags={light=true}},{x=8,y=52,r=15,flags={light = true}}, --lights
     {x=18,y=100,sprite=254,flags={key=true, interactable=true}}, -- key
 
     --Baddies
@@ -157,11 +154,11 @@ room_objects = {
     {sprite=13, x=70,y=40,w=2,h=2, flags={chest=true, solid=true, interactable={true}}}
   },
   ["4_0"] = {
-    {x=64, y=112,flp=false,fy=1,flags={door=true}}, --doorbottom
+    {x=64, y=112,flp=false,fy=1,flags={door=true, solid=true}}, --doorbottom
     {x=64,y=120,vori=true,flp=true,flags={door_arches=true}}, --door arch bottom
     {x=56,y=120,r=15,flags={light=true}},{x=87,y=120,r=15,flags={light=true}}, --side lights
-
     {x=80, y=32,flags={flames=true}},{x=80+8,y=32+4,r=30,flags={light=true}}, -- flame block
+    {x=80, y=32,flags={flames_back=true}} -- fire
   },
   ["4_1"] = {
     {name="MYSTERY KEY ROOM", flags={name=true}},
@@ -187,41 +184,23 @@ room_objects = {
 
 function draw_sign_dialog()
   for obj in all(active_objects) do
-
-    if obj.flags.interactable then
-      
-      if obj.flags.sign then
-        local len = abs(mapx+obj.x-p.x)+abs(mapy+obj.y-p.y+6)
-          
-        if len<20 and len>0 then
+    local f=obj.flags
+    if f.interactable then
+      local ox,oy=mapx+obj.x,mapy+obj.y
+      local len=abs(ox-p.x)+abs(oy-p.y+6)
+      if len<20 and len>0 then
+        if f.sign then
           sspr(24,80,5,7,p.x+8,p.y-8)
-          if btn(BTN_O) and reading==false and val==0 then
-            dset(0, flr(p.x))
-            dset(1, flr(p.y))
-            dset(2, p.remaining_hearts)
-            t_increment=0.05		
-            tb_init(14,obj.text)
+          if btn(BTN_O) and not reading and val==0 then
+            dset(0,flr(p.x)) dset(1,flr(p.y)) dset(2,p.remaining_hearts)
+            t_increment=0.05 tb_init(14,obj.text)
           end
-        else
-          reading=false
-          val=0
-        end
-      end
-
-      if obj.flags.key then
-        local len = abs(mapx+obj.x-p.x)+abs(mapy+obj.y-p.y+6)
-        if len<20 and len>0 then
+        elseif f.key or f.chest then
           sspr(29,80,3,7,p.x+8,p.y-8)
         end
+      elseif f.sign then
+        reading=false val=0
       end
-
-      if obj.flags.chest then
-        local len = abs(mapx+obj.x-p.x)+abs(mapy+obj.y-p.y+6)
-        if len<20 and len>0 then
-          sspr(29,80,3,7,p.x+8,p.y-8)
-        end
-      end
-
     end
   end
 end
@@ -233,6 +212,7 @@ function draw_background_sprites()
 
     if f.zoom ~= nil then zoom_view = f.zoom end
     if f.rain ~= nil then raindrops = f.rain end
+    if f.quake ~= nil then quake = f.quake end
 
     if f.sewer then
       palette(sewer)
@@ -296,6 +276,10 @@ function draw_background_sprites()
       animate_spikes(obj)
     end
 
+    if f.flames_back then
+      flames(mapx+obj.x,mapy+obj.y) 
+    end
+
   end
 end
 
@@ -340,7 +324,7 @@ function draw_foreground_sprites()
 
 
     -- Door Arches
-    if obj.flags.door_arches then
+    if f.door_arches then
       if obj.vori then
           if (obj.flp==false) rectfill(mapx+obj.x-4,mapy+obj.y+2,mapx+obj.x+19,mapy+obj.y-6,0)
         if (obj.flp==true) rectfill(mapx+obj.x-4,mapy+obj.y+5,mapx+obj.x+19,mapy+obj.y+13,0) 
@@ -356,7 +340,7 @@ function draw_foreground_sprites()
     end
 
     -- Flames
-    if obj.flags.flames then
+    if f.flames_fore then
       flames(mapx+obj.x,mapy+obj.y) 
     end
   end
@@ -365,20 +349,20 @@ function draw_foreground_sprites()
 
 end
 
-function draw_screen_wipe()
-  for obj in all(active_objects) do
-    if obj.flags.exit_room and p.y>obj.y then
-      poke(0x5f34,0x2)
-      if radius_thing>0 then
-        for i=1,3 do
-          radius_thing-=1*t_increment
-          circfill(obj.x,obj.y,radius_thing,0|0x1800)
-          if radius_thing==0 then radius_thing=128 end
-        end
-      end
-    end
-  end
-end
+-- function draw_screen_wipe()
+--   for obj in all(active_objects) do
+--     if obj.flags.exit_room and p.y>obj.y then
+--       poke(0x5f34,0x2)
+--       if radius_thing>0 then
+--         for i=1,3 do
+--           radius_thing-=1*t_increment
+--           circfill(obj.x,obj.y,radius_thing,0|0x1800)
+--           if radius_thing==0 then radius_thing=128 end
+--         end
+--       end
+--     end
+--   end
+-- end
 
 --
 

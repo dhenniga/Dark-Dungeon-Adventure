@@ -41,15 +41,6 @@ function blob(x,y,d)
 	spr(226,x,y,2,2,d)
 end
 
------------------------------------------
------------------------------------------
------------------------------------------
------------------------------------------
------------------------------------------
------------------------------------------
------------------------------------------
------------------------------------------
-
 function new_bat(x,y)
   return {
     fr={236,234,232},
@@ -119,24 +110,6 @@ baddie_m.update = function()
   foreach(baddie_m.baddies, function(b) baddie_update(b) end)
 end
 
--- baddie_m.draw = function()
---   foreach(baddie_m.baddies, function(b) 
---     baddie_draw(b) 
---   end)
--- end
-
--- baddie_m.map = function()
---   foreach(baddie_m.baddies, function(b) 
---     if b.state=="ATTACK" then
---     place_on_map(b,3)
---     else
---       place_on_map(b,14)
---     end
---   end)
--- end
-
---
-
 baddie_m.update = function()
   foreach(baddie_m.baddies, function(b)
     -- Only update if on screen
@@ -171,84 +144,40 @@ end
 
 function baddie_update(b)
   b.ttl-=1
-
-  local new_x, new_y = b.x,b.y
-  new_x += b.dx*t_increment
-  new_y += b.dy*t_increment
-
-  local can_move_func = b.can_fly and flying_enemy_can_move or ground_enemy_can_move
-  
-  if not can_move_func(b) then
-    if b.direction==BTN_R then
-      b.direction=BTN_L
-      left(b,b.speed)
-    elseif b.direction == BTN_L then
-      b.direction=BTN_R
-      right(b,b.speed)
-    elseif b.direction==BTN_U then
-      b.direction=BTN_D
-      down(b,b.speed)
-    elseif b.direction==BTN_D then
-      b.direction=BTN_U
-      up(b,b.speed)
-    end
+  local can_move = (b.can_fly and flying_enemy_can_move or ground_enemy_can_move)(b)
+  if not can_move then
+    local dir_swap = {[BTN_R]=BTN_L,[BTN_L]=BTN_R,[BTN_U]=BTN_D,[BTN_D]=BTN_U}
+    local move_func = {[BTN_R]=left,[BTN_L]=right,[BTN_U]=down,[BTN_D]=up}
+    b.direction=dir_swap[b.direction] or b.direction
+    (move_func[b.direction] or function()end)(b,b.speed)
     b.state="BOUNCE"
   else
     b.x+=b.dx*t_increment
     b.y+=b.dy*t_increment
   end
 
- 	-- if sprite_collision(p, b) then
-	-- 	q.add_event("collision")
-	-- end
-  
-  
+   	if sprite_collision(p, b) then
+		q.add_event("collision")
+	end
+
   if b.ttl<=0 then
     if sees(b,l_rad*1.5,0,1,1,0) then
       b.state="ATTACK"
-      sset(76,119,3)
-      sset(74,120,3)
-      sset(92,118,3)
-      sset(90,119,3)
-      sset(108,117,3)
-      sset(106,118,3)
-
+      for i=0,2 do sset(76+i*16,119-i,3) sset(74+i*16,120-i,3) end
       b.direction=angle_between(p,b)
-      if b.direction==BTN_U then
-          up(b,b.att_speed)
-        elseif b.direction==BTN_D then
-          down(b,b.att_speed)
-        elseif b.direction==BTN_R then
-          right(b,b.att_speed)
-        elseif b.direction==BTN_L then
-          left(b,b.att_speed)
-      end
-  
+      local move={[BTN_U]=up,[BTN_D]=down,[BTN_R]=right,[BTN_L]=left}
+      (move[b.direction] or function()end)(b,b.att_speed)
     elseif rnd()>0.2 then
-    b.state="WALK"
-    sset(76,119,9)
-    sset(74,120,9)
-    sset(92,118,9)
-    sset(90,119,9)
-    sset(108,117,9)
-    sset(106,118,9)
-    b.ttl=ceil(rnd(120)+30)
-    b.direction = flr(rnd(4))
-
-    if b.direction==BTN_U then
-      up(b,b.speed)
-      elseif b.direction==BTN_D then
-        down(b,b.speed)
-      elseif b.direction==BTN_R then
-        right(b,b.speed)
-      elseif b.direction==BTN_L then
-        left(b,b.speed)
-    end   
+      b.state="WALK"
+      for i=0,2 do sset(76+i*16,119-i,9) sset(74+i*16,120-i,9) end
+      b.ttl=ceil(rnd(120)+30)
+      b.direction=flr(rnd(4))
+      local move={[BTN_U]=up,[BTN_D]=down,[BTN_R]=right,[BTN_L]=left}
+      (move[b.direction] or function()end)(b,b.speed)
     else
       b.state="STOP"
-      b.dx=0
-      b.dy=0
-      b.ttl = ceil(rnd(150)+15)
+      b.dx,b.dy=0,0
+      b.ttl=ceil(rnd(150)+15)
     end
   end
 end

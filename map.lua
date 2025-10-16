@@ -54,11 +54,12 @@ function update_map()
 	end
 
 	local offset=0
-	if (quake) offset=(16-rnd(32))*0.05
+	local time_val=flr(time()*0.1)
+	if (quake) offset=(16-rnd(512))*0.001
 	poke(0x5f2c,zoom_view and 3 or 0)
 	camera(
-		(zoom_view and (p.x-29+offset) or (mapx+offset)),
-		(zoom_view and (p.y-31+offset) or (mapy+offset))
+		(zoom_view and (p.x-29+offset) or (mapx+offset*time_val)),
+		(zoom_view and (p.y-31+offset) or (mapy+offset*time_val))
 	)
 end 
 

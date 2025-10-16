@@ -35,74 +35,51 @@ p.sword_timer = 0 -- Timer for frame transitions
 p.sword_playing = false -- Whether the sword animation is playing
 
 function draw_player()
+ local isMoving=p.dx~=0 or p.dy~=0
+ p.curr_speed=max(abs(p.dx),abs(p.dy))/4.5
 
-		isMoving = p.dx>0 or p.dx<0 or p.dy>0 or p.dy<0 
-		p.curr_speed=max(abs(p.dx),abs(p.dy))/4.5
+ -- diag movement speed
+ if p.dx*p.dy!=0 then
+  p.dx*=0.55 p.dy*=0.55
+ end
 
-		-- diag movement speed
-		if p.dx*p.dy!=0 then
-			p.dx=p.dx*0.55
-			p.dy=p.dy*0.55
-		end
+ -- idol animation
+ idol=(idol<3.8) and idol+0.09*t_increment or 1
 
-			-- idol animation
-			if (idol<3.8) then 
-				idol=idol+0.09*t_increment
-			else 
-				idol=1 
-			end
-			
-			-- running animation
-			if (isMoving and running<4.5) then 
-				running=running+p.curr_speed
-			else 
-				running=1
-			end
-			
-			--footstep sounds for specific frames
-			if not p.fall_dir then
-			if (isMoving and running>1.2 and running<1.5 or running>3.2 and running<3.4) then
-				sfx(7,2)
-			end
-		end
+ -- running animation
+ running=(isMoving and running<4.5) and running+p.curr_speed or 1
 
-		if not player_atk then
-			if isMoving then 
-				-- circ(p.x+2,p.y+2,l_rad*1.5,8) --light radius test
-				if (not p.fall_dir) spr(p.af_run[flr(running)],p.x-4,p.y-8,2,2,p.direction)
-				-- spr(162,p.x,p.y,1,1,p.direction) --collision test block
-			else
-				-- circ(p.x+2,p.y+2,l_rad*1.5,8) --light radius test
-				if (not p.fall_dir) spr(p.af_idle[flr(idol)],p.x-4,p.y-8,2,2,p.direction)
-				-- spr(162,p.x,p.y,1,1,p.direction) --collision test block
-			end
-		else 
-			spr(194,p.x-4,p.y-8,2,2,p.direction)
-		end
-	
+ -- footstep sounds for specific frames
+ if not p.fall_dir and isMoving and ((running>1.2 and running<1.5) or (running>3.2 and running<3.4)) then
+  sfx(7,2)
+ end
 
-	if p.fall_dir then
-		if tp > 0 then
-			-- Shrink sprite evenly toward the center
-			tp -= 0.5 -- Reduce size
-	
-			local center_offset = (16 - tp) / 2 -- Calculate how much to shift to center the sprite
-	
-			-- Adjust position and draw the sprite
-			sspr(96, 32, 16, 16, p.x + center_offset-4, p.y + center_offset-6, tp, tp)
-		else
-			p.dx=0
-			p.dy=0 
-			if (p.fall_dir=="left") p.x+=16 p.fall_dir=nil
-			if (p.fall_dir=="right") p.x-=16 p.fall_dir=nil
-			if (p.fall_dir=="up") p.y+=6 p.fall_dir=nil
-			if (p.fall_dir=="down") p.y-=14 p.fall_dir=nil
+ if not player_atk then
+  if isMoving then
+   if not p.fall_dir then spr(p.af_run[flr(running)],p.x-4,p.y-8,2,2,p.direction) end
+  else
+   if not p.fall_dir then spr(p.af_idle[flr(idol)],p.x-4,p.y-8,2,2,p.direction) end
+  end
+ else
+  spr(194,p.x-4,p.y-8,2,2,p.direction)
+ end
 
-			p.remaining_hearts-=1
-			tp = 19
-		end
-	end
-
+ if p.fall_dir then
+  if tp>0 then
+   tp-=0.5
+   local c=(16-tp)/2
+   sspr(96,32,16,16,p.x+c-4,p.y+c-6,tp,tp)
+  else
+   p.dx,p.dy=0,0
+   if p.fall_dir=="left" then p.x+=16 end
+   if p.fall_dir=="right" then p.x-=16 end
+   if p.fall_dir=="up" then p.y+=6 end
+   if p.fall_dir=="down" then p.y-=14 end
+   p.fall_dir=nil
+   p.remaining_hearts-=1
+   tp=19
+  end
+ end
 end
 
 --
@@ -134,38 +111,26 @@ end
 --
 
 function update_player()
+ if p.fall_dir or not allow_movement then return end
 
-	if p.fall_dir then return end
+ if btn(BTN_L) then p.dx-=p.a p.direction=true end
+ if btn(BTN_R) then p.dx+=p.a p.direction=false end
+ if btn(BTN_U) then p.dy-=p.a end
+ if btn(BTN_D) then p.dy+=p.a end
 
-	if allow_movement then
+ p.dx=mid(-1,p.dx,1)
+ p.dy=mid(-1,p.dy,1)
 
-	if (btn(BTN_L)) p.dx-=p.a p.direction=true
-	if (btn(BTN_R)) p.dx+=p.a p.direction=false
-	if (btn(BTN_U)) p.dy-=p.a
-	if (btn(BTN_D)) p.dy+=p.a
-		
-	p.dx=mid(-1, p.dx, 1)
-	p.dy=mid(-1, p.dy, 1)
+ if player_can_move(p) then
+  p.x+=p.dx p.y+=p.dy
+ else
+  p.dx,p.dy=0,0
+ end
 
-	-- Check if the player can move
-	if player_can_move(p) then
-		p.x += p.dx
-		p.y += p.dy
-	else
-		-- Stop movement if collision is detected
-		p.dx = 0
-		p.dy = 0
-	end 
-
-	-- Apply friction
-	if (abs(p.dx) > 0) p.dx *= p.drg
-	if (abs(p.dy) > 0) p.dy *= p.drg
-	
-	-- Stop small movements
-	if (abs(p.dx) < 0.02) p.dx = 0
-	if (abs(p.dy) < 0.02) p.dy = 0
-
-end
+ p.dx=abs(p.dx)>0 and p.dx*p.drg or 0
+ p.dy=abs(p.dy)>0 and p.dy*p.drg or 0
+ if abs(p.dx)<0.02 then p.dx=0 end
+ if abs(p.dy)<0.02 then p.dy=0 end
 end
 
 --
