@@ -27,7 +27,7 @@ end
 
 function _init()
 	cartdata("davidhennigan_dark_dungeon_1")
-	p.x = 570 or dget(0)
+	p.x = 64 or dget(0)
 	p.y = 40 or dget(1)
   -- p.x = 148 or dget(0)
 	-- p.y = 294 or dget(1)
@@ -53,7 +53,7 @@ function _init()
 	-- q.add_topics("collision")
 	-- q.add_sub("collision", p.handle_collision)
 
---music(0)
+music(0)
 	sfx(10,3)
  poke(0x5f2e,1) --keep palette changes
  palette(dungeon)

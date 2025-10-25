@@ -112,21 +112,16 @@ end
 
 function update_player()
  if p.fall_dir or not allow_movement then return end
-
  if btn(BTN_L) then p.dx-=p.a p.direction=true end
  if btn(BTN_R) then p.dx+=p.a p.direction=false end
  if btn(BTN_U) then p.dy-=p.a end
  if btn(BTN_D) then p.dy+=p.a end
-
- p.dx=mid(-1,p.dx,1)
- p.dy=mid(-1,p.dy,1)
-
+ p.dx,p.dy=mid(-1,p.dx,1),mid(-1,p.dy,1)
  if player_can_move(p) then
   p.x+=p.dx p.y+=p.dy
  else
   p.dx,p.dy=0,0
  end
-
  p.dx=abs(p.dx)>0 and p.dx*p.drg or 0
  p.dy=abs(p.dy)>0 and p.dy*p.drg or 0
  if abs(p.dx)<0.02 then p.dx=0 end

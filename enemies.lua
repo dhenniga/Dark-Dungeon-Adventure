@@ -1,45 +1,18 @@
 -- enemies
 
-function angle_between(pl,b)
-	local res=flr(atan2(b.y-pl.y,b.x-pl.x)*12/3.1415926535)
-	if (res==0) return 2
-	if (res==1) return 1
-	if (res==2) return 3
-	if (res==3) return 0
-	return res
-end
-
------------------------------------------
-
--- frb=1
--- function bat(x,y,d)
--- 	local f_bat={236,234,232}
---   local dir=false
---   if (d==1) dir=false
---   if (d==0) dir=true
--- 	if frb<3.8 then frb=frb+0.10*t_increment else frb=1 end	
--- 	-- if (frb>3 and frb<3.1) sfx(12,2)
--- 	-- spr(162,x,y,1,1,dir)
---   spr(f_bat[flr(frb)],x,y,2,2,dir)
+-- function angle_between(pl,b)
+-- 	local res=flr(atan2(b.y-pl.y,b.x-pl.x)*12/3.1415926535)
+-- 	if (res==0) return 2
+-- 	if (res==1) return 1
+-- 	if (res==2) return 3
+-- 	if (res==3) return 0
+-- 	return res
 -- end
 
------------------------------------------
-
-frr=1
-function rat(x,y,d)
-	local f_rat={228,230}
-  local dir=false
-  if (d==1) dir=false
-  if (d==0) dir=true
-	if frr<2.8 then frr=frr+0.1*t_increment else frr=1 end
-	spr(f_rat[flr(frr)],x,y,2,2,dir)
+function angle_between(a,b)
+ return({[0]=2,1,3,0})[flr(atan2(b.y-a.y,b.x-a.x)*3.8197)]or 0
 end
 
------------------------------------------
-
-function blob(x,y,d)
-	spr(226,x,y,2,2,d)
-end
 
 function new_bat(x,y)
   return {
