@@ -54,7 +54,6 @@ function _init()
 	-- q.add_sub("collision", p.handle_collision)
 
 music(0)
-	sfx(10,3)
  poke(0x5f2e,1) --keep palette changes
  palette(dungeon)
 end
@@ -62,6 +61,11 @@ end
 --
 
 function _update60()
+
+	if stat(23) == -1 then
+    	sfx(10,3)
+end
+
 	check_room_change()
 	update_map()
 	update_player()	

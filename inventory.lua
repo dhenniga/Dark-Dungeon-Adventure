@@ -44,7 +44,7 @@ function show_inventory()
  end
  local dirs={BTN_U,BTN_D,BTN_L,BTN_R}
  for i=1,4 do
-  if btnp(dirs[i]) then item_selected=i sfx(11) end
+  if btnp(dirs[i]) then item_selected=i sfx(11,3) end
  end
  local pos={{p.x+2,p.y-20},{p.x+2,p.y+20},{p.x-19,p.y},{p.x+23,p.y}}
  for i=1,4 do

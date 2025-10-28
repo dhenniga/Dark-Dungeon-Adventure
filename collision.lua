@@ -14,7 +14,7 @@ function sprite_collision(s0, s1)
       if p.recoil=="up" then s1.dy-=8 s0.dy+=8 end
       if p.recoil=="down" then s1.dy+=8 s0.dy-=8 end
 
-      sfx(11)
+      sfx(11,3)
       return true
   end
   return false
@@ -112,7 +112,7 @@ function player_can_move(a)
 --  for i=1,4 do
 --   local pos=fall_checks[i]
 --   if is_fall_tile(pos[1],pos[2]) then
---    sfx(15)
+--    sfx(15,3)
 --    determine_fall_direction(p)
 --    return false
 --   end
