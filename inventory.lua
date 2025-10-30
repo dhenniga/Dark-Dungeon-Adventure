@@ -12,7 +12,7 @@ function draw_inventory()
  if btn(BTN_X) then
   t_increment=0.05
   if inv_timer<50 then inv_timer+=1 end
-  if inv_timer==1 then sfx(13) end
+  if inv_timer==1 then sfx(13,3) end
   p.dx,p.dy=0,0
   allow_movement=false
   show_inventory()

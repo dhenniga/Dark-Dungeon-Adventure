@@ -25,7 +25,7 @@ function tb_update()
 		if tb.cur>0.9 then
 			tb.char+=1
 			tb.cur=0
-			if (ord(tb.str[tb.i],tb.char)!=32) sfx(tb.voice)
+			if (ord(tb.str[tb.i],tb.char)!=32) sfx(tb.voice, 3)
 		end
 		if (btnp(BTN_O)) tb.char=#tb.str[tb.i]
 
