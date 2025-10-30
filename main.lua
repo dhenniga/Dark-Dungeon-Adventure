@@ -62,8 +62,8 @@ end
 
 function _update60()
 
-	if stat(23) == -1 then
-    	sfx(10,3)
+	if stat(50) == -1 then
+    	sfx(20,0)
 end
 
 	check_room_change()

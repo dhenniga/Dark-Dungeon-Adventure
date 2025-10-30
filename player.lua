@@ -51,7 +51,7 @@ function draw_player()
 
  -- footstep sounds for specific frames
  if not p.fall_dir and isMoving and ((running>1.2 and running<1.5) or (running>3.2 and running<3.4)) then
-  sfx(7,3)
+  sfx(13,3) --done
  end
 
  if not player_atk then
@@ -97,7 +97,7 @@ function player_attack()
 	local sword_anim={72,74,106,108}
 	if item_selected==4 and btn(BTN_O) then
 		player_atk=true
-		sfx(17,3)
+		sfx(14,3) --done
 		local frame_index=flr(time()*(12*t_increment)%4)+1
 		spr(sword_anim[frame_index],p.x+4,p.y-10,2,2,p.direction)
 	else

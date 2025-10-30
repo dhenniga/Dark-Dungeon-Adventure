@@ -12,7 +12,7 @@ function draw_inventory()
  if btn(BTN_X) then
   t_increment=0.05
   if inv_timer<50 then inv_timer+=1 end
-  if inv_timer==1 then sfx(13,3) end
+  if inv_timer==1 then sfx(12,3) end --done
   p.dx,p.dy=0,0
   allow_movement=false
   show_inventory()
@@ -44,7 +44,7 @@ function show_inventory()
  end
  local dirs={BTN_U,BTN_D,BTN_L,BTN_R}
  for i=1,4 do
-  if btnp(dirs[i]) then item_selected=i sfx(11,3) end
+  if btnp(dirs[i]) then item_selected=i sfx(10,3) end --done
  end
  local pos={{p.x+2,p.y-20},{p.x+2,p.y+20},{p.x-19,p.y},{p.x+23,p.y}}
  for i=1,4 do
