@@ -62,8 +62,12 @@ end
 
 function _update60()
 
-	if stat(50) == -1 then
-    	sfx(20,0)
+	if not stat(57) then
+    music(0)
+  end
+
+	if stat(53) == -1 then
+    	sfx(20,3)
 end
 
 	check_room_change()
