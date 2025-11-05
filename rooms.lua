@@ -177,7 +177,15 @@ room_objects = {
     {x=32,y=16,flags={standard_rock=true, solid=true}},
     {x=48,y=32,flags={cracked_rock=true,solid=true}},
     {x=64,y=48,flags={standard_rock=true,solid=true}},
-  }
+  },
+  ["6_0"] = {
+    {name="ENTRANCE LOBBY INNER", flags={name=true}},
+  },
+  ["6_1"] = {
+    {name="ENTRANCE LOBBY INNER", flags={name=true}},
+    {x=80, y=80,flags={flames=true}},{x=80+8,y=80+4,r=30,flags={light=true}}, -- flame block
+    {x=80, y=80,flags={flames_back=true}} -- fire
+  },
 }
 
 --
