@@ -27,11 +27,16 @@ end
 
 function _init()
 	cartdata("davidhennigan_dark_dungeon_1")
-	p.x = 64 or dget(0)
-	p.y = 40 or dget(1)
-  -- p.x = 148 or dget(0)
-	-- p.y = 294 or dget(1)
-	p.remaining_hearts = 3 or dget(2)
+	-- p.x = 68 or dget(0)  --real start
+	-- p.y = 18 or dget(1)
+  
+	p.x = 148 or dget(0) -- pit
+	p.y = 294 or dget(1) -- pit
+
+	-- p.x = 64 * 13 or dget(0) -- pit
+	-- p.y = 64 or dget(1) -- pit
+
+	p.remaining_hearts = 5 or dget(2)
 
 	t_increment = 1
 	pal(0)

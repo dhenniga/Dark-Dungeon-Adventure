@@ -25,7 +25,7 @@ function draw_text()
 	if btn(❎) then 
 		--text="CONTINUE"
 		--p4bonus(text,34,110,7,0)
-		load("dark_dungeon_adventure.p8")
+		load("level_1.p8")
 	end
 end
 
