@@ -47,7 +47,15 @@ function show_inventory()
  circfill(p.x+2,p.y,big,5)
  circ(p.x+2,p.y,big,0)
  spr(192,p.x-4,p.y-8,2,2,p.direction)
- if p.keys==1 then fillp(█)circfill(mapx+121,mapy+6,6,3)spr(206,mapx+118,mapy+3,1,1)end
+if p.keys>0 then
+ for i=1,min(p.keys,5) do
+  local x=mapx+121-(i-1)*13
+  fillp(█)
+  circfill(x,mapy+6,6,3)
+  spr(206,x-3,mapy+3)
+ end
+end
+
  circfill(p.x+2,p.y-20,knob,5)
  spr(207,p.x-1,outelastic(it,p.y,-25,25),1,2)
  circfill(p.x+23,p.y,knob,5)

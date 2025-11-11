@@ -24,13 +24,13 @@ function _init()
 	reading,show_dialog,darkrooms,quake,zoom_view,allow_movement,raindrops=false,false,true,false,false,true,false
 	init_rain()
 	q=qico()
-	music(0)
+	--music(0)
 	poke(0x5f2e,1)
 	palette(dungeon)
 end
 
 function _update60()
-	if not stat(57)then music(0)end
+	-- if not stat(57)then music(0)end
 	if stat(53)==-1 then sfx(20,3)end
 	check_room_change()
 	update_map()
