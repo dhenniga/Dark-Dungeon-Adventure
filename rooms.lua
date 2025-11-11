@@ -305,7 +305,7 @@ function draw_sign_dialog()
    local ox,oy=mapx+obj.x,mapy+obj.y
    local len=abs(ox-p.x)+abs(oy-p.y+6)
    if len<16 and not reading then
-    sspr(113,96,5,8,p.x+8,p.y-8)
+    if p.keys>0 then sspr(113,96,5,8,p.x+8,p.y-8) end
     if btnp(BTN_O)and obj.locked and p.keys>0 then
      p.keys-=1
      unlock_door(obj)
