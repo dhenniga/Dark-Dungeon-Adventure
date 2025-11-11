@@ -27,11 +27,14 @@ f={
 function obj(x,y,fl)return{x=x,y=y,flags=fl}end
 function light(x,y,r)return{x=x,y=y,r=r,flags=f.light}end
 
+-- door constructor with persistent state
 function door(x,y,flx,fly,solid)
- local id=x.."_"..y -- simple unique ID per door position
- local o={x=x,y=y,flags={door=true,solid=solid},id=id,locked=true}
- o.flx,o.fly,o.flp,o.fx,o.fy=flx,fly,flx,flx,fly
- return o
+ return {
+  x=x, y=y,
+  flags={door=true, solid=solid},
+  locked=true,
+  flx=flx, fly=fly, flp=flx, fx=flx, fy=fly
+ }
 end
 
 function arch(x,y,vori,flx,fly)
@@ -43,13 +46,25 @@ end
 function sign(x,y,sprite,txt)return{x=x,y=y,sprite=sprite,text=txt,flags=f.sign}end
 function room(x,y,t)room_objects[x.."_"..y]=t end
 
+function unlock_door(o)
+ local ax,ay=mapx+o.x,mapy+o.y
+ door_states[ax.."_"..ay]=true
+ o.locked=false o.flags.solid=false
+ local dl,dr,dt,db=o.x,128-o.x,o.y,128-o.y
+ if dl<=dr and dl<=dt and dl<=db then ax=ax-16
+ elseif dr<=dl and dr<=dt and dr<=db then ax=ax+16
+ elseif dt<=dl and dt<=dr and dt<=db then ay=ay-16
+ else ay=ay+16 end
+ door_states[ax.."_"..ay]=true
+ sfx(8,3)
+end
+
 --
 
 room(0,0,{
   {name="CASTLE ENTRANCE",flags={name=true,dungeon=true,zoom=false,rain=false}},
-  door(64,0,false,false,true),
+  {sprite=128,x=64,y=0,w=2,h=2,flags=f.c_rock},
   arch(64,0,true,false,false),
-  light(56,8,15),light(79,8,15),
   sign(33,5,170,{
     "WELCOME TO THE DARK\nDUNGEONS OF THE SPOOKY\nCASTLE OF NAME. CONTAINED\nWITHIN THESE DANK WALLS ARE\nSECRETS, TRIALS...",
     "...AND TREASURES BEYOND\nYOUR WILDEST IMAGINATION.\n\nARMED ONLY WITH A SWORD AND\nYOUR ELVEN POWER OF...",
@@ -66,7 +81,7 @@ room(0,0,{
 
 room(0,1,{
   {name="CASTLE GARDEN STORAGE",flags={name=true,sewer=true,rain=true}},
-  door(64,0,false,false,false),
+  door(64,0,false,false,true),
   arch(64,0,true,false,false),
   light(56,8,15),light(87,8,15),
   obj(112,96,f.vase),obj(112,80,f.vase),
@@ -105,7 +120,7 @@ room(1,0,{
 
 room(1,1,{
   {name="CASTLE GARDEN STORAGE",flags={name=true,sewer=true,zoom=false,rain=true}},
-  door(112,32,true,false,false),
+  door(112,32,true,false,true),
   light(118,22,15),light(118,52,15),
   arch(120,32,false,true,false),
   obj(16,96,f.vase),obj(16,80,f.vase),obj(32,80,f.vase),
@@ -117,7 +132,6 @@ room(1,1,{
 room(1,2,{
   {name="THE PIT MAZE",flags={name=true,pit=true,zoom=false,rain=false}},
   obj(16,16,{stairs_down=true,solid=true}),
-
   obj(16,64,f.spike),obj(32,96,f.spike),obj(48,64,f.spike),
     sign(48,5,170,{
     "THREE BUTTONS MUST BE\nPRESSED TO REVEAL THE\nHIDDEN STAIRCASE.\n\nWHERE COULD THEY BE?"
@@ -128,6 +142,7 @@ room(1,2,{
 
 room(2,0,{
   {name="THE BOTTOMLESS PATHS - WEST",flags={name=true}},
+  door(0,32,true,true,true),
   arch(0,32,false,false,false),
   arch(48,120,true,true,true),
   light(8,22,15),light(8,52,15),
@@ -136,7 +151,7 @@ room(2,0,{
 })
 
 room(2,1,{
-  door(0,32,true,true,false),
+  door(0,32,true,true,true),
   light(8,22,15),light(8,52,15),
   arch(0,32,false,false,false),
   arch(48,0,true,false,false),
@@ -172,7 +187,9 @@ room(4,0,{
 
 room(4,1,{
   {name="MYSTERY KEY ROOM",flags={name=true}},
+  door(64,0,false,false,true),
   arch(64,0,true,false,false),
+  light(56,8,15),light(79,8,15),
   sign(34,6,170,{
     "THE KEY ON THE TABLE\nUNLOCKS A DOOR ON THIS\nFLOOR...\n\nBUT WHICH ONE?"
   }),
@@ -266,39 +283,40 @@ function normalize_obj_list(t)
 end
 
 function draw_sign_dialog()
-  for obj in all(active_objects) do
-    local f=obj.flags
-    if f.interactable then
-      local ox,oy=mapx+obj.x,mapy+obj.y
-      local len=abs(ox-p.x)+abs(oy-p.y+6)
-      if len<20 and len>0 then
-        if f.sign then
-          sspr(24,80,5,7,p.x+8,p.y-8)
-          if btn(BTN_O) and not reading and val==0 then
-            dset(0,flr(p.x)) dset(1,flr(p.y)) dset(2,p.remaining_hearts)
-            t_increment=0.05 tb_init(15,obj.text)
-          end
-        elseif f.key or f.chest then
-          sspr(29,80,3,7,p.x+8,p.y-8)
-        end
-      elseif f.sign then
-        reading=false val=0
-      end
-      elseif f.door and f.solid then
-        local ox,oy=mapx+obj.x,mapy+obj.y
-        local len=abs(ox-p.x)+abs(oy-p.y+6)
-        if len<16 and not reading then
-          sspr(113,96,5,8,p.x+8,p.y-8) -- prompt icon
-          if btnp(BTN_O) and obj.locked and p.keys>0 then
-            p.keys-=1
-            obj.locked=false
-            obj.flags.solid=false
-            door_states[obj.id]={locked=false}
-            sfx(8,3) -- unlock sound
-        end
-      end
-    end  
+ for obj in all(active_objects)do
+  local f=obj.flags
+  if f.interactable then
+   local ox,oy=mapx+obj.x,mapy+obj.y
+   local len=abs(ox-p.x)+abs(oy-p.y+6)
+   if len<20 and len>0 then
+    if f.sign then
+     sspr(24,80,5,7,p.x+8,p.y-8)
+     if btn(BTN_O)and not reading and val==0 then
+      dset(0,flr(p.x)) dset(1,flr(p.y)) dset(2,p.remaining_hearts)
+      t_increment=0.05 tb_init(15,obj.text)
+     end
+    elseif f.key or f.chest then
+     sspr(29,80,3,7,p.x+8,p.y-8)
+    end
+   elseif f.sign then
+    reading=false val=0
+   end
+  elseif f.door and f.solid then
+   local ox,oy=mapx+obj.x,mapy+obj.y
+   local len=abs(ox-p.x)+abs(oy-p.y+6)
+   if len<16 and not reading then
+    sspr(113,96,5,8,p.x+8,p.y-8)
+    if btnp(BTN_O)and obj.locked and p.keys>0 then
+     p.keys-=1
+     unlock_door(obj)
+    end
+    if btnp(BTN_O)and obj.locked and p.keys<=0 then
+      sfx(9,3)
+    end
+
+   end
   end
+ end
 end
 
 function draw_background_sprites()
@@ -389,12 +407,18 @@ function get_current_room()
 end
 
 function load_room_objects(room_id)
- active_objects=room_objects[room_id] or {}
+ active_objects = room_objects[room_id] or {}
  normalize_obj_list(active_objects)
+
  for o in all(active_objects) do
-  if o.flags.door then
-   local s=door_states[o.id]
-   if s then o.locked=o.locked and s.locked end
+  if o.flags and o.flags.door then
+   o.id = (mapx + o.x) .. "_" .. (mapy + o.y)
+   if door_states[o.id] then
+    o.locked = false
+    o.flags.solid = false
+   else
+    o.locked = (o.locked == nil) and true or o.locked
+   end
   end
  end
 end

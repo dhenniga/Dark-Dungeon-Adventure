@@ -18,7 +18,7 @@ p={
 	total_hearts=5,
 	remaining_hearts=3,
 	fall_dir=nil,
-	keys=3,
+	keys=1,
 }
 
 local idol=1
@@ -97,7 +97,7 @@ function player_attack()
 	local sword_anim={72,74,106,108}
 	if item_selected==4 and btn(BTN_O) then
 		player_atk=true
-		sfx(14,3) --done
+		sfx(14,3)
 		local frame_index=flr(time()*(12*t_increment)%4)+1
 		spr(sword_anim[frame_index],p.x+4,p.y-10,2,2,p.direction)
 	else
