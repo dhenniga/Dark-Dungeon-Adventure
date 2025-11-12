@@ -18,7 +18,7 @@ p={
 	total_hearts=5,
 	remaining_hearts=3,
 	fall_dir=nil,
-	keys=1,
+	keys=5,
 }
 
 local idol=1

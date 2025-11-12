@@ -49,9 +49,10 @@ function show_inventory()
  spr(192,p.x-4,p.y-8,2,2,p.direction)
 if p.keys>0 then
  for i=1,min(p.keys,5) do
+    -- local x=mapx+121-(i-1)*8
   local x=mapx+121-(i-1)*13
   fillp(█)
-  circfill(x,mapy+6,6,3)
+  circfill(x,mapy+6,6,129)
   spr(206,x-3,mapy+3)
  end
 end

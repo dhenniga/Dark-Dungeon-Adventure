@@ -30,7 +30,7 @@ function _init()
 end
 
 function _update60()
-	-- if not stat(57)then music(0)end
+	if not stat(57)then music(0)end
 	if stat(53)==-1 then sfx(20,3)end	
   update_map()
 	check_room_change()
