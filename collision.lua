@@ -70,7 +70,7 @@ function sees(b, dist, facing, sweep, incr, obst)
 end
 
 
- --
+--
 
  function ground_enemy_can_move(a)
   local nx_l,nx_r,ny_t,ny_b=a.x+a.dx,a.x+a.dx+a.w,a.y+a.dy,a.y+a.dy+a.h

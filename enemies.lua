@@ -50,6 +50,15 @@ function baddie_update(b)
   b.x+=b.dx*t_increment
   b.y+=b.dy*t_increment
  end
+
+ -- 🔸 Screen-edge bounce
+ if b.x<mapx or b.x>mapx+120 or b.y<mapy or b.y>mapy+120 then
+  b.direction=(b.direction+2)%4
+  move_dir(b,b.speed)
+  b.x=mid(mapx+4,b.x,mapx+124)
+  b.y=mid(mapy+4,b.y,mapy+124)
+ end
+
  if sprite_collision(p,b)then q.add_event"collision"end
  if b.ttl<=0 then
   if sees(b,l_rad*1.5,0,1,1,0)then
@@ -74,6 +83,7 @@ function baddie_update(b)
   end
  end
 end
+
 
 function move_dir(b,s)
  if b.direction==0 then b.dx=-s b.dy=0
