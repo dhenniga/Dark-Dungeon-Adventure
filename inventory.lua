@@ -59,7 +59,7 @@ function show_inventory()
   -- show item name banner
   for o in all(active_objects) do
     if o.flags.name and not reading then
-      pb(o.name, mapx, mapy + 112, 11, 0)
+      pb(o.name, mapx, mapy + 112, 11, 0) -- display the name of the room
     end
   end
 

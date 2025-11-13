@@ -12,20 +12,21 @@ p = {
 	drg = 0.9,
 	recoil = 0,
 	cooldown = 0,
-	weapon = nil,
 	af_idle = { 192, 194, 196 },
 	af_run = { 198, 200, 202, 204 },
 	total_hearts = 5,
 	remaining_hearts = 3,
 	fall_dir = nil,
-	keys = 1
+	keys = 1,
+	engaged = false,
+	moving = false
 }
 
 local idol = 1
 local running = 1
 local player_atk = false
 lanturn_timer = 0
-l_rad = 40
+-- l_rad = 120
 tp = 19
 
 -- Add sword animation to the player
@@ -35,7 +36,7 @@ p.sword_timer = 0 -- Timer for frame transitions
 p.sword_playing = false -- Whether the sword animation is playing
 
 function draw_player()
-	local isMoving = p.dx ~= 0 or p.dy ~= 0
+	p.moving = p.dx ~= 0 or p.dy ~= 0
 	p.curr_speed = max(abs(p.dx), abs(p.dy)) / 4.5
 
 	-- diag movement speed
@@ -47,15 +48,15 @@ function draw_player()
 	idol = (idol < 3.8) and idol + 0.09 * t_increment or 1
 
 	-- running animation
-	running = (isMoving and running < 4.5) and running + p.curr_speed or 1
+	running = (p.moving and running < 4.5) and running + p.curr_speed or 1
 
 	-- footstep sounds for specific frames
-	if not p.fall_dir and isMoving and ((running > 1.2 and running < 1.5) or (running > 3.2 and running < 3.4)) then
+	if not p.fall_dir and p.moving and ((running > 1.2 and running < 1.5) or (running > 3.2 and running < 3.4)) then
 		sfx(13, 3)
 	end
 
 	if not player_atk then
-		if isMoving then
+		if p.moving then 
 			if not p.fall_dir then spr(p.af_run[flr(running)], p.x - 4, p.y - 8, 2, 2, p.direction) end
 		else
 			if not p.fall_dir then spr(p.af_idle[flr(idol)], p.x - 4, p.y - 8, 2, 2, p.direction) end
@@ -94,17 +95,30 @@ end
 --
 
 function player_attack()
-	local a = { 72, 74, 106, 108 }
-	if item_selected == 4 and btn(BTN_O) then
-		player_atk = true
-		sfx(14, 3)
-		local i = flr(time() * (12 * t_increment) % 4) + 1
-		local o = p.direction and -12 or 4
-		spr(a[i], p.x + o, p.y - 10, 2, 2, p.direction)
-	else
-		player_atk = false
+	-- sword frames
+	local a={72,74,106,108}
+
+	-- start attack on button press if not already attacking
+	if btnp(BTN_O) and not p.engaged and not player_atk then
+		player_atk=true
+		p.atk_t=time() -- start timestamp
+		sfx(14,3)
+	end
+
+	-- handle active attack animation
+	if player_atk then
+		local t=time()-p.atk_t
+		local i=flr(t*12)%#a+1 -- control frame timing
+		local o=p.direction and -12 or 4
+		spr(a[i],p.x+o,p.y-10,2,2,p.direction)
+
+		-- attack lasts ~0.3s
+		if t>0.3 then
+			player_atk=false
+		end
 	end
 end
+
 
 --
 

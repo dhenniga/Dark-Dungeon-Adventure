@@ -100,15 +100,15 @@ function flying_enemy_can_move(a)
 end
 
 function player_can_move(a)
---  local xl,xr,yt,yb=a.x+a.dx,a.x+a.dx+a.w,a.y+a.dy,a.y+a.dy+a.h
---  for i=1,4 do
---   local x,y=i<3 and xl+4 or xr-4,(i%2<1)and yt+6 or yb-2
---   if is_fall_tile(x,y)then
---    sfx(11,3)determine_fall_direction(p)return false
---   end
---   x,y=i<3 and xl+2 or xr-2,(i%2<1)and yt+4 or yb-2
---   if solid(x,y)then return false end
---  end
+ local xl,xr,yt,yb=a.x+a.dx,a.x+a.dx+a.w,a.y+a.dy,a.y+a.dy+a.h
+ for i=1,4 do
+  local x,y=i<3 and xl+4 or xr-4,(i%2<1)and yt+6 or yb-2
+  if is_fall_tile(x,y)then
+   sfx(11,3)determine_fall_direction(p)return false
+  end
+  x,y=i<3 and xl+2 or xr-2,(i%2<1)and yt+4 or yb-2
+  if solid(x,y)then return false end
+ end
  return true
 end
 

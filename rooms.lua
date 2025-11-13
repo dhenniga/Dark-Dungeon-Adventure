@@ -3,12 +3,29 @@ tiledat = "00000000160001001600241004000500051004100a002c0025000900080025102b000
 active_objects = {}
 room_objects = {}
 door_states = {}
-f = { door = { door = true, solid = true }, arch = { door_arches = true }, light = { light = true }, rock = { standard_rock = true, solid = true }, c_rock = { cracked_rock = true, solid = true }, spike = { spike_tile = true }, vase = { vase = true, solid = true }, bat = { bat = true }, rat = { rat = true }, sign = { sign = true, interactable = true, solid = true }, key = { key = true, interactable = true }, flame_b = { flames_back = true }, flame_f = { flames_fore = true }, flame = { flames = true } }
+f = {
+  door = { door = true, solid = true, interactable = true },
+  arch = { door_arches = true },
+  light = { light = true },
+  rock = { standard_rock = true, solid = true },
+  c_rock = { cracked_rock = true, solid = true },
+  spike = { spike_tile = true },
+  vase = { vase = true, solid = true },
+  bat = { bat = true },
+  rat = { rat = true },
+  sign = { sign = true, solid = true, interactable = true },
+  key = { key = true, interactable = true },
+  flame_b = { flames_back = true },
+  flame_f = { flames_fore = true },
+  flame = { flames = true }
+}
 obj = function(x, y, fl) return { x = x, y = y, flags = fl } end
 light = function(x, y, r) return { x = x, y = y, r = r, flags = f.light } end
-door = function(x, y, flx, fly) return { x = x, y = y, flags = { door = true, solid = true }, locked = true, flx = flx, fly = fly, flp = flx, fx = flx, fy = fly } end
+door = function(x, y, flx, fly) return { x = x, y = y, flags = { door = true, solid = true, interactable = true }, locked = true, flx = flx, fly = fly, flp = flx, fx = flx, fy = fly } end
 arch = function(x, y, vori, flx, fly) local o = { x = x, y = y, vori = vori, flags = f.arch } o.flx = flx o.fly = fly o.flp = flx o.fx = flx o.fy = fly return o end
 sign = function(x, y, s, txt) return { x = x, y = y, sprite = s, text = txt, flags = f.sign } end
+key = function(x, y, s) return { x = x, y = y, sprite = s, flags = f.key } end
+
 room = function(x, y, t) room_objects[x .. "_" .. y] = t end
 
 room(
@@ -228,7 +245,7 @@ room(
     light(56, 8, 15),
     light(79, 8, 15),
     sign(34, 6, 170, { "THE KEY ON THE TABLE\nUNLOCKS A DOOR ON THIS\nFLOOR...\n\nBUT WHICH ONE?" }),
-    { x = 56, y = 64, sprite = 254, flags = f.key }
+    key(56, 64, 254)
   }
 )
 room(
@@ -369,46 +386,74 @@ function normalize_obj_list(t)
     end
   end
 end
+function draw_player_interact_icon()
+  local engaged_now = false
 
-function draw_sign_dialog()
   for obj in all(active_objects) do
+    local ox, oy = mapx + flr(obj.x), mapy + flr(obj.y)
+    local len = abs(ox - flr(p.x)) + abs(oy - flr(p.y) + 6)
     local f = obj.flags
+
     if f.interactable then
-      local ox, oy = mapx + obj.x, mapy + obj.y
-      local len = abs(ox - p.x) + abs(oy - p.y + 6)
-      if len < 22 and len > 0 then
-        if f.sign then
+      -- SIGN
+      if f.sign then
+        if len < 22 and len > 0 then
+          engaged_now = true
           sspr(24, 80, 5, 7, p.x + 8, p.y - 8)
+
           if btn(BTN_O) and not reading and val == 0 then
             dset(0, flr(p.x))
-            dset(1, flr(p.y)) 
-            dset(2, flr(p.remaining_hearts)) 
-            dset(3, flr(p.keys)) 
+            dset(1, flr(p.y))
+            dset(2, flr(p.remaining_hearts))
+            dset(3, flr(p.keys))
             dset(4, door_states)
-            t_increment = 0.05 tb_init(15, obj.text)
+            t_increment = 0.05
+            tb_init(15, obj.text)
           end
-        elseif f.key or f.chest then
+        end
+      end
+
+      -- KEY / CHEST
+      if f.key or f.chest then
+        if len < 22 and len > 0 then
+          engaged_now = true
           sspr(29, 80, 3, 7, p.x + 8, p.y - 8)
         end
-      elseif f.sign then
-        reading = false val = 0
       end
-    elseif f.door and f.solid then
-      local ox, oy = mapx + obj.x, mapy + obj.y
-      local len = abs(ox - p.x) + abs(oy - p.y + 6)
-      if len < 22 and not reading then
-        if p.keys > 0 then sspr(113, 96, 5, 8, p.x + 8, p.y - 8) end
-        if btnp(BTN_O) then
-          if obj.locked and p.keys > 0 then
-            p.keys -= 1 unlock_door(obj)
-          elseif obj.locked then
-            sfx(9, 3)
+
+      -- DOOR
+      if f.door and f.solid then
+        if len < 22 and len > 0 then
+          engaged_now = true
+          if not reading then
+            if p.keys > 0 then
+              sspr(113, 96, 5, 8, p.x + 8, p.y - 8)
+            end
+            if btnp(BTN_O) then
+              if obj.locked and p.keys > 0 then
+                p.keys -= 1
+                unlock_door(obj)
+              elseif obj.locked then
+                sfx(9, 3)
+              end
+            end
           end
         end
       end
     end
   end
+
+  -- Apply final decision once
+  p.engaged = engaged_now
+
+  -- When not engaged, auto-reset sign reading
+  if not engaged_now then
+    reading = false
+    val = 0
+  end
 end
+
+--
 
 function draw_background_sprites()
   for obj in all(active_objects) do

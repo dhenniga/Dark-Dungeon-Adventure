@@ -10,10 +10,6 @@ function palette(d)
 	end
 end
 
-function save_game()
-	s = { x = 64, y = 48, remaining_hearts = 3 }
-end
-
 function _init()
 	cartdata("davidhennigan_dark_dungeon_1")
 	p.x, p.y, p.remaining_hearts, p.keys = dget(0),dget(1),dget(2),3
@@ -44,8 +40,6 @@ function _update60()
 	if raindrops then update_rain() end
 end
 
-radius_thing = 128
-
 function _draw()
 	cls()
 	draw_map()
@@ -57,8 +51,7 @@ function _draw()
 	if darkrooms then darkroom() end
 	draw_inventory()
 	curr_item()
-	draw_sign_dialog()
+	draw_player_interact_icon()
 	tb_draw()
-	print(get_current_room(), mapx+112,mapy+120,7)
-  print(door_states, mapx,mapy,7)
 end
+
