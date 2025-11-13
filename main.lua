@@ -16,10 +16,7 @@ end
 
 function _init()
 	cartdata("davidhennigan_dark_dungeon_1")
-	p.x, p.y = dget(0),dget(1)
-
-	-- p.x,p.y=64*13,18*12 --or dget(0),dget(1)
-	p.remaining_hearts = dget(2)
+	p.x, p.y, p.remaining_hearts, p.keys = dget(0),dget(1),dget(2),3
 	t_increment = 1
 	pal(0)
 	palt(14, 1)
@@ -33,7 +30,7 @@ function _init()
 end
 
 function _update60()
-	if not stat(57) then music(0) end
+	-- if not stat(57) then music(0) end 
 	if stat(53) == -1 then sfx(20, 3) end
 	update_map()
 	check_room_change()
@@ -63,4 +60,5 @@ function _draw()
 	draw_sign_dialog()
 	tb_draw()
 	print(get_current_room(), mapx+112,mapy+120,7)
+  print(door_states, mapx,mapy,7)
 end

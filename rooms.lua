@@ -380,7 +380,12 @@ function draw_sign_dialog()
         if f.sign then
           sspr(24, 80, 5, 7, p.x + 8, p.y - 8)
           if btn(BTN_O) and not reading and val == 0 then
-            dset(0, flr(p.x)) dset(1, flr(p.y)) dset(2, p.remaining_hearts) t_increment = 0.05 tb_init(15, obj.text)
+            dset(0, flr(p.x))
+            dset(1, flr(p.y)) 
+            dset(2, flr(p.remaining_hearts)) 
+            dset(3, flr(p.keys)) 
+            dset(4, door_states)
+            t_increment = 0.05 tb_init(15, obj.text)
           end
         elseif f.key or f.chest then
           sspr(29, 80, 3, 7, p.x + 8, p.y - 8)
