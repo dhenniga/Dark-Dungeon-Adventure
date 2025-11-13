@@ -16,12 +16,10 @@ end
 
 function _init()
 	cartdata("davidhennigan_dark_dungeon_1")
-	-- p.x, p.y = 68, 18
-	--or dget(0),dget(1)
+	p.x, p.y = dget(0),dget(1)
 
-	p.x,p.y=64*13,18*12 --or dget(0),dget(1)
-	p.remaining_hearts = 5
-	--or dget(2)
+	-- p.x,p.y=64*13,18*12 --or dget(0),dget(1)
+	p.remaining_hearts = dget(2)
 	t_increment = 1
 	pal(0)
 	palt(14, 1)
@@ -35,7 +33,7 @@ function _init()
 end
 
 function _update60()
-	-- if not stat(57) then music(0) end
+	if not stat(57) then music(0) end
 	if stat(53) == -1 then sfx(20, 3) end
 	update_map()
 	check_room_change()
