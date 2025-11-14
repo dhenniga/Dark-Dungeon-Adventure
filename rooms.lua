@@ -23,22 +23,28 @@ obj = function(x, y, fl) return { x = x, y = y, flags = fl } end
 light = function(x, y, r) return { x = x, y = y, r = r, flags = f.light } end
 door = function(x, y, flx, fly) return { x = x, y = y, flags = { door = true, solid = true, interactable = true }, locked = true, flx = flx, fly = fly, flp = flx, fx = flx, fy = fly } end
 arch = function(x, y, vori, flx, fly) local o = { x = x, y = y, vori = vori, flags = f.arch } o.flx = flx o.fly = fly o.flp = flx o.fx = flx o.fy = fly return o end
-sign = function(x, y, s, txt) return { x = x, y = y, sprite = s, text = txt, flags = f.sign } end
+sign = function(x, y, txt) return { x = x, y = y, text = txt, flags = f.sign } end
 key = function(x, y, s) return { x = x, y = y, sprite = s, flags = f.key } end
-
 room = function(x, y, t) room_objects[x .. "_" .. y] = t end
+
+rf = function(t)
+  local f = { name = true, dungeon = false, sewer = false, pit = false, zoom = false, rain = false }
+  for k, v in pairs(t) do
+    f[k] = v
+  end
+  return f
+end
 
 room(
   0,
   0,
   {
-    { name = "CASTLE ENTRANCE", flags = { name = true, dungeon = true, zoom = false, rain = false } },
+    { name = "CASTLE ENTRANCE", flags = rf { dungeon = true } },
     { sprite = 128, x = 64, y = 0, w = 2, h = 2, flags = f.c_rock },
     arch(64, 0, true, false, false),
     sign(
       33,
       5,
-      170,
       {
         "WELCOME TO THE DARK\nDUNGEONS OF THE SPOOKY\nCASTLE OF NAME. CONTAINED\nWITHIN THESE DANK WALLS ARE\nSECRETS, TRIALS...",
         "...AND TREASURES BEYOND\nYOUR WILDEST IMAGINATION.\n\nARMED ONLY WITH A SWORD AND\nYOUR ELVEN POWER OF...",
@@ -64,7 +70,7 @@ room(
   0,
   1,
   {
-    { name = "CASTLE GARDEN STORAGE", flags = { name = true, sewer = true, rain = true } },
+    { name = "CASTLE GARDEN STORAGE", flags = rf { sewer = true, rain = true } },
     door(64, 0, false, false),
     arch(64, 0, true, false, false),
     light(56, 8, 15),
@@ -81,7 +87,7 @@ room(
   0,
   2,
   {
-    { name = "MAIN BOSS CHAMBER", flags = { name = true, dungeon = true, rain = false } },
+    { name = "MAIN BOSS CHAMBER", flags = rf { dungeon = true } },
     door(64, 112, false, true),
     arch(64, 120, true, true, true),
     obj(16, 16, f.flame_b),
@@ -98,7 +104,7 @@ room(
   0,
   3,
   {
-    { name = "PASSAGE END", flags = { name = true, dungeon = true } },
+    { name = "PASSAGE END", flags = rf { dungeon = true } },
     door(64, 0, false, false),
     arch(64, 0, true, false, false),
     light(56, 8, 15),
@@ -110,7 +116,6 @@ room(
     sign(
       18,
       70,
-      170,
       {
         "AHEAD LIES YOUR GREATEST\nCHALLENGE SO FAR...\n\n...THE DREADED BOSSNAME",
         "HE'S TOUGH AND FAST BUT HE\nDOESN'T SEE TOO WELL IN\nTHE DARK. THAT COULD MAKE\nALL THE DIFFERENCE."
@@ -122,7 +127,7 @@ room(
   1,
   0,
   {
-    { name = "ENTRANCE LOBBY INNER", flags = { name = true, dungeon = true } },
+    { name = "ENTRANCE LOBBY INNER", flags = rf { dungeon = true } },
     door(112, 32, true, false),
     light(118, 22, 15),
     light(118, 52, 15),
@@ -137,7 +142,7 @@ room(
   1,
   1,
   {
-    { name = "CASTLE GARDEN STORAGE", flags = { name = true, sewer = true, zoom = false, rain = true } },
+     { name = "CASTLE GARDEN STORAGE", flags = rf { sewer = true, rain = true } },
     door(112, 32, true, false),
     light(118, 22, 15),
     light(118, 52, 15),
@@ -157,12 +162,12 @@ room(
   1,
   2,
   {
-    { name = "THE PIT MAZE", flags = { name = true, pit = true, zoom = false, rain = false } },
+    { name = "THE PIT MAZE", flags = rf { pit = true } },
     obj(16, 16, { stairs_down = true, solid = true }),
     obj(16, 64, f.spike),
     obj(32, 96, f.spike),
     obj(48, 64, f.spike),
-    sign(48, 5, 170, { "THREE BUTTONS MUST BE\nPRESSED TO REVEAL THE\nHIDDEN STAIRCASE.\n\nWHERE COULD THEY BE?" }),
+    sign(48, 5, { "THREE BUTTONS MUST BE\nPRESSED TO REVEAL THE\nHIDDEN STAIRCASE.\n\nWHERE COULD THEY BE?" }),
     obj(100, 73, { wall_button = true })
   }
 )
@@ -170,7 +175,7 @@ room(
   2,
   0,
   {
-    { name = "THE BOTTOMLESS PATHS - WEST", flags = { name = true, dungeon = true } },
+     { name = "THE BOTTOMLESS PATHS - WEST", flags = rf { dungeon = true } },
     door(0, 32, true, true),
     arch(0, 32, false, false, false),
     arch(48, 120, true, true, true),
@@ -185,7 +190,7 @@ room(
   2,
   1,
   {
-    { name = "WATCH THE DROP", flags = { name = true, dungeon = true } },
+    { name = "WATCH THE DROP", flags = rf { dungeon = true } },
     door(0, 32, true, true),
     light(8, 22, 15),
     light(8, 52, 15),
@@ -198,7 +203,7 @@ room(
   2,
   2,
   {
-    { name = "THE PIT MAZE", flags = { name = true, pit = true, zoom = false, rain = false } },
+       { name = "THE PIT MAZE", flags = rf { pit = true } },
     obj(20, 41, { wall_button = true })
   }
 )
@@ -206,7 +211,7 @@ room(
   3,
   0,
   {
-    { name = "THE BOTTOMLESS PATHS - EAST", flags = { name = true, dungeon = true } },
+    { name = "THE BOTTOMLESS PATHS - EAST", flags = rf { dungeon = true } },
     obj(80, 80, f.bat),
     obj(60, 20, f.bat),
     obj(10, 90, f.bat)
@@ -216,16 +221,18 @@ room(
   3,
   1,
   {
-    { name = "THE BOTTOMLESS PATHS - SOUTH", flags = { name = true, zoom = false, dungeon = true } },
+  { name = "THE BOTTOMLESS PATHS - SOUTH", flags = rf { dungeon = true } },
     { sprite = 13, x = 70, y = 40, w = 2, h = 2, flags = { chest = true, solid = true, interactable = true } }
   }
 )
-room(3, 2, { { name = "THE PIT MAZE", flags = { name = true, pit = true, zoom = false, rain = false } } })
+room(3, 2, { 
+  { name = "THE PIT MAZE", flags = rf { pit = true } }
+ })
 room(
   4,
   0,
   {
-    { name = "RESTING POINT", flags = { name = true, dungeon = true } },
+    { name = "RESTING POINT", flags = rf { dungeon = true } },
     door(64, 112, false, true),
     arch(64, 120, true, true, true),
     light(56, 120, 15),
@@ -239,12 +246,12 @@ room(
   4,
   1,
   {
-    { name = "MYSTERY KEY ROOM", flags = { name = true, dungeon = true } },
+    { name = "MYSTERY KEY ROOM", flags = rf { dungeon = true } },
     door(64, 0, false, false),
     arch(64, 0, true, false, false),
     light(56, 8, 15),
     light(79, 8, 15),
-    sign(34, 6, 170, { "THE KEY ON THE TABLE\nUNLOCKS A DOOR ON THIS\nFLOOR...\n\nBUT WHICH ONE?" }),
+    sign(34, 6, { "THE KEY ON THE TABLE\nUNLOCKS A DOOR ON THIS\nFLOOR...\n\nBUT WHICH ONE?" }),
     key(56, 64, 254)
   }
 )
@@ -252,7 +259,7 @@ room(
   4,
   2,
   {
-    { name = "THE PIT MAZE", flags = { name = true, pit = true, zoom = false, rain = false } },
+    { name = "THE PIT MAZE", flags = rf { pit = true } },
     obj(84, 9, { wall_button = true })
   }
 )
@@ -260,26 +267,36 @@ room(
   4,
   3,
   {
-    { name = "HALL OF SPIKES", flags = { name = true, zoom = false, dungeon = true } },
+    { name = "HALL OF SPIKES", flags = rf { dungeon = true } },
     obj(15, 95, f.spike),
     obj(47, 79, f.spike),
     obj(63, 79, f.spike),
     obj(95, 95, f.spike)
   }
 )
-room(5, 0, { { name = "OUTER WALLS VIEW", flags = { name = true, zoom = false, dungeon = true } }, obj(32, 16, f.rock), obj(48, 32, f.c_rock), obj(64, 48, f.rock) })
-room(5, 1, { { name = "THE SLIDING FLOORS", flags = { name = true, zoom = false, dungeon = true } } })
-room(5, 2, { { name = "NEED NAME HERE", flags = { name = true, zoom = false, dungeon = true } } })
-room(5, 3, { { name = "NEED NAME HERE", flags = { name = true, zoom = false, dungeon = true } } })
+room(5, 0, { 
+  { name = "OUTER WALLS VIEW", flags = rf { dungeon = true } }, 
+  obj(32, 16, f.rock), 
+  obj(48, 32, f.c_rock), 
+  obj(64, 48, f.rock) 
+})
+room(5, 1, { 
+  { name = "THE SLIDING FLOORS", flags = rf { dungeon = true } }
+})
+room(5, 2, { 
+  { name = "NEED NAME HERE", flags = rf { dungeon = true } }
+ })
+room(5, 3, { 
+  { name = "NEED NAME HERE", flags = rf { dungeon = true } }
+ })
 room(
   6,
   0,
   {
-    { name = "OUTER COURTYARD", flags = { name = true, sewer = true, rain = true } },
+    { name = "OUTER COURTYARD", flags = rf { sewer = true, rain = true } },
     sign(
       105,
       53,
-      170,
       {
         "THE NEXT ROOM HAS SPIKES\nTHAT SHOOT FROM BOTTOM TO\nTOP. YOU HAVE TO PRESS THE\nBUTTON AT THE TOP TO STOP\nTHE SPIKES AND CLOSE...",
         "THE PITS DOORS."
@@ -291,8 +308,9 @@ room(
     light(103, 120, 15)
   }
 )
-room(6,1,{
-    { name = "CRUMBLING GROTTO", flags = { name = true, dungeon = true, rain = false } },
+room(
+  6, 1, {
+    { name = "CRUMBLING GROTTO", flags = rf { dungeon = true } },
     door(80, 0, false, false, true),
     arch(80, 0, true, false, false),
     light(72, 8, 15),
@@ -308,7 +326,7 @@ room(
   7,
   0,
   {
-    { name = "SPIKES OF DOOM", flags = { name = true, sewer = true } },
+    { name = "SPIKES OF DOOM", flags = rf { sewer = true, rain = true } },
     obj(20, 9, { wall_button = true }),
     obj(68, 9, { wall_button = true }),
     obj(116, 9, { wall_button = true })
@@ -318,7 +336,7 @@ room(
   7,
   1,
   {
-    { name = "MORE CRUMBLING GROTTO", flags = { name = true, dungeon = true } },
+    { name = "MORE CRUMBLING GROTTO", flags = rf { dungeon = true } },
     obj(40, 80, f.bat),
     obj(90, 50, f.bat),
     obj(64, 64, f.bat)
@@ -328,7 +346,7 @@ room(
   8,
   0,
   {
-    { name = "MORE CRUMBLING GROTTO", flags = { name = true, sewer = true } },
+    { name = "MORE CRUMBLING GROTTO", flags = rf { sewer = true, rain = true } },
     door(112, 64, true, false),
     light(118, 54, 15),
     light(118, 84, 15),
@@ -340,7 +358,39 @@ room(
   8,
   1,
   {
-    { name = "REALLY CRUMBLING GROTTO", flags = { name = true, dungeon = true } },
+    { name = "REALLY CRUMBLING GROTTO", flags = rf { dungeon = true } },
+    obj(40, 80, f.bat),
+    obj(90, 50, f.bat),
+    obj(64, 64, f.bat)
+  }
+)
+room(
+  8, 2, {
+    { name = "DEFAULT ROOM NAME", flags = rf { dungeon = true } }
+  }
+)
+
+room(
+  9, 0, {
+    { name = "CRUMBLED GROTTO", flags = rf { pit = true, zoom = true } },
+    door(0, 64, true, true),
+    light(8, 54, 15),
+    light(8, 84, 15),
+    arch(0, 64, false, false, false)
+  }
+)
+
+room(
+  9, 1, {
+    { name = "CRUMBLED GROTTO", flags = rf { dungeon = true } },
+    obj(40, 80, f.bat),
+    obj(90, 50, f.bat),
+    obj(64, 64, f.bat)
+  }
+)
+room(
+  10, 1, {
+    { name = "CRUMBLED GROTTO", flags = rf { dungeon = true } },
     obj(40, 80, f.bat),
     obj(90, 50, f.bat),
     obj(64, 64, f.bat)
@@ -386,62 +436,35 @@ function normalize_obj_list(t)
     end
   end
 end
+
 function draw_player_interact_icon()
   local engaged_now = false
-
-  for obj in all(active_objects) do
-    local ox, oy = mapx + flr(obj.x), mapy + flr(obj.y)
-    local len = abs(ox - flr(p.x)) + abs(oy - flr(p.y) + 6)
-    local f = obj.flags
-
+  for o in all(active_objects) do
+    local f = o.flags
     if f.interactable then
-      -- SIGN
-      if f.sign then
-        if len < 22 and len > 0 then
-          engaged_now = true
-          sspr(24, 80, 5, 7, p.x + 8, p.y - 8)
-
-          if btn(BTN_O) and not reading and val == 0 then
-            t_increment = 0.05
-            tb_init(15, obj.text)
-          end
+      local ox, oy = mapx + flr(o.x), mapy + flr(o.y)
+      local len = abs(ox - flr(p.x)) + abs(oy - flr(p.y) + 6)
+      if len > 0 and len < 22 then
+        engaged_now = true
+        if f.sign and not reading and val == 0 and btn(BTN_O) then
+          t_increment = 0.05 tb_init(15, o.text)
         end
-      end
-
-      -- KEY / CHEST
-      if f.key or f.chest then
-        if len < 22 and len > 0 then
-          engaged_now = true
-          sspr(29, 80, 3, 7, p.x + 8, p.y - 8)
-        end
-      end
-
-      -- DOOR
-      if f.door and f.solid then
-        if len < 22 and len > 0 then
-          engaged_now = true
-          if not reading then
-            if p.keys > 0 then
-              sspr(113, 96, 5, 8, p.x + 8, p.y - 8)
-            end
-            if btnp(BTN_O) then
-              if obj.locked and p.keys > 0 then
-                p.keys -= 1
-                unlock_door(obj)
-              elseif obj.locked then
-                sfx(9, 3)
-              end
+        if f.sign then sspr(24, 80, 5, 7, p.x + 8, p.y - 8) end
+        if f.key or f.chest then sspr(29, 80, 3, 7, p.x + 8, p.y - 8) end
+        if f.door and f.solid then
+          if p.keys > 0 then sspr(113, 96, 5, 8, p.x + 8, p.y - 8) end
+          if btnp(BTN_O) then
+            if o.locked and p.keys > 0 then
+              p.keys -= 1 unlock_door(o)
+            elseif o.locked then
+              sfx(9, 3)
             end
           end
         end
       end
     end
   end
-
-  -- Apply final decision once
   p.engaged = engaged_now
-
-  -- When not engaged, auto-reset sign reading
   if not engaged_now then
     reading = false
     val = 0
@@ -464,7 +487,7 @@ function draw_background_sprites()
       palette(pit)
     end
     if f.vase then spr(172, mapx + obj.x, mapy + obj.y, 2, 2) end
-    if f.sign then spr(obj.sprite, mapx + obj.x, mapy + obj.y, 2, 2) end
+    if f.sign then spr(170, mapx + obj.x, mapy + obj.y, 2, 2) end
     if f.key and not btn(BTN_O) then spr(obj.sprite, mapx + obj.x, mapy + obj.y, 2, 1) end
     if f.door then
       if obj.flp then
