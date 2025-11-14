@@ -170,7 +170,7 @@ room(
   2,
   0,
   {
-    { name = "THE BOTTOMLESS PATHS - WEST", flags = { name = true } },
+    { name = "THE BOTTOMLESS PATHS - WEST", flags = { name = true, dungeon = true } },
     door(0, 32, true, true),
     arch(0, 32, false, false, false),
     arch(48, 120, true, true, true),
@@ -185,7 +185,7 @@ room(
   2,
   1,
   {
-    { name = "WATCH THE DROP", flags = { name = true } },
+    { name = "WATCH THE DROP", flags = { name = true, dungeon = true } },
     door(0, 32, true, true),
     light(8, 22, 15),
     light(8, 52, 15),
@@ -206,7 +206,7 @@ room(
   3,
   0,
   {
-    { name = "THE BOTTOMLESS PATHS - EAST", flags = { name = true } },
+    { name = "THE BOTTOMLESS PATHS - EAST", flags = { name = true, dungeon = true } },
     obj(80, 80, f.bat),
     obj(60, 20, f.bat),
     obj(10, 90, f.bat)
@@ -216,7 +216,7 @@ room(
   3,
   1,
   {
-    { name = "THE BOTTOMLESS PATHS - SOUTH", flags = { name = true, zoom = false } },
+    { name = "THE BOTTOMLESS PATHS - SOUTH", flags = { name = true, zoom = false, dungeon = true } },
     { sprite = 13, x = 70, y = 40, w = 2, h = 2, flags = { chest = true, solid = true, interactable = true } }
   }
 )
@@ -225,7 +225,7 @@ room(
   4,
   0,
   {
-    { name = "RESTING POINT", flags = { name = true } },
+    { name = "RESTING POINT", flags = { name = true, dungeon = true } },
     door(64, 112, false, true),
     arch(64, 120, true, true, true),
     light(56, 120, 15),
@@ -239,7 +239,7 @@ room(
   4,
   1,
   {
-    { name = "MYSTERY KEY ROOM", flags = { name = true } },
+    { name = "MYSTERY KEY ROOM", flags = { name = true, dungeon = true } },
     door(64, 0, false, false),
     arch(64, 0, true, false, false),
     light(56, 8, 15),
@@ -260,14 +260,17 @@ room(
   4,
   3,
   {
-    { name = "HALL OF SPIKES", flags = { name = true, zoom = false } },
+    { name = "HALL OF SPIKES", flags = { name = true, zoom = false, dungeon = true } },
     obj(15, 95, f.spike),
     obj(47, 79, f.spike),
     obj(63, 79, f.spike),
     obj(95, 95, f.spike)
   }
 )
-room(5, 0, { { name = "OUTER WALLS VIEW", flags = { name = true, zoom = false } }, obj(32, 16, f.rock), obj(48, 32, f.c_rock), obj(64, 48, f.rock) })
+room(5, 0, { { name = "OUTER WALLS VIEW", flags = { name = true, zoom = false, dungeon = true } }, obj(32, 16, f.rock), obj(48, 32, f.c_rock), obj(64, 48, f.rock) })
+room(5, 1, { { name = "THE SLIDING FLOORS", flags = { name = true, zoom = false, dungeon = true } } })
+room(5, 2, { { name = "NEED NAME HERE", flags = { name = true, zoom = false, dungeon = true } } })
+room(5, 3, { { name = "NEED NAME HERE", flags = { name = true, zoom = false, dungeon = true } } })
 room(
   6,
   0,
@@ -318,7 +321,7 @@ room(
   7,
   1,
   {
-    { name = "MORE CRUMBLING GROTTO", flags = { name = true } },
+    { name = "MORE CRUMBLING GROTTO", flags = { name = true, dungeon = true } },
     obj(40, 80, f.bat),
     obj(90, 50, f.bat),
     obj(64, 64, f.bat)
@@ -328,7 +331,7 @@ room(
   8,
   0,
   {
-    { name = "MORE CRUMBLING GROTTO", flags = { name = true } },
+    { name = "MORE CRUMBLING GROTTO", flags = { name = true, dungeon = true } },
     door(112, 64, true, false),
     light(118, 54, 15),
     light(118, 84, 15),
@@ -340,7 +343,7 @@ room(
   8,
   1,
   {
-    { name = "REALLY CRUMBLING GROTTO", flags = { name = true } },
+    { name = "REALLY CRUMBLING GROTTO", flags = { name = true, dungeon = true } },
     obj(40, 80, f.bat),
     obj(90, 50, f.bat),
     obj(64, 64, f.bat)
@@ -549,11 +552,36 @@ function load_room_objects(room_id)
   end
 end
 
+-- local current_room = ""
+-- function check_room_change()
+--   local new_room = get_current_room()
+--   if new_room ~= current_room then
+--     current_room = new_room active_objects = {} load_room_objects(current_room)
+--   end
+-- end
+
 local current_room = ""
 function check_room_change()
   local new_room = get_current_room()
   if new_room ~= current_room then
-    current_room = new_room active_objects = {} load_room_objects(current_room)
+    current_room = new_room
+
+    active_objects = {}
+    load_room_objects(current_room)
+
+    -- set palette based on room flags
+    local flags = room_objects[current_room][1].flags
+
+    if flags.dungeon then
+      palette(dungeon)
+      current_palette = "dungeon"
+    elseif flags.sewer then
+      palette(sewer)
+      current_palette = "sewer"
+    elseif flags.pit then
+      palette(pit)
+      current_palette = "pit"
+    end
   end
 end
 

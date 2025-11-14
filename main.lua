@@ -12,7 +12,7 @@ end
 
 function _init()
 	cartdata("davidhennigan_dark_dungeon_1")
-	p.x, p.y, p.remaining_hearts, p.keys = dget(0),dget(1),dget(2),3
+	p.x, p.y, p.remaining_hearts, p.keys = dget(0), dget(1), dget(2), 3
 	t_increment = 1
 	pal(0)
 	palt(14, 1)
@@ -23,11 +23,22 @@ function _init()
 	q = qico()
 	poke(0x5f2e, 1)
 	palette(dungeon)
+	current_palette = "dungeon"
 end
 
 function _update60()
-	-- if not stat(57) then music(0) end 
-	if stat(53) == -1 then sfx(20, 3) end
+	if not stat(57) then music(0) end
+
+	if stat(53) == -1 then
+		if current_palette == "dungeon" then
+			sfx(20, 3)
+		elseif current_palette == "sewer" then
+			sfx(41, 3)
+		elseif current_palette == "pit" then
+			sfx(55, 3) -- or whatever
+		end
+	end
+
 	update_map()
 	check_room_change()
 	update_player()
@@ -53,5 +64,5 @@ function _draw()
 	curr_item()
 	draw_player_interact_icon()
 	tb_draw()
+	print(get_current_room(), mapx, mapy, 7)
 end
-
