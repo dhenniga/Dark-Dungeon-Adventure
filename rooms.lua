@@ -291,10 +291,7 @@ room(
     light(103, 120, 15)
   }
 )
-room(
-  6,
-  1,
-  {
+room(6,1,{
     { name = "CRUMBLING GROTTO", flags = { name = true, dungeon = true, rain = false } },
     door(80, 0, false, false, true),
     arch(80, 0, true, false, false),
@@ -311,7 +308,7 @@ room(
   7,
   0,
   {
-    { name = "SPIKES OF DOOM", flags = { name = true } },
+    { name = "SPIKES OF DOOM", flags = { name = true, sewer = true } },
     obj(20, 9, { wall_button = true }),
     obj(68, 9, { wall_button = true }),
     obj(116, 9, { wall_button = true })
@@ -331,7 +328,7 @@ room(
   8,
   0,
   {
-    { name = "MORE CRUMBLING GROTTO", flags = { name = true, dungeon = true } },
+    { name = "MORE CRUMBLING GROTTO", flags = { name = true, sewer = true } },
     door(112, 64, true, false),
     light(118, 54, 15),
     light(118, 84, 15),
@@ -405,11 +402,6 @@ function draw_player_interact_icon()
           sspr(24, 80, 5, 7, p.x + 8, p.y - 8)
 
           if btn(BTN_O) and not reading and val == 0 then
-            dset(0, flr(p.x))
-            dset(1, flr(p.y))
-            dset(2, flr(p.remaining_hearts))
-            dset(3, flr(p.keys))
-            dset(4, door_states)
             t_increment = 0.05
             tb_init(15, obj.text)
           end
@@ -582,6 +574,11 @@ function check_room_change()
       palette(pit)
       current_palette = "pit"
     end
+
+    dset(0, flr(p.x))
+    dset(1, flr(p.y))
+    dset(2, flr(p.remaining_hearts))
+    dset(3, flr(p.keys))
   end
 end
 

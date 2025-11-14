@@ -35,7 +35,7 @@ function _update60()
 		elseif current_palette == "sewer" then
 			sfx(41, 3)
 		elseif current_palette == "pit" then
-			sfx(55, 3) -- or whatever
+			sfx(42, 3) -- or whatever
 		end
 	end
 
