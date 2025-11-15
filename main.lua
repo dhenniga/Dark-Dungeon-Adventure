@@ -1,18 +1,22 @@
 BTN_L, BTN_R, BTN_U, BTN_D, BTN_X, BTN_O = 0, 1, 2, 3, 4, 5
+dungeon="128,7,139,132,5,6,135,4,137,138,9,143,13,14,15"
+sewer="129,7,131,130,129,131,135,132,137,139,9,4,1,14,5"
+pit="0,7,139,132,128,130,135,4,137,138,9,143,129,14,15"
+music_enabled = true
+ambient_cooldown = 0
 
-dungeon = { { 1, 128 }, { 2, 7 }, { 3, 139 }, { 4, 132 }, { 5, 5 }, { 6, 6 }, { 7, 135 }, { 8, 4 }, { 9, 137 }, { 10, 138 }, { 11, 9 }, { 12, 143 }, { 13, 13 }, { 14, 14 }, { 15, 15 } }
-sewer = { { 1, 129 }, { 2, 7 }, { 3, 131 }, { 4, 130 }, { 5, 129 }, { 6, 131 }, { 7, 135 }, { 8, 132 }, { 9, 137 }, { 10, 139 }, { 11, 9 }, { 12, 4 }, { 13, 1 }, { 14, 14 }, { 15, 5 } }
-pit = { { 1, 0 }, { 2, 7 }, { 3, 139 }, { 4, 132 }, { 5, 128 }, { 13, 129 }, { 6, 130 }, { 7, 135 }, { 8, 4 }, { 9, 137 }, { 10, 138 }, { 11, 9 }, { 12, 143 }, { 14, 14 }, { 15, 15 } }
 
-function palette(d)
-	for i in all(d) do
-		pal(i[1], i[2], 1)
-	end
+
+
+function palette(s)
+ for i,v in ipairs(split(s,",")) do
+  pal(i,v+0,1)
+ end
 end
 
 function _init()
 	cartdata("davidhennigan_dark_dungeon_1")
-	p.x, p.y, p.remaining_hearts, p.keys = dget(0), dget(1), dget(2), 3
+	p.x, p.y, p.remaining_hearts, p.keys = dget(0), dget(1), 4, 3
 	t_increment = 1
 	pal(0)
 	palt(14, 1)
@@ -22,22 +26,30 @@ function _init()
 	init_rain()
 	q = qico()
 	poke(0x5f2e, 1)
-	palette(dungeon)
-	current_palette = "dungeon"
+	music(0)
+	menuitem(1, "toggle music", function()
+    if music_enabled then
+        music(-1)
+        music_enabled = false
+    else
+        music(0)
+        music_enabled = true
+    end
+end)
+
 end
 
 function _update60()
-	if not stat(57) then music(0) end
 
-	if stat(53) == -1 then
-		if current_palette == "dungeon" then
-			sfx(20, 3)
-		elseif current_palette == "sewer" then
-			sfx(41, 3)
-		elseif current_palette == "pit" then
-			sfx(42, 3) -- or whatever
-		end
-	end
+	-- if stat(53) == -1 then
+	-- 	if current_palette == "dungeon" then
+	-- 		sfx(20, 3)
+	-- 	elseif current_palette == "sewer" then
+	-- 		sfx(41, 3)
+	-- 	elseif current_palette == "pit" then
+	-- 		sfx(42, 3)
+	-- 	end
+	-- end
 
 	update_map()
 	check_room_change()
@@ -64,5 +76,5 @@ function _draw()
 	curr_item()
 	draw_player_interact_icon()
 	tb_draw()
-	print(get_current_room(), mapx, mapy, 7)
+	print(ch, mapx, mapy, 7)
 end
