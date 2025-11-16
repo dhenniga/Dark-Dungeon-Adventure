@@ -3,10 +3,6 @@ dungeon="128,7,139,132,5,6,135,4,137,138,9,143,13,14,15"
 sewer="129,7,131,130,129,131,135,132,137,139,9,4,1,14,5"
 pit="0,7,139,132,128,130,135,4,137,138,9,143,129,14,15"
 music_enabled = true
-ambient_cooldown = 0
-
-
-
 
 function palette(s)
  for i,v in ipairs(split(s,",")) do
@@ -41,15 +37,15 @@ end
 
 function _update60()
 
-	-- if stat(53) == -1 then
-	-- 	if current_palette == "dungeon" then
-	-- 		sfx(20, 3)
-	-- 	elseif current_palette == "sewer" then
-	-- 		sfx(41, 3)
-	-- 	elseif current_palette == "pit" then
-	-- 		sfx(42, 3)
-	-- 	end
-	-- end
+	if stat(53) == -1 then
+		if current_palette == "dungeon" then
+			sfx(20, 3)
+		elseif current_palette == "sewer" then
+			sfx(41, 3)
+		elseif current_palette == "pit" then
+			sfx(42, 3)
+		end
+	end
 
 	update_map()
 	check_room_change()
@@ -76,5 +72,4 @@ function _draw()
 	curr_item()
 	draw_player_interact_icon()
 	tb_draw()
-	print(ch, mapx, mapy, 7)
 end
