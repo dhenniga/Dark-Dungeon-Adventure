@@ -23,17 +23,8 @@ function _init()
 	q = qico()
 	poke(0x5f2e, 1)
 	if music_enabled then music(0) end
-	menuitem(
-		1, "toggle music", function()
-			if music_enabled then
-				music(-1)
-				music_enabled = false
-			else
-				music(0)
-				music_enabled = true
-			end
-		end
-	)
+	menuitem(1,"toggle music",function()music_enabled=not music_enabled music(music_enabled and 0 or -1)end)
+	menuitem(2,"toggle collision",function()toggle_collision=not toggle_collision end)
 end
 
 function _update60()
