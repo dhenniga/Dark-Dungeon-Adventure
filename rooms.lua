@@ -1,41 +1,34 @@
 --rooms
-tiledat = "00000000160001001600241004000500051004100a002c0025000900080025102b000b002b002c002b002c002b00360037002c008e008f000f000f10a400a5000000000010001100341012101400150015101410250119001a003c003b001b00180025113b00260027003c003b003c003b003c009e009f001f001f10b400b500020003002b002c0003100210140115011511141129002a00080009002b002c000a002c002b000b00860087008800890082008300ae00af00a000a100a100a200120013003b003c0013101210040105010511041139003c003b003c00180019001a003c003b001b009600970098009900920093003b003c00b000b100b100b200120034011101100134111210110128002800110138010100010038010600070035003500080009000800251025000800ae00af00b3002c008a008b008c008d002401160101011601160124110101380038000101280110001000280117101700000000001800190018002511250118001a003c003b003c009a009b009c009d0000000000000000000000000000000000000000000c102c00000000001710170017100000120013001310121001001600ae00af00a000a100a100a100a100a20000003a00000000000000000000000000000000000c113c0000000000171017001710000023102210221023008e008f003b001b00b000b100b100b100b100b20024001600060035003500070000001700000000000000000011012000210021102010110100003210320000000000000000000000be00bf0083108210a000a200120034001710000000001700000017000000000000000000160130000000000030101601000032113201000000000000000000009600970093109210b000b200250025100a000b002b002c000c100c000a000b000000000016003001000000003011160023112211221123012f002f002f002f003f002f002f003f00080008001a001b00250125110c110c013b003c001a001b000000000011002001210121112011111012001301131112102f003f002f002f002f002f003f002f003f002b000000000000000000000000000000000000000000000000003f000a10250025103f000c002f002f00b3002c00080008002f002f002f000a100a002f002b003f000000000000000000000000000000000000000000000000002f000a100a000a102f002f000c110c01180019002f002f00080108012f000a100a002f000801080100000000000000000000000000000000000000003f002f000c102f000a000a102f003f000c100c002f000c0025000800080025100a002f002f000a100a002b0000000000000000000000000000000000000000000c113f002f003f000a000a102f000c012f002f002f002f000a002f002f000a1025010801080125110a003f000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000002f002f0000000000000000003f000a100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000c113f0000000000000000002b000a100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
-active_objects = {}
-local room_objects = {}
-local door_states = {}
-
-fl = function(...)
-  local t = {}
-  for v in all({...}) do
-    t[v] = true
-  end
-  return t
-end
-
+room_objects, door_states, active_objects = {}, {}, {}
 f = {
-  door = fl "door","solid","interactable",
-  arch = fl "door_arches",
-  light = fl "light",
-  rock = fl "standard_rock","solid",
-  c_rock = fl "cracked_rock","solid",
-  spike = fl "spike_tile",
-  vase = fl "vase","solid",
-  bat = fl "bat",
-  rat = fl "rat",
-  sign = fl "sign","solid","interactable",
-  key = fl "key","interactable",
-  flame_b = fl "flames_back",
-  flame_f = fl "flames_fore",
-  flame = fl "flames"
+  -- door = { door = true, solid = true, interactable = true, locked = true },
+  -- arch = { door_arches = true },
+  -- light = { light = true },
+  rock = { rock = true, solid = true },
+  c_rock = { c_rock = true, solid = true },
+  spike = { spike_tile = true },
+  vase = { vase = true, solid = true },
+  bat = { bat = true },
+  rat = { rat = true },
+  -- sign = { sign = true, solid = true, interactable = true },
+  -- key = { key = true, interactable = true },
+  flame_b = { flames_back = true },
+  flame_f = { flames_fore = true },
+  flame = { flames = true }
+  -- w_button = { w_button = true, interactable = true }
 }
 
 obj = function(x, y, fl) return { x = x, y = y, flags = fl } end
-light = function(x, y, r) return { x = x, y = y, r = r, flags = f.light } end
-door = function(x, y, flx, fly) return { x = x, y = y, flags = { door = true, solid = true, interactable = true }, locked = true, flx = flx, fly = fly, flp = flx, fx = flx, fy = fly } end
-arch = function(x, y, vori, flx, fly) local o = { x = x, y = y, vori = vori, flags = f.arch } o.flx = flx o.fly = fly o.flp = flx o.fx = flx o.fy = fly return o end
-sign = function(x, y, txt) return { x = x, y = y, text = txt, flags = f.sign } end
-key = function(x, y, s) return { x = x, y = y, sprite = s, flags = f.key } end
+light = function(x, y, r) return { x = x, y = y, r = r, flags = { light = true } } end
+door = function(x, y, flx, fly) return { x = x, y = y, flx = flx, fly = fly, flp = flx, fx = flx, fy = fly, flags = { door = true, solid = true, interactable = true, locked = true } } end
+arch = function(x, y, v, flx, fly) return { x = x, y = y, vori = v, flx = flx, fly = fly, flp = flx, fx = flx, fy = fly, flags = { door_arches = true } } end
+sign = function(x, y, t) return { x = x, y = y, text = t, flags = { sign = true, interactable = true, solid = true } } end
+key = function(x, y) return { x = x, y = y, flags = { key = true, interactable = true } } end
+w_button = function(x, y) return { x = x, y = y, flags = { w_button = true, interactable = true } } end
+chest = function(x, y) return { x = x, y = y, flags = { chest = true, interactable = true } } end
 room = function(x, y, t) room_objects[x .. "_" .. y] = t end
+
+--
 
 rf = function(t)
   local f = { name = true, dungeon = false, sewer = false, pit = false, zoom = false, rain = false }
@@ -46,11 +39,9 @@ rf = function(t)
 end
 
 room(
-  0,
-  0,
-  {
+  0, 0, {
     { name = "CASTLE ENTRANCE", flags = rf { dungeon = true } },
-    { sprite = 128, x = 64, y = 0, w = 2, h = 2, flags = f.c_rock },
+    obj(64, 0, f.c_rock),
     arch(64, 0, true, false, false),
     sign(
       33,
@@ -90,7 +81,8 @@ room(
     obj(96, 96, f.vase),
     obj(96, 80, f.vase),
     obj(20, 90, f.bat),
-    obj(100, 40, f.rat)
+    obj(100, 40, f.rat),
+    obj(32, 48, f.vase)
   }
 )
 room(
@@ -152,7 +144,7 @@ room(
   1,
   1,
   {
-     { name = "CASTLE GARDEN STORAGE", flags = rf { sewer = true, rain = true } },
+    { name = "CASTLE GARDEN STORAGE", flags = rf { sewer = true, rain = true } },
     door(112, 32, true, false),
     light(118, 22, 15),
     light(118, 52, 15),
@@ -178,20 +170,20 @@ room(
     obj(32, 96, f.spike),
     obj(48, 64, f.spike),
     sign(48, 5, { "THREE BUTTONS MUST BE\nPRESSED TO REVEAL THE\nHIDDEN STAIRCASE.\n\nWHERE COULD THEY BE?" }),
-    obj(100, 73, { wall_button = true })
+    w_button(100, 73)
   }
 )
 room(
   2,
   0,
   {
-     { name = "THE BOTTOMLESS PATHS - WEST", flags = rf { dungeon = true } },
+    { name = "THE BOTTOMLESS PATHS - WEST", flags = rf { dungeon = true } },
     door(0, 32, true, true),
     arch(0, 32, false, false, false),
     arch(48, 120, true, true, true),
     light(8, 22, 15),
     light(8, 52, 15),
-    { x = 18, y = 100, sprite = 254, flags = f.key },
+    key(18, 100),
     obj(80, 80, f.bat),
     obj(60, 20, f.bat)
   }
@@ -205,16 +197,15 @@ room(
     light(8, 22, 15),
     light(8, 52, 15),
     arch(0, 32, false, false, false),
-    arch(48, 0, true, false, false),
-    { flags = { dungeon = true, zoom = false, rain = false } }
+    arch(48, 0, true, false, false)
   }
 )
 room(
   2,
   2,
   {
-       { name = "THE PIT MAZE", flags = rf { pit = true } },
-    obj(20, 41, { wall_button = true })
+    { name = "THE PIT MAZE", flags = rf { pit = true } },
+    w_button(20, 41)
   }
 )
 room(
@@ -231,13 +222,15 @@ room(
   3,
   1,
   {
-  { name = "THE BOTTOMLESS PATHS - SOUTH", flags = rf { dungeon = true } },
-    { sprite = 13, x = 70, y = 40, w = 2, h = 2, flags = { chest = true, solid = true, interactable = true } }
+    { name = "THE BOTTOMLESS PATHS - SOUTH", flags = rf { dungeon = true } },
+    chest(70, 40)
   }
 )
-room(3, 2, { 
-  { name = "THE PIT MAZE", flags = rf { pit = true } }
- })
+room(
+  3, 2, {
+    { name = "THE PIT MAZE", flags = rf { pit = true } }
+  }
+)
 room(
   4,
   0,
@@ -249,7 +242,11 @@ room(
     light(87, 120, 15),
     obj(80, 32, f.flame),
     light(88, 36, 30),
-    obj(80, 32, f.flame_b)
+    obj(80, 32, f.flame_b),
+    obj(80, 8, f.vase),
+    obj(16, 96, f.vase),
+    obj(32, 96, f.vase),
+    obj(16, 80, f.vase)
   }
 )
 room(
@@ -262,7 +259,7 @@ room(
     light(56, 8, 15),
     light(79, 8, 15),
     sign(34, 6, { "THE KEY ON THE TABLE\nUNLOCKS A DOOR ON THIS\nFLOOR...\n\nBUT WHICH ONE?" }),
-    key(56, 64, 254)
+    key(56, 64)
   }
 )
 room(
@@ -270,7 +267,7 @@ room(
   2,
   {
     { name = "THE PIT MAZE", flags = rf { pit = true } },
-    obj(84, 9, { wall_button = true })
+    w_button(84, 9)
   }
 )
 room(
@@ -284,21 +281,29 @@ room(
     obj(95, 95, f.spike)
   }
 )
-room(5, 0, { 
-  { name = "OUTER WALLS VIEW", flags = rf { dungeon = true } }, 
-  obj(32, 16, f.rock), 
-  obj(48, 32, f.c_rock), 
-  obj(64, 48, f.rock) 
-})
-room(5, 1, { 
-  { name = "THE SLIDING FLOORS", flags = rf { dungeon = true } }
-})
-room(5, 2, { 
-  { name = "NEED NAME HERE", flags = rf { dungeon = true } }
- })
-room(5, 3, { 
-  { name = "NEED NAME HERE", flags = rf { dungeon = true } }
- })
+room(
+  5, 0, {
+    { name = "OUTER WALLS VIEW", flags = rf { dungeon = true } },
+    obj(32, 16, f.rock),
+    obj(48, 32, f.c_rock),
+    obj(64, 48, f.rock)
+  }
+)
+room(
+  5, 1, {
+    { name = "THE SLIDING FLOORS", flags = rf { dungeon = true } }
+  }
+)
+room(
+  5, 2, {
+    { name = "NEED NAME HERE", flags = rf { dungeon = true } }
+  }
+)
+room(
+  5, 3, {
+    { name = "NEED NAME HERE", flags = rf { dungeon = true } }
+  }
+)
 room(
   6,
   0,
@@ -337,9 +342,9 @@ room(
   0,
   {
     { name = "SPIKES OF DOOM", flags = rf { sewer = true, rain = true } },
-    obj(20, 9, { wall_button = true }),
-    obj(68, 9, { wall_button = true }),
-    obj(116, 9, { wall_button = true })
+    w_button(20, 9),
+    w_button(68, 9),
+    w_button(116, 9)
   }
 )
 room(
@@ -361,7 +366,7 @@ room(
     light(118, 54, 15),
     light(118, 84, 15),
     arch(120, 64, false, true, false),
-    { sprite = 13, x = 96, y = 16, w = 2, h = 2, flags = { chest = true, solid = true, interactable = true } }
+    chest(96, 16)
   }
 )
 room(
@@ -498,7 +503,7 @@ function draw_background_sprites()
     end
     if f.vase then spr(172, mapx + obj.x, mapy + obj.y, 2, 2) end
     if f.sign then spr(170, mapx + obj.x, mapy + obj.y, 2, 2) end
-    if f.key and not btn(BTN_O) then spr(obj.sprite, mapx + obj.x, mapy + obj.y, 2, 1) end
+    if f.key then spr(254, mapx + obj.x, mapy + obj.y, 2, 1) end
     if f.door then
       if obj.flp then
         if obj.locked then spr(168, mapx + obj.x, mapy + obj.y, 2, 2, obj.fy, obj.fx) end
@@ -507,13 +512,13 @@ function draw_background_sprites()
       end
       door_lights(mapx + obj.x, mapy + obj.y, obj.fx, obj.fy, obj.flp)
     end
-    if f.chest then spr(obj.sprite, mapx + obj.x, mapy + obj.y, obj.w, obj.h, obj.fx, obj.fy) end
-    if f.standard_rock then spr(134, mapx + obj.x, mapy + obj.y, 2, 2) end
+    if f.chest then spr(13, mapx + obj.x, mapy + obj.y, 2, 2, obj.fx, obj.fy) end
+    if f.rock then spr(134, mapx + obj.x, mapy + obj.y, 2, 2) end
     if f.stairs_down then spr(130, mapx + obj.x, mapy + obj.y, 2, 2) end
     if f.stairs_up then spr(132, mapx + obj.x, mapy + obj.y, 2, 2) end
-    if f.cracked_rock then spr(136, mapx + obj.x, mapy + obj.y, 2, 2) end
+    if f.c_rock then spr(136, mapx + obj.x, mapy + obj.y, 2, 2) end
     if f.spike_tile then animate_spikes(obj) end
-    if f.wall_button then spr(95, mapx + obj.x, mapy + obj.y, 1, 1) end
+    if f.w_button then spr(95, mapx + obj.x, mapy + obj.y, 1, 1) end
     if f.flames_back then flames(mapx + obj.x, mapy + obj.y) end
   end
 end
@@ -598,7 +603,7 @@ function check_room_change()
     local flags = room_objects[current_room][1].flags
 
     palette(flags.dungeon and dungeon or flags.sewer and sewer or pit)
-    current_palette=flags.dungeon and"dungeon" or flags.sewer and"sewer" or"pit"
+    current_palette = flags.dungeon and "dungeon" or flags.sewer and "sewer" or "pit"
 
     dset(0, flr(p.x))
     dset(1, flr(p.y))
