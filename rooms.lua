@@ -25,7 +25,7 @@ arch = function(x, y, v, flx, fly) return { x = x, y = y, vori = v, flx = flx, f
 sign = function(x, y, t) return { x = x, y = y, text = t, flags = { sign = true, interactable = true, solid = true } } end
 key = function(x, y) return { x = x, y = y, flags = { key = true, interactable = true } } end
 w_button = function(x, y) return { x = x, y = y, flags = { w_button = true, interactable = true } } end
-chest = function(x, y) return { x = x, y = y, flags = { chest = true, interactable = true } } end
+chest = function(x, y) return { x = x, y = y, flags = { chest = true, interactable = true, solid = true } } end
 room = function(x, y, t) room_objects[x .. "_" .. y] = t end
 
 --
@@ -387,11 +387,18 @@ room(
 
 room(
   9, 0, {
-    { name = "CRUMBLED GROTTO", flags = rf { pit = true, zoom = true } },
+    { name = "THE LIGHTLESS PIT", flags = rf { pit = true } },
     door(0, 64, true, true),
     light(8, 54, 15),
     light(8, 84, 15),
-    arch(0, 64, false, false, false)
+    arch(0, 64, false, false, false),
+    light(88, 100, 30),
+    obj(80, 96, f.flame_f),
+    light(54, 20, 30),
+    obj(48, 16, f.flame_b),
+    obj(40, 80, f.rat),
+    obj(90, 50, f.rat),
+    obj(64, 64, f.rat)
   }
 )
 
@@ -403,6 +410,13 @@ room(
     obj(64, 64, f.bat)
   }
 )
+
+room(
+  10, 0, {
+    { name = "THE LIGHTLESS PIT", flags = rf { pit = true } },
+  }
+)
+
 room(
   10, 1, {
     { name = "CRUMBLED GROTTO", flags = rf { dungeon = true } },
