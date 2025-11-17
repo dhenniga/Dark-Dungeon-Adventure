@@ -90,10 +90,10 @@ function show_inventory()
   end
 
   -- background black border for top
-  circfill(p.x+2,p.y-20,ob,0)
-  circfill(p.x+23,p.y,ob,0)
-  circfill(p.x+2,p.y+20,ob,0)
-  circfill(p.x-19,p.y,ob,0)
+for p2 in all{{2,-20},{23,0},{2,20},{-19,0}} do
+  circfill(p.x+p2[1],p.y+p2[2],ob,0)
+end
+
 
   -- backgruond back
   circfill(p.x + 2, p.y, outelastic(it, 0, 26, 26), 0)
