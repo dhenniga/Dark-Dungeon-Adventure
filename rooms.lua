@@ -396,9 +396,12 @@ room(
     obj(80, 96, f.flame_f),
     light(54, 20, 30),
     obj(48, 16, f.flame_b),
-    obj(40, 80, f.rat),
-    obj(90, 50, f.rat),
-    obj(64, 64, f.rat)
+    obj(90, 16, f.rat),
+    obj(90, 16, f.rat),
+    obj(90, 16, f.rat),
+    obj(90, 16, f.rat),
+    obj(90, 16, f.rat),
+    obj(90, 16, f.rat)
   }
 )
 
@@ -596,14 +599,6 @@ function load_room_objects(room_id)
   end
 end
 
--- local current_room = ""
--- function check_room_change()
---   local new_room = get_current_room()
---   if new_room ~= current_room then
---     current_room = new_room active_objects = {} load_room_objects(current_room)
---   end
--- end
-
 local current_room = ""
 function check_room_change()
   local new_room = get_current_room()
@@ -621,8 +616,6 @@ function check_room_change()
 
     dset(0, flr(p.x))
     dset(1, flr(p.y))
-    dset(2, flr(p.remaining_hearts))
-    dset(3, flr(p.keys))
   end
 end
 

@@ -38,12 +38,15 @@ function _update60()
 		end
 	end
 
+if music_enabled and not stat(57) then music(0) end
+
+
 	update_map()
 	check_room_change()
 	update_player()
 	baddie_m.update()
 	q.proc()
-	if item_selected == 1 and lanturn_timer < 12 then
+	if player_light_enabled and lanturn_timer < 12 then
 		lanturn_timer = lanturn_timer + 0.5
 	end
 	if lanturn_timer > 0 then
@@ -64,7 +67,6 @@ function _draw()
 	draw_foreground_sprites()
 	if darkrooms then darkroom() end
 	draw_inventory()
-	curr_item()
 	draw_player_interact_icon()
 	tb_draw()
 	--print(get_current_room(), mapx + 2, mapy + 2, 7)

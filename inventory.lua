@@ -2,9 +2,18 @@
 
 local it = 0 -- inventory transition timer
 item_selected = 1 -- which slot is currently active
+player_light_enabled = true
 
 -- 🩸 Draw hearts and handle inventory toggle
 function draw_inventory()
+
+  -- lanturn lighting
+  for x = 121, 125 do
+    for y = 104, 106 do 
+      sset(x, y, player_light_enabled and 7 or 0)
+    end
+  end
+
   for i = 1, p.total_hearts do
     local filled = p.remaining_hearts >= i
     if zoom_view then
@@ -26,7 +35,7 @@ function draw_inventory()
   if btn(BTN_X) then
     t_increment = .05
     if it < 50 then it += 1 end
-    if it == 1 then sfx(12, 3) end
+    if it == 1 then sfx(10, 3) end
     p.dx, p.dy = 0, 0
     allow_movement = false
     show_inventory()
@@ -35,15 +44,6 @@ function draw_inventory()
     t_increment = 1
     it = 0
     allow_movement = true
-  end
-end
-
--- 🎒 Draw currently selected item (HUD)
-function curr_item()
-  if item_selected == 1 then
-    spr(207, mapx + 8, mapy + 4, 1, 2)
-  elseif item_selected == 4 then
-    spr(72, mapx + 4, mapy + 4, 2, 2)
   end
 end
 
@@ -73,45 +73,47 @@ function show_inventory()
     end
   end
 
-  -- handle selection (↑↓←→)
   local dirs = { BTN_U, BTN_D, BTN_L, BTN_R }
   for i = 1, 4 do
     if btnp(dirs[i]) then
+      if i == 1 then
+        player_light_enabled = not player_light_enabled sfx(12, 3)
+      end
       item_selected = i
-      sfx(10, 3)
     end
   end
 
-  -- positions around player
-  local pos = {
-    { p.x + 2, p.y - 20 }, -- up
-    { p.x + 2, p.y + 20 }, -- down
-    { p.x - 19, p.y }, -- left
-    { p.x + 23, p.y } -- right
-  }
-
   -- elastic animations
-  local outs, big, knob = {}, outelastic(it, 0, 25, 25), outelastic(it, 0, 9, 50)
+  local outs, knob, ob = {}, outelastic(it, 0, 9, 50), outelastic(it,0,10,50)
   for i = 1, 4 do
-    outs[i] = outelastic(it, 0, 10 + (item_selected == i and 7 or 0), 50)
+    outs[i] = outelastic(it, 0, 11 + (item_selected == i and 7 or 0), 50)
   end
 
-  -- draw background circles
-  fillp(0x0000)
-  for i = 1, 4 do
-    circfill(pos[i][1], pos[i][2], outs[i], item_selected == i and 7 or 0)
-  end
+  -- background black border for top
+  circfill(p.x+2,p.y-20,ob,0)
+  circfill(p.x+23,p.y,ob,0)
+  circfill(p.x+2,p.y+20,ob,0)
+  circfill(p.x-19,p.y,ob,0)
 
-  -- draw center pulse
-  circfill(p.x + 2, p.y, big, 5)
-  circ(p.x + 2, p.y, big, 0)
-  spr(192, p.x - 4, p.y - 8, 2, 2, p.direction)
+  -- backgruond back
+  circfill(p.x + 2, p.y, outelastic(it, 0, 26, 26), 0)
+  
+  -- backgruond front
+  circfill(p.x + 2, p.y, outelastic(it, 0, 25, 25), 5)
 
-  -- draw item slots (animated knobs + icons)
+    -- selection circles
   circfill(p.x + 2, p.y - 20, knob, 5)
-  spr(207, p.x - 1, outelastic(it, p.y, -25, 25), 1, 2)
   circfill(p.x + 23, p.y, knob, 5)
-  spr(72, outelastic(it, p.x, 16, 25), p.y - 8, 2, 2)
   circfill(p.x + 2, p.y + 20, knob, 5)
   circfill(p.x - 19, p.y, knob, 5)
+
+  --light
+  spr(207, p.x - 1, outelastic(it, p.y, -25, 25), 1, 2)
+
+  --sword
+  spr(72, outelastic(it, p.x, 16, 25), p.y - 8, 2, 2)
+
+  -- draw character
+  spr(192, p.x - 4, p.y - 8, 2, 2, p.direction)
+
 end

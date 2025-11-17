@@ -26,7 +26,6 @@ local idol = 1
 local running = 1
 local player_atk = false
 lanturn_timer = 0
--- l_rad = 120
 tp = 19
 
 -- Add sword animation to the player
