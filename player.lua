@@ -5,15 +5,10 @@ p = {
 	y = 40,
 	dx = 0,
 	dy = 0,
-	w = 8,
-	h = 8,
 	curr_speed = 0,
-	a = 0.4,
+	acc = 0.4,
 	drg = 0.9,
-	recoil = 0,
 	cooldown = 0,
-	af_idle = { 192, 194, 196 },
-	af_run = { 198, 200, 202, 204 },
 	total_hearts = 5,
 	remaining_hearts = 3,
 	fall_dir = nil,
@@ -22,17 +17,11 @@ p = {
 	moving = false
 }
 
-local idol = 1
+local idle = 1
 local running = 1
 local player_atk = false
 lanturn_timer = 0
 tp = 19
-
--- Add sword animation to the player
-p.sword_anim = { 68, 70, 72, 74 } -- Sword swipe animation frames
-p.sword_frame = 1 -- Current frame of the sword animation
-p.sword_timer = 0 -- Timer for frame transitions
-p.sword_playing = false -- Whether the sword animation is playing
 
 function draw_player()
 	p.moving = p.dx ~= 0 or p.dy ~= 0
@@ -43,8 +32,8 @@ function draw_player()
 		p.dx *= 0.55 p.dy *= 0.55
 	end
 
-	-- idol animation
-	idol = (idol < 3.8) and idol + 0.09 * t_increment or 1
+	-- idle animation
+	idle = (idle < 3.8) and idle + 0.09 * t_increment or 1
 
 	-- running animation
 	running = (p.moving and running < 4.5) and running + p.curr_speed or 1
@@ -56,9 +45,9 @@ function draw_player()
 
 	if not player_atk then
 		if p.moving then 
-			if not p.fall_dir then spr(p.af_run[flr(running)], p.x - 4, p.y - 8, 2, 2, p.direction) end
+			if not p.fall_dir then spr(({198,200,202,204})[flr(running)], p.x - 4, p.y - 8, 2, 2, p.direction) end
 		else
-			if not p.fall_dir then spr(p.af_idle[flr(idol)], p.x - 4, p.y - 8, 2, 2, p.direction) end
+			if not p.fall_dir then spr(({192,194,196})[flr(idle)], p.x - 4, p.y - 8, 2, 2, p.direction) end
 		end
 	else
 		spr(194, p.x - 4, p.y - 8, 2, 2, p.direction)
@@ -124,13 +113,13 @@ end
 function update_player()
 	if p.fall_dir or not allow_movement then return end
 	if btn(BTN_L) then
-		p.dx -= p.a p.direction = true
+		p.dx -= p.acc p.direction = true
 	end
 	if btn(BTN_R) then
-		p.dx += p.a p.direction = false
+		p.dx += p.acc p.direction = false
 	end
-	if btn(BTN_U) then p.dy -= p.a end
-	if btn(BTN_D) then p.dy += p.a end
+	if btn(BTN_U) then p.dy -= p.acc end
+	if btn(BTN_D) then p.dy += p.acc end
 	p.dx, p.dy = mid(-1, p.dx, 1), mid(-1, p.dy, 1)
 	if player_can_move(p) then
 		p.x += p.dx p.y += p.dy
