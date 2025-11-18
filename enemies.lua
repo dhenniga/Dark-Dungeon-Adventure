@@ -6,7 +6,7 @@ end
 
 function nb(fr,x,y,fly)
  return{fr=fr,x=x,y=y,dx=0,dy=0,w=8,h=8,can_fly=fly or false,prox=.2,angle=0,
- speed=.5,att_speed=.9,direction=3,state="init",ttl=0}
+ speed=.5,att_speed=.9,direction=3,state="init",ttl=0,hp=10,start_hp=10}
 end
 function new_bat(x,y)return nb({236,234,232},x,y,true)end
 function new_rat(x,y)return nb({228,230},x,y)end
@@ -37,6 +37,12 @@ function baddie_draw(b)
  local dir=b.direction==0
  frb=frb<#b.fr+.9 and frb+.1*t_increment or 1
  spr(b.fr[flr(frb)],b.x-4,b.y-4,2,2,dir)
+
+  if b.hp < b.start_hp then     
+    rectfill(b.x, b.y + 10, b.x + b.start_hp, b.y + 10, 0) 
+    rectfill(b.x, b.y + 10, b.x + b.hp, b.y + 10, 9) 
+  end
+
 end
 
 function baddie_update(b)
