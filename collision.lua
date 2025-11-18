@@ -1,24 +1,35 @@
 -- collision
 
-function sprite_collision(s0, s1)
-  if (s0.x<(s1.x+8) and (s0.x+8)>s1.x and (s0.y+8)>s1.y and s0.y<(s1.y+8)) then
+function sprite_collision(a,b)
+ if a.x<(b.x+8) and (a.x+8)>b.x and (a.y+8)>b.y and a.y<(b.y+8) then
 
-      
-      if s0.x<(s1.x+8) then p.recoil="left" end
-      if (s0.x+8)>s1.x then p.recoil="right" end
-      if (s0.y+8)>s1.y then p.recoil="up" end
-      if s0.y<(s1.y+8) then p.recoil="down" end
-  
-      if p.recoil=="left" then s1.dx-=8 s0.dx+=8 end
-      if p.recoil=="right" then s1.dx+=8 s0.dx-=8 end
-      if p.recoil=="up" then s1.dy-=8 s0.dy+=8 end
-      if p.recoil=="down" then s1.dy+=8 s0.dy-=8 end
+  -- vector from b → a
+  local dx = a.x - b.x
+  local dy = a.y - b.y
 
-      sfx(10,3) --done
-      return true
-  end
-  return false
+  -- avoid divide-by-zero
+  local dist = max(sqrt(dx*dx + dy*dy), 0.1)
+
+  -- normalize to unit vector
+  dx /= dist
+  dy /= dist
+
+  -- bounce strengths
+  local pk = 1     -- player knockback
+  local bk = 1.5   -- baddie knockback (slightly stronger)
+
+  -- push both entities apart
+  a.dx += dx * pk
+  a.dy += dy * pk
+  b.dx -= dx * bk
+  b.dy -= dy * bk
+
+  sfx(16,3)
+  return true
+ end
+ return false
 end
+
 
 --
 
@@ -73,7 +84,7 @@ end
 --
 
  function ground_enemy_can_move(a)
-  local nx_l,nx_r,ny_t,ny_b=a.x+a.dx,a.x+a.dx+a.w,a.y+a.dy,a.y+a.dy+a.h
+  local nx_l,nx_r,ny_t,ny_b=a.x+a.dx,a.x+a.dx+8,a.y+a.dy,a.y+a.dy+8
 
   if is_fall_tile(nx_l+4,ny_t+6) or is_fall_tile(nx_r-4, ny_t+6) or
      is_fall_tile(nx_l+4,ny_b-2) or is_fall_tile(nx_r-4, ny_b-2) then
@@ -89,7 +100,7 @@ end
 end
 
 function flying_enemy_can_move(a)
-  local nx_l,nx_r,ny_t,ny_b=a.x+a.dx,a.x+a.dx+a.w,a.y+a.dy,a.y+a.dy+a.h
+  local nx_l,nx_r,ny_t,ny_b=a.x+a.dx,a.x+a.dx+8,a.y+a.dy,a.y+a.dy+8
 
   if solid(nx_l+2,ny_t+4) or solid(nx_r-2,ny_t+4) or
      solid(nx_l+2,ny_b-2) or solid(nx_r-2,ny_b-2) then
@@ -101,7 +112,7 @@ end
 
 function player_can_move(a)
   if toggle_collision then
-    local xl,xr,yt,yb=a.x+a.dx,a.x+a.dx+a.w,a.y+a.dy,a.y+a.dy+a.h
+    local xl,xr,yt,yb=a.x+a.dx,a.x+a.dx+8,a.y+a.dy,a.y+a.dy+8
     for i=1,4 do
       local x,y=i<3 and xl+4 or xr-4,(i%2<1)and yt+6 or yb-2
       if is_fall_tile(x,y)then
