@@ -12,7 +12,6 @@ __lua__
 #include enemies.lua
 #include collision.lua
 #include inventory.lua
-#include qico.lua
 #include textbox.lua
 #include tween.lua
 

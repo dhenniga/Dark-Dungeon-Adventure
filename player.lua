@@ -73,18 +73,9 @@ end
 
 --
 
-p.handle_collision = function()
-	if p.cooldown == 0 then
-		p.remaining_hearts -= 1
-		p.cooldown = 60
-	end
-end
-
---
-
 function player_attack()
 	-- sword frames
-	local a={72,74,106,108}
+	local sword_frames={72,74,106,108}
 
 	-- start attack on button press if not already attacking
 	if btnp(BTN_O) and not p.engaged and not player_atk then
@@ -96,9 +87,9 @@ function player_attack()
 	-- handle active attack animation
 	if player_atk then
 		local t=time()-p.atk_t
-		local i=flr(t*12)%#a+1 -- control frame timing
+		local i=flr(t*12)%#sword_frames+1 -- control frame timing
 		local o=p.direction and -12 or 4
-		spr(a[i],p.x+o,p.y-10,2,2,p.direction)
+		spr(sword_frames[i],p.x+o,p.y-10,2,2,p.direction)
 
 		-- attack lasts ~0.3s
 		if t>0.3 then
@@ -106,7 +97,6 @@ function player_attack()
 		end
 	end
 end
-
 
 --
 
@@ -138,10 +128,10 @@ function draw_character_light()
 	if l_rad > 0 then
 		local px, py = p.x + 2, p.y + 2
 		fillp(░)
-		circfill(px, py, l_rad + rnd(3) + l_rad / 1.5, 14)
+		circfill(px, py, (l_rad - 10) + rnd(3) + l_rad / 1.5, 14)
 		fillp(▒)
-		circfill(px, py, l_rad + rnd(3) + l_rad / 3, 14)
+		circfill(px, py, (l_rad - 10) + rnd(3) + l_rad / 3, 14)
 		fillp(█)
-		circfill(px, py, l_rad + rnd(3) + l_rad / 6, 14)
+		circfill(px, py, (l_rad - 10) + rnd(3) + l_rad / 6, 14)
 	end
 end

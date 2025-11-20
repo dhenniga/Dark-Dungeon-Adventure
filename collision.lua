@@ -1,28 +1,29 @@
 -- collision
 
-function sprite_collision(a,b)
- if a.x<(b.x+8) and (a.x+8)>b.x and (a.y+8)>b.y and a.y<(b.y+8) then
-
-  -- vector from b → a
-  local dx = a.x - b.x
-  local dy = a.y - b.y
-
-  -- avoid divide-by-zero
-  local dist = max(sqrt(dx*dx + dy*dy), 0.1)
-
-  -- normalize to unit vector
+function sprite_collision(o1,o2)
+ if o1.x<(o2.x+8) 
+ and (o1.x+8)>o2.x 
+ and (o1.y+8)>o2.y 
+ and o1.y<(o2.y+8) then
+  local dx, dy = o1.x - o2.x, o1.y - o2.y
+  local dist = sqrt(dx*dx + dy*dy)
   dx /= dist
   dy /= dist
 
   -- bounce strengths
-  local pk = 1     -- player knockback
-  local bk = 1.5   -- baddie knockback (slightly stronger)
+  local pk = 2     -- player knockback
+  local bk = 1   -- baddie knockback (slightly stronger)
 
   -- push both entities apart
-  a.dx += dx * pk
-  a.dy += dy * pk
-  b.dx -= dx * bk
-  b.dy -= dy * bk
+  o1.dx += dx * pk
+  o1.dy += dy * pk
+  o1.dx -= dx * bk
+  o2.dy -= dy * bk
+
+  -- o2.dx += dx * bk
+  -- o2.dy += dy * bk
+  -- o2.dx -= dx * pk
+  -- o2.dy -= dy * pk
 
   sfx(16,3)
   return true
@@ -30,56 +31,30 @@ function sprite_collision(a,b)
  return false
 end
 
-
 --
 
-function sees(b, dist, facing, sweep, incr, obst)
-  local d=dist or 128
-  local fac=facing or 0
-  local swp=sweep or 1
-  local incr=incr or 1
-  local obst=obst or 0
-  if d<=1 or incr<1 or swp==0 then return end -- Invalid arguments / blind
-  
-  local dx,dy=b.x-p.x,b.y-p.y
-  local adx,ady=abs(dx),abs(dy)
-  if adx>d or ady>d then return end -- Too far on any axis
-  if (dx/d)^2+(dy/d)^2>1 then return end -- Fails distance check
+function sees(b, max_dist, facing, sweep)
+    local max_dist, facing, sweep, dx, dy = max_dist or 128, facing or 0, sweep or 1, p.x - b.x, p.y - b.y
+    local dist_sq = dx*dx + dy*dy
+    if dist_sq > max_dist*max_dist then return false end -- too far
 
-  local adif=abs(fac-atan2(dx, dy))%1
-  if adif>swp and (1-adif)>swp then return end -- Facing away
+    -- facing check
+    local ang_to_player = atan2(dy, dx)
+    if ang_to_player < 0 then ang_to_player += 1 end
+    local diff = abs(ang_to_player - facing) % 1
+    if diff > sweep and (1 - diff) > sweep then return false end -- facing away
 
-  local function is_obstacle(x, y)
-    -- Metatile system collision detection
-    local mt_x,mt_y=shr(x,4),shr(y,4)
-    local metatile_num= mget(mt_x,mt_y)
-    local sub_x,sub_y= flr((x%16)/8),flr((y%16)/8)
-    local sub_tiles=decoded_tiles[metatile_num]
-
-    if sub_tiles then
-      local sub_tile=sub_tiles[sub_y*2+sub_x+1]
-      if sub_tile and fget(sub_tile.sp,obst) then
-        return true
-      end
+    -- obstacle check (simple step along line)
+    local steps = flr(sqrt(dist_sq) / 4)  -- every 4 pixels
+    for i = 1, steps do
+      local t = i / steps
+      local x = b.x + dx * t
+      local y = b.y + dy * t
+      if solid(x, y) then return false end
     end
-    return false
-  end
 
-  if adx>ady then
-    for i=0,dx,incr*sgn(dx) do
-      local x,y=p.x+i,p.y+i*dy/dx
-      if is_obstacle(x,y) then return end
-    end
-  else
-    for i=0,dy,incr*sgn(dy) do
-      local x,y=p.x+i*dx/dy,p.y+i
-      if is_obstacle(x,y) then return end
-    end
-  end
-
-  return true
+    return true
 end
-
 
 --
 
@@ -111,7 +86,7 @@ function flying_enemy_can_move(a)
 end
 
 function player_can_move(a)
-  if toggle_collision then
+  if collision_state then
     local xl,xr,yt,yb=a.x+a.dx,a.x+a.dx+8,a.y+a.dy,a.y+a.dy+8
     for i=1,4 do
       local x,y=i<3 and xl+4 or xr-4,(i%2<1)and yt+6 or yb-2

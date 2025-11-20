@@ -1,21 +1,16 @@
 --rooms
 room_objects, door_states, active_objects = {}, {}, {}
 f = {
-  -- door = { door = true, solid = true, interactable = true, locked = true },
-  -- arch = { door_arches = true },
-  -- light = { light = true },
   rock = { rock = true, solid = true },
   c_rock = { c_rock = true, solid = true },
   spike = { spike_tile = true },
   vase = { vase = true, solid = true },
   bat = { bat = true },
   rat = { rat = true },
-  -- sign = { sign = true, solid = true, interactable = true },
-  -- key = { key = true, interactable = true },
+  blob = { blob = true },
   flame_b = { flames_back = true },
   flame_f = { flames_fore = true },
   flame = { flames = true }
-  -- w_button = { w_button = true, interactable = true }
 }
 
 obj = function(x, y, fl) return { x = x, y = y, flags = fl } end
@@ -42,6 +37,7 @@ room(
   0, 0, {
     { name = "CASTLE ENTRANCE", flags = rf { dungeon = true } },
     obj(64, 0, f.c_rock),
+    obj(32, 32, f.blob),
     arch(64, 0, true, false, false),
     sign(
       33,
@@ -60,6 +56,8 @@ room(
     light(104, 20, 20),
     arch(64, 120, true, true, true),
     door(64, 112, false, true),
+    light(56, 120, 12),
+    light(87, 120, 12),
     obj(16, 80, f.vase),
     obj(16, 96, f.vase),
     obj(32, 96, f.vase),
@@ -74,14 +72,14 @@ room(
     { name = "CASTLE GARDEN STORAGE", flags = rf { sewer = true, rain = true } },
     door(64, 0, false, false),
     arch(64, 0, true, false, false),
-    light(56, 8, 15),
-    light(87, 8, 15),
+    light(56, 8, 12),
+    light(87, 8, 12),
     obj(112, 96, f.vase),
     obj(112, 80, f.vase),
     obj(96, 96, f.vase),
     obj(96, 80, f.vase),
     obj(20, 90, f.bat),
-    obj(100, 40, f.rat),
+    obj(100, 32, f.rat),
     obj(32, 48, f.vase)
   }
 )
@@ -109,8 +107,8 @@ room(
     { name = "PASSAGE END", flags = rf { dungeon = true } },
     door(64, 0, false, false),
     arch(64, 0, true, false, false),
-    light(56, 8, 15),
-    light(87, 8, 15),
+    light(56, 8, 12),
+    light(87, 8, 12),
     obj(32, 16, f.flame_f),
     light(40, 20, 20),
     obj(80, 16, f.flame_f),
@@ -131,8 +129,8 @@ room(
   {
     { name = "ENTRANCE LOBBY INNER", flags = rf { dungeon = true } },
     door(112, 32, true, false),
-    light(118, 22, 15),
-    light(118, 52, 15),
+    light(118, 22, 12),
+    light(118, 52, 12),
     arch(120, 32, false, true, false),
     obj(32, 96, f.rock),
     obj(96, 96, f.rock),
@@ -146,8 +144,8 @@ room(
   {
     { name = "CASTLE GARDEN STORAGE", flags = rf { sewer = true, rain = true } },
     door(112, 32, true, false),
-    light(118, 22, 15),
-    light(118, 52, 15),
+    light(118, 22, 12),
+    light(118, 52, 12),
     arch(120, 32, false, true, false),
     obj(16, 96, f.vase),
     obj(16, 80, f.vase),
@@ -181,8 +179,8 @@ room(
     door(0, 32, true, true),
     arch(0, 32, false, false, false),
     arch(48, 120, true, true, true),
-    light(8, 22, 15),
-    light(8, 52, 15),
+    light(8, 22, 12),
+    light(8, 52, 12),
     key(18, 100),
     obj(80, 80, f.bat),
     obj(60, 20, f.bat)
@@ -194,8 +192,8 @@ room(
   {
     { name = "WATCH THE DROP", flags = rf { dungeon = true } },
     door(0, 32, true, true),
-    light(8, 22, 15),
-    light(8, 52, 15),
+    light(8, 22, 12),
+    light(8, 52, 12),
     arch(0, 32, false, false, false),
     arch(48, 0, true, false, false)
   }
@@ -238,8 +236,8 @@ room(
     { name = "RESTING POINT", flags = rf { dungeon = true } },
     door(64, 112, false, true),
     arch(64, 120, true, true, true),
-    light(56, 120, 15),
-    light(87, 120, 15),
+    light(56, 120, 12),
+    light(87, 120, 12),
     obj(80, 32, f.flame),
     light(88, 36, 30),
     obj(80, 32, f.flame_b),
@@ -256,8 +254,8 @@ room(
     { name = "MYSTERY KEY ROOM", flags = rf { dungeon = true } },
     door(64, 0, false, false),
     arch(64, 0, true, false, false),
-    light(56, 8, 15),
-    light(79, 8, 15),
+    light(56, 8, 12),
+    light(79, 8, 12),
     sign(34, 6, { "THE KEY ON THE TABLE\nUNLOCKS A DOOR ON THIS\nFLOOR...\n\nBUT WHICH ONE?" }),
     key(56, 64)
   }
@@ -319,8 +317,8 @@ room(
     ),
     door(80, 112, false, true, true),
     arch(80, 120, true, true, false),
-    light(72, 120, 15),
-    light(103, 120, 15)
+    light(72, 120, 12),
+    light(103, 120, 12)
   }
 )
 room(
@@ -328,10 +326,10 @@ room(
     { name = "CRUMBLING GROTTO", flags = rf { dungeon = true } },
     door(80, 0, false, false, true),
     arch(80, 0, true, false, false),
-    light(72, 8, 15),
-    light(103, 8, 15),
+    light(72, 8, 12),
+    light(103, 8, 12),
     obj(80, 80, f.flame),
-    light(88, 84, 30),
+    light(88, 84, 15),
     obj(80, 80, f.flame_b),
     obj(40, 80, f.bat),
     obj(90, 50, f.bat)
@@ -363,8 +361,8 @@ room(
   {
     { name = "MORE CRUMBLING GROTTO", flags = rf { sewer = true, rain = true } },
     door(112, 64, true, false),
-    light(118, 54, 15),
-    light(118, 84, 15),
+    light(118, 54, 12),
+    light(118, 84, 12),
     arch(120, 64, false, true, false),
     chest(96, 16)
   }
@@ -389,19 +387,19 @@ room(
   9, 0, {
     { name = "THE LIGHTLESS PIT", flags = rf { pit = true } },
     door(0, 64, true, true),
-    light(8, 54, 15),
-    light(8, 84, 15),
+    light(8, 54, 12),
+    light(8, 84, 12),
     arch(0, 64, false, false, false),
-    light(88, 100, 30),
+    light(88, 100, 20),
     obj(80, 96, f.flame_f),
-    light(54, 20, 30),
+    light(54, 20, 20),
     obj(48, 16, f.flame_b),
-    obj(90, 16, f.rat),
-    obj(90, 16, f.rat),
-    obj(90, 16, f.rat),
-    obj(90, 16, f.rat),
-    obj(90, 16, f.rat),
-    obj(90, 16, f.rat)
+    obj(90, 32, f.rat),
+    obj(90, 48, f.rat),
+    obj(90, 64, f.rat),
+    obj(90, 80, f.rat),
+    obj(112, 96, f.rat),
+    obj(112, 112, f.rat)
   }
 )
 
@@ -555,13 +553,13 @@ function draw_foreground_sprites()
   for obj in all(active_objects) do
     local f = obj.flags
     if f.bat and not obj.spawned then
-      add(baddie_m.baddies, new_bat(mapx + obj.x, mapy + obj.y)) obj.spawned = true
+      add(baddie_m.baddies, bat(mapx + obj.x, mapy + obj.y)) obj.spawned = true
     end
     if f.rat and not obj.spawned then
-      add(baddie_m.baddies, new_rat(mapx + obj.x, mapy + obj.y)) obj.spawned = true
+      add(baddie_m.baddies, rat(mapx + obj.x, mapy + obj.y)) obj.spawned = true
     end
     if f.blob and not obj.spawned then
-      add(baddie_m.baddies, new_blob(mapx + obj.x, mapy + obj.y)) obj.spawned = true
+      add(baddie_m.baddies, blob(mapx + obj.x, mapy + obj.y)) obj.spawned = true
     end
     if f.door_arches then
       if obj.vori then
