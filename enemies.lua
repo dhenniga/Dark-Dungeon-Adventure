@@ -1,44 +1,51 @@
 -- enemies.lua
--- Three-state enemies: explore → stop → attack (steering arrival)
--- Per-enemy numeric parameters (no "modes"). Max baddies cap, separation, solid-tile collision.
+-- World coords stored in b.x/b.y but movement computed in LOCAL screen space
+-- to avoid floating-point precision issues when the camera is far from origin.
+-- Room/camera size assumed 128x128.
 
 local TAU = 2 * 3.14159
 local MAX_BADDIES = 10
 local SPR_W = 16 -- sprite hitbox size
 
-function enemy(fr, x, y, fly, speed, att_speed, acc, drg, stop_time, pause_between, weight, slow_radius)
+-- constructor
+function enemy(room_id, fr, x, y, fly, speed, att_speed, acc, drg, stop_time, pause_between, weight, slow_radius)
   return {
-    fr = fr,
-    x = x, y = y,
-    dx = 0, dy = 0,
+    room_id = room_id, -- set when added to manager
+    frames = fr,
+    anim = 1,
+    x = x, y = y,    -- global world coordinates
+    dx = 0, dy = 0,  -- local-velocity (px/frame) applied in local space
     can_fly = fly or false,
-    -- movement tuning (per-enemy)
-    speed = speed or 0.5, -- explore baseline
-    att_speed = att_speed or 1, -- top chase speed
-    acc = acc or 0.12, -- steering/acceleration
-    drg = drg or 0.92, -- drag each frame
-    stop_time = stop_time or 30, -- frames to pause on first sight
-    pause_between = pause_between or 60, -- delay between explore decisions
-    weight = weight or 1, -- used for repel strength
-    slow_radius = slow_radius or 24, -- arrival slow radius
-    -- state
-    state = "explore",
-    ttl = 0, burst_t = 0,
-    hp = 10, start_hp = 10,
+    speed = speed or 0.5,
+    att_speed = att_speed or 1,
+    acc = acc or 0.12,
+    drg = drg or 0.92,
+    stop_time = stop_time or 30,       -- frames to pause on first sight
+    pause_between = pause_between or 60,
+    weight = weight or 1,              -- separation / bounce weight
+    slow_radius = slow_radius or 24,   -- steering arrival radius
+    state = "explore",                 -- "explore" | "stop" | "attack"
+    ttl = 0,
+    hp = 10,
+    start_hp = 10,
     alert_time = 0
   }
 end
 
--- convenience factories (set per-enemy numbers here)
-function bat(x, y) return enemy({ 236, 234, 232 }, x, y, true, 1.2, 1.6, 0.14, 0.95, 30, 40, 1, 28) end
-function rat(x, y) return enemy({ 228, 230 }, x, y, false, 0.6, 0.9, 0.18, 0.88, 10, 90, 1.5, 8) end
-function blob(x, y) return enemy({ 226 }, x, y, false, 0.8, 1.0, 0.12, 0.92, 20, 80, 1, 20) end
+-- presets
+function bat(x, y)  return enemy(get_current_room(), {232,234,236,234}, x, y, true, 1.2, 1.6, 0.14, 0.95, 60, 40, 10, 98) end
+function rat(x, y)  return enemy(get_current_room(),{228,230},         x, y, false, 0.5, 0.3,  0.18, 0.99, 35, 90,  2, 20) end
+function blob(x, y) return enemy(get_current_room(),{226},             x, y, false, 0.8, 1.0,  0.12, 0.92, 20, 80,  1, 20) end
 
 baddie_m = { baddies = {} }
 
 function baddie_m.add(b)
-  if #baddie_m.baddies < MAX_BADDIES then add(baddie_m.baddies, b) end
+  if #baddie_m.baddies < MAX_BADDIES then
+    b.room_id = get_current_room()
+    add(baddie_m.baddies, b)
+  end
 end
+
 
 -- helpers
 local function normalize(x, y)
@@ -47,47 +54,44 @@ local function normalize(x, y)
   return x / l, y / l, l
 end
 
-local function clamp_room(b)
-  if b.x < mapx then
-    b.x = mapx b.dx = abs(b.dx)
-  end
-  if b.x > mapx + 128 - SPR_W then
-    b.x = mapx + 128 - SPR_W b.dx = -abs(b.dx)
-  end
-  if b.y < mapy then
-    b.y = mapy b.dy = abs(b.dy)
-  end
-  if b.y > mapy + 128 - SPR_W then
-    b.y = mapy + 128 - SPR_W b.dy = -abs(b.dy)
-  end
+local function clamp_room_local(lx, ly)
+  -- returns clamped local x,y (0..127-SPR_W)
+  local mx = mid(0, lx, 128 - SPR_W)
+  local my = mid(0, ly, 128 - SPR_W)
+  return mx, my
 end
 
-local function solid_box(x, y)
-  if solid(x, y) then return true end
-  if solid(x + SPR_W - 1, y) then return true end
-  if solid(x, y + SPR_W - 1) then return true end
-  if solid(x + SPR_W - 1, y + SPR_W - 1) then return true end
+local function solid_box_global(gx, gy)
+  -- check 4 corners of 16x16 sprite at global pos (gx,gy)
+  if solid(gx, gy) then return true end
+  if solid(gx + SPR_W - 1, gy) then return true end
+  if solid(gx, gy + SPR_W - 1) then return true end
+  if solid(gx + SPR_W - 1, gy + SPR_W - 1) then return true end
   return false
 end
 
--- drawing
-local frb = 1
+-- drawing (safe anim advance)
 function baddie_draw(b)
-  local flip = b.dx < 0
-  frb = (frb < #b.fr + .9) and frb + .1 * t_increment or 1
-  spr(b.fr[flr(frb)], b.x - 4, b.y - 4, 2, 2, flip)
+  b.anim += 0.2 * t_increment
+  if b.anim > #b.frames + 0.999 then b.anim = 1 end
+  local frame = b.frames[flr(b.anim)]
+  local flip = (b.dx < 0)
+  spr(frame, b.x - 4, b.y - 4, 2, 2, flip)
+
   if b.hp < b.start_hp then
     rectfill(b.x, b.y + 10, b.x + b.start_hp, b.y + 10, 0)
-    rectfill(b.x, b.y + 10, b.x + b.hp, b.y + 10, 9)
+    rectfill(b.x, b.y + 10, b.x + b.hp,       b.y + 10, 9)
   end
-  -- optional: exclamation during alert
+
   if b.state == "stop" then
-    sspr(29, 80, 3, 7, b.x + 6, b.y - 4)
+    sspr(29, 80, 3, 7, b.x + 6, b.y - 4) -- exclamation icon (adjust coords if needed)
   end
 end
 
+-- manager loops
 function baddie_m.update()
   for b in all(baddie_m.baddies) do
+    -- only update baddies inside current camera view
     if b.x >= mapx and b.x <= mapx + 127 and b.y >= mapy and b.y <= mapy + 127 then
       baddie_update(b)
     end
@@ -106,87 +110,122 @@ end
 function baddie_update(b)
   b.ttl -= 1
 
-  -- apply drag
+  -- apply drag to local velocity
   b.dx *= b.drg
   b.dy *= b.drg
 
+  -- compute local coordinates relative to current camera
+  local lx = b.x - mapx
+  local ly = b.y - mapy
+
   -- SEE / ALERT / ATTACK logic (attack overrides explore)
   if sees(b, l_rad or 40, 0, 1, 1, 0) then
-    -- if just saw player and was exploring -> stop (alert)
+    -- first sight: if coming from explore -> STOP/ALERT
     if b.state ~= "stop" and b.state ~= "attack" then
       b.state = "stop"
       b.alert_time = b.stop_time
       b.dx, b.dy = 0, 0
+      -- don't move this frame
       return
     end
 
+    -- still in stop/alert: countdown
     if b.state == "stop" then
       b.alert_time -= 1
-      if b.alert_time <= 0 then b.state = "attack" end
+      if b.alert_time <= 0 then
+        b.state = "attack"
+      end
       return
     end
 
+    -- ATTACK behaviour: steering arrival in local space
     if b.state == "attack" then
-      -- steering arrival: desired vel toward player; slow as approach
-      local vx, vy = p.x - b.x, p.y - b.y
-      local nx, ny, dist = normalize(vx, vy)
+      -- desired vector toward player (global deltas), convert to local desired
+      local desired_gx, desired_gy = p.x - b.x, p.y - b.y -- global delta
+      local ndx, ndy, dist = normalize(desired_gx, desired_gy)
+      -- desired speed slows inside slow_radius
       local desired_speed = b.att_speed
       if dist < b.slow_radius then desired_speed = desired_speed * (dist / max(1, b.slow_radius)) end
-      local desired_x, desired_y = nx * desired_speed, ny * desired_speed
-      local steer_x, steer_y = desired_x - b.dx, desired_y - b.dy
-      -- limit steering by acc
+      local desired_vx, desired_vy = ndx * desired_speed, ndy * desired_speed
+
+      -- convert desired_v (global) to local vector is the same numerically, we operate on b.dx/b.dy (local px/frame)
+      local steer_x, steer_y = desired_vx - b.dx, desired_vy - b.dy
       local sl = sqrt(steer_x * steer_x + steer_y * steer_y)
       if sl > 0 then
         local lim = b.acc
         if sl > lim then steer_x, steer_y = steer_x / sl * lim, steer_y / sl * lim end
-        b.dx += steer_x b.dy += steer_y
+        b.dx += steer_x
+        b.dy += steer_y
       end
+
       -- clamp speed to att_speed
       local vl = sqrt(b.dx * b.dx + b.dy * b.dy)
       if vl > b.att_speed then b.dx, b.dy = (b.dx / vl) * b.att_speed, (b.dy / vl) * b.att_speed end
     end
   else
-    -- lost sight: if was attacking or stopping, revert to explore
+    -- lost sight: revert to explore if needed
     if b.state == "attack" or b.state == "stop" then
       b.state = "explore"
       b.ttl = 0
     end
 
-    -- EXPLORE behaviour: periodic wander impulses (pause_between controls pacing)
+    -- EXPLORE behaviour: periodic wander impulses
     if b.ttl <= 0 then
       b.state = "explore"
       b.ttl = b.pause_between + flr(rnd(b.pause_between))
-      -- small random steering impulse (can be tuned per enemy)
       local ang = rnd() * TAU
       b.dx += cos(ang) * b.speed
       b.dy += sin(ang) * b.speed
     end
   end
 
-  -- compute next pos and respect solids (x then y)
-  local nx = b.x + b.dx * t_increment
-  local ny = b.y + b.dy * t_increment
+  -- PROPOSED local next position (operate in local coords to keep additions small)
+  local nx_local = lx + b.dx * t_increment
+  local ny_local = ly + b.dy * t_increment
 
-  if not solid_box(nx, b.y) then b.x = nx else b.dx = 0 end
-  if not solid_box(b.x, ny) then b.y = ny else b.dy = 0 end
+  -- convert back to global
+  local nx_global = mapx + nx_local
+  local ny_global = mapy + ny_local
 
-  clamp_room(b)
+  -- per-axis solid checks using global hitbox corners
+  if not solid_box_global(nx_global, b.y) then
+    b.x = nx_global
+  else
+    b.dx = 0
+    -- small nudge away from obstacle
+    -- try sliding: if x blocked, attempt small backstep
+  end
 
+  if not solid_box_global(b.x, ny_global) then
+    b.y = ny_global
+  else
+    b.dy = 0
+  end
+
+  -- clamp inside room local bounds
+  local clamped_lx, clamped_ly = clamp_room_local(b.x - mapx, b.y - mapy)
+  b.x = mapx + clamped_lx
+  b.y = mapy + clamped_ly
+
+  -- separation / gentle repel (velocity nudges scaled by weight)
   -- separation from others (velocity nudges, scaled by weight)
-  for o in all(baddie_m.baddies) do
-    if o ~= b then
-      local rx, ry = o.x - b.x, o.y - b.y
-      local d = sqrt(rx * rx + ry * ry)
-      if d > 0 and d < 12 then
-        local nxp, nyp = rx / d, ry / d
-        local push = (12 - d) * 0.03 * b.weight
-        o.dx += nxp * push
-        o.dy += nyp * push
-        b.dx -= nxp * push
-        b.dy -= nyp * push
-      end
+for o in all(baddie_m.baddies) do
+  if o ~= b and o.room_id == b.room_id then
+    local rx, ry = o.x - b.x, o.y - b.y
+    local d = sqrt(rx * rx + ry * ry)
+    if d > 0 and d < 12 then
+      local nxp, nyp = rx / d, ry / d
+      local push = (12 - d) * 0.03 * b.weight
+      -- clamp per-step push so it can't blow up
+      if push > 0.5 then push = 0.5 end
+      o.dx += nxp * push
+      o.dy += nyp * push
+      b.dx -= nxp * push
+      b.dy -= nyp * push
     end
   end
+end
+
 
   -- sanity ttl clamp
   if b.ttl < -300 then b.ttl = 0 end

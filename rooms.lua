@@ -62,7 +62,7 @@ room(
     obj(16, 96, f.vase),
     obj(32, 96, f.vase),
     obj(90, 90, f.bat),
-    obj(100, 40, f.rat)
+    obj(90, 40, f.rat)
   }
 )
 room(
@@ -134,8 +134,8 @@ room(
     arch(120, 32, false, true, false),
     obj(32, 96, f.rock),
     obj(96, 96, f.rock),
-    obj(100, 40, f.rat),
-    obj(100, 90, f.rat)
+    obj(96, 40, f.rat),
+    obj(96, 80, f.rat)
   }
 )
 room(
@@ -331,8 +331,14 @@ room(
     obj(80, 80, f.flame),
     light(88, 84, 15),
     obj(80, 80, f.flame_b),
-    obj(40, 80, f.bat),
-    obj(90, 50, f.bat)
+    obj(32, 32, f.bat),
+    obj(48, 48, f.bat),
+    obj(64, 64, f.bat),
+    obj(80, 80, f.bat),
+    obj(96, 96, f.bat),
+    obj(112, 112, f.bat),
+    obj(32, 80, f.bat),
+    obj(64, 80, f.bat)
   }
 )
 room(
@@ -394,7 +400,7 @@ room(
     obj(80, 96, f.flame_f),
     light(54, 20, 20),
     obj(48, 16, f.flame_b),
-    obj(90, 32, f.rat),
+    obj(119, 20, f.rat),
     obj(90, 48, f.rat),
     obj(90, 64, f.rat),
     obj(90, 80, f.rat),
@@ -414,7 +420,7 @@ room(
 
 room(
   10, 0, {
-    { name = "THE LIGHTLESS PIT", flags = rf { pit = true } },
+    { name = "THE LIGHTLESS PIT", flags = rf { pit = true } }
   }
 )
 
