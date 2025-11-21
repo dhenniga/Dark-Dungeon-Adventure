@@ -73,8 +73,7 @@ end
 function baddie_update(b)
   b.ttl -= 1
 
- local f=b.can_fly and flying_enemy_can_move or ground_enemy_can_move
- if not f(b)then 
+ if not enemy_can_move(b) then 
   sfx(16,3) 
 end
 
@@ -105,7 +104,7 @@ end
 
     -- ATTACK behaviour: steering arrival in local space
     if b.state == "attack" then
-      local desired_gx, desired_gy = p.x - b.x, p.y - b.y -- global delta
+      local desired_gx, desired_gy = p.x - b.x, (p.y - 5) - b.y -- global delta
       local dist, ndx, ndy = sqrt(desired_gx * desired_gx + desired_gy * desired_gy), 0, 0
       if dist > 0.0001 then
         ndx, ndy = desired_gx / dist, desired_gy / dist

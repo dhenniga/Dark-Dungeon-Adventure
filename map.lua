@@ -3,8 +3,7 @@ tiledat, decoded_tiles = "00000000160001001600241004000500051004100a002c00250009
 
 function decode_tiles()
  for n=0,128 do
-  local sx,sy=n%16,flr(n/16)
-  local t={}
+  local sx,sy,t=n%16,flr(n/16),{}
   for i=0,1 do
    for j=0,1 do
     local o=shl(sx,3)+shl(i,2)+shl(sy,8)+shl(j,7)

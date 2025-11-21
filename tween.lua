@@ -1,4 +1,3 @@
-pi = 3.14159
 function asin(x)
   local n = x < 0 and 1 or 0
   x = abs(x)

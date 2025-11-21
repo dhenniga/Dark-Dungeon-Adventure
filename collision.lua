@@ -51,34 +51,54 @@ function sees(b, max_dist, facing, sweep)
     return true
 end
 
+function enemy_can_move(a)
+  local xl,xr,yt,yb=a.x+a.dx,a.x+a.dx+8,a.y+a.dy,a.y+a.dy+8
+  if not a.can_fly 
+    and (is_fall_tile(xl+4,yt+6) 
+    or is_fall_tile(xr-4,yt+6) 
+    or is_fall_tile(xl+4,yb-2) 
+    or is_fall_tile(xr-4,yb-2)
+  ) 
+    then 
+      return false 
+    end
+    
+    return not(solid(xl+2,yt+4) 
+    or solid(xr-2,yt+4) 
+    or solid(xl+2,yb-2) 
+    or solid(xr-2,yb-2)
+  )
+end
+
+
 --
 
- function ground_enemy_can_move(a)
-  local nx_l,nx_r,ny_t,ny_b=a.x+a.dx,a.x+a.dx+8,a.y+a.dy,a.y+a.dy+8
+--  function ground_enemy_can_move(a)
+--   local nx_l,nx_r,ny_t,ny_b=a.x+a.dx,a.x+a.dx+8,a.y+a.dy,a.y+a.dy+8
 
-  if is_fall_tile(nx_l+4,ny_t+6) or is_fall_tile(nx_r-4, ny_t+6) or
-     is_fall_tile(nx_l+4,ny_b-2) or is_fall_tile(nx_r-4, ny_b-2) then
-   return false
-  end
+--   if is_fall_tile(nx_l+4,ny_t+6) or is_fall_tile(nx_r-4, ny_t+6) or
+--      is_fall_tile(nx_l+4,ny_b-2) or is_fall_tile(nx_r-4, ny_b-2) then
+--    return false
+--   end
 
-  if solid(nx_l+2,ny_t+4) or solid(nx_r-2,ny_t+4) or
-     solid(nx_l+2,ny_b-2) or solid(nx_r-2,ny_b-2) then
-    return false
-  end
+--   if solid(nx_l+2,ny_t+4) or solid(nx_r-2,ny_t+4) or
+--      solid(nx_l+2,ny_b-2) or solid(nx_r-2,ny_b-2) then
+--     return false
+--   end
 
-  return true
-end
+--   return true
+-- end
 
-function flying_enemy_can_move(a)
-  local nx_l,nx_r,ny_t,ny_b=a.x+a.dx,a.x+a.dx+8,a.y+a.dy,a.y+a.dy+8
+-- function flying_enemy_can_move(a)
+--   local nx_l,nx_r,ny_t,ny_b=a.x+a.dx,a.x+a.dx+8,a.y+a.dy,a.y+a.dy+8
 
-  if solid(nx_l+2,ny_t+4) or solid(nx_r-2,ny_t+4) or
-     solid(nx_l+2,ny_b-2) or solid(nx_r-2,ny_b-2) then
-    return false
-  end
+--   if solid(nx_l+2,ny_t+4) or solid(nx_r-2,ny_t+4) or
+--      solid(nx_l+2,ny_b-2) or solid(nx_r-2,ny_b-2) then
+--     return false
+--   end
 
-  return true
-end
+--   return true
+-- end
 
 function player_can_move(a)
   if collision_state then
