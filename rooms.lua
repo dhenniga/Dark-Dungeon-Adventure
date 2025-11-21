@@ -334,9 +334,9 @@ room(
     obj(32, 32, f.bat),
     obj(48, 48, f.bat),
     obj(64, 64, f.bat),
-    obj(80, 80, f.bat),
+    obj(64, 80, f.bat),
     obj(96, 96, f.bat),
-    obj(112, 112, f.bat),
+    obj(112, 96, f.bat),
     obj(32, 80, f.bat),
     obj(64, 80, f.bat)
   }
@@ -400,12 +400,16 @@ room(
     obj(80, 96, f.flame_f),
     light(54, 20, 20),
     obj(48, 16, f.flame_b),
-    obj(119, 20, f.rat),
-    obj(90, 48, f.rat),
-    obj(90, 64, f.rat),
-    obj(90, 80, f.rat),
+    obj(112, 32, f.rat),
+    obj(112, 48, f.rat),
+    obj(112, 64, f.rat),
+    obj(112, 80, f.rat),
     obj(112, 96, f.rat),
-    obj(112, 112, f.rat)
+    obj(80, 32, f.rat),
+    obj(80, 48, f.rat),
+    -- obj(80, 64, f.rat),
+    -- obj(80, 80, f.rat),
+    -- obj(64, 96, f.rat)
   }
 )
 
@@ -420,7 +424,12 @@ room(
 
 room(
   10, 0, {
-    { name = "THE LIGHTLESS PIT", flags = rf { pit = true } }
+    { name = "THE LIGHTLESS PIT", flags = rf { pit = true } },
+    obj(48, 96, f.flame_f), 
+    light(56, 100, 20),
+    obj(64, 32, f.flame_f), 
+    light(72, 36, 20),
+
   }
 )
 
@@ -433,13 +442,10 @@ room(
   }
 )
 
---
-
 function unlock_door(o)
   local ax, ay = mapx + o.x, mapy + o.y
   door_states[ax .. "_" .. ay] = true
-  o.locked = false
-  o.flags.solid = false
+  o.locked, o.flags.solid = false, false
   local dl, dr, dt, db = o.x, 128 - o.x, o.y, 128 - o.y
   if dl <= dr and dl <= dt and dl <= db then
     ax = ax - 16
@@ -455,8 +461,7 @@ function unlock_door(o)
 end
 
 function door_lights(x, y, fx, fy, flp)
-  local a = flp and { 240, 241, 241, 240 } or { 224, 225, 225, 224 }
-  local i = flr(time() * (4 * t_increment) % 4) + 1
+  local a, i = flp and { 240, 241, 241, 240 } or { 224, 225, 225, 224 }, flr(time() * (4 * t_increment) % 4) + 1
   local flip = i > 2
   if flp then
     spr(a[i], x + 4, y - 12, 1, 1, fx, flip) spr(a[i], x + 4, y + 20, 1, 1, fx, flip)
@@ -478,8 +483,8 @@ function draw_player_interact_icon()
   for o in all(active_objects) do
     local f = o.flags
     if f.interactable then
-      local ox, oy = mapx + flr(o.x), mapy + flr(o.y)
-      local len = abs(ox - flr(p.x)) + abs(oy - flr(p.y) + 6)
+      local ox, oy = mapx + o.x, mapy + o.y
+      local len = abs(ox - p.x) + abs(oy - p.y + 6)
       if len > 0 and len < 22 then
         engaged_now = true
         if f.sign and not reading and val == 0 and btn(BTN_O) then

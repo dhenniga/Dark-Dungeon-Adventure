@@ -6,10 +6,9 @@ player_light_enabled = true
 
 -- 🩸 Draw hearts and handle inventory toggle
 function draw_inventory()
-
   -- lanturn lighting
   for x = 121, 125 do
-    for y = 104, 106 do 
+    for y = 104, 106 do
       sset(x, y, player_light_enabled and 7 or 0)
     end
   end
@@ -40,10 +39,7 @@ function draw_inventory()
     allow_movement = false
     show_inventory()
   else
-    -- close inventory
-    t_increment = 1
-    it = 0
-    allow_movement = true
+    t_increment, it, allow_movement = 1, 0, true
   end
 end
 
@@ -84,24 +80,23 @@ function show_inventory()
   end
 
   -- elastic animations
-  local outs, knob, ob = {}, outelastic(it, 0, 9, 50), outelastic(it,0,10,50)
+  local outs, knob, ob = {}, outelastic(it, 0, 9, 50), outelastic(it, 0, 10, 50)
   for i = 1, 4 do
     outs[i] = outelastic(it, 0, 11 + (item_selected == i and 7 or 0), 50)
   end
 
   -- background black border for top
-for p2 in all{{2,-20},{23,0},{2,20},{-19,0}} do
-  circfill(p.x+p2[1],p.y+p2[2],ob,0)
-end
-
+  for p2 in all { { 2, -20 }, { 23, 0 }, { 2, 20 }, { -19, 0 } } do
+    circfill(p.x + p2[1], p.y + p2[2], ob, 0)
+  end
 
   -- backgruond back
   circfill(p.x + 2, p.y, outelastic(it, 0, 26, 26), 0)
-  
+
   -- backgruond front
   circfill(p.x + 2, p.y, outelastic(it, 0, 25, 25), 5)
 
-    -- selection circles
+  -- selection circles
   circfill(p.x + 2, p.y - 20, knob, 5)
   circfill(p.x + 23, p.y, knob, 5)
   circfill(p.x + 2, p.y + 20, knob, 5)
@@ -115,5 +110,4 @@ end
 
   -- draw character
   spr(192, p.x - 4, p.y - 8, 2, 2, p.direction)
-
 end

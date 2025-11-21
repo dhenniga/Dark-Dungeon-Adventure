@@ -1,30 +1,24 @@
 -- enemies.lua
--- World coords stored in b.x/b.y but movement computed in LOCAL screen space
--- to avoid floating-point precision issues when the camera is far from origin.
--- Room/camera size assumed 128x128.
 
-local TAU = 2 * 3.14159
-local MAX_BADDIES = 10
-local SPR_W = 16 -- sprite hitbox size
-
--- constructor
 function enemy(room_id, fr, x, y, fly, speed, att_speed, acc, drg, stop_time, pause_between, weight, slow_radius)
   return {
-    room_id = room_id, -- set when added to manager
+    room_id = room_id,
     frames = fr,
     anim = 1,
-    x = x, y = y,    -- global world coordinates
-    dx = 0, dy = 0,  -- local-velocity (px/frame) applied in local space
-    can_fly = fly or false,
-    speed = speed or 0.5,
-    att_speed = att_speed or 1,
-    acc = acc or 0.12,
-    drg = drg or 0.92,
-    stop_time = stop_time or 30,       -- frames to pause on first sight
-    pause_between = pause_between or 60,
-    weight = weight or 1,              -- separation / bounce weight
-    slow_radius = slow_radius or 24,   -- steering arrival radius
-    state = "explore",                 -- "explore" | "stop" | "attack"
+    x = x,
+    y = y,
+    dx = 0,
+    dy = 0,
+    can_fly = fly,
+    speed = speed,
+    att_speed = att_speed,
+    acc = acc,
+    drg = drg,
+    stop_time = stop_time,
+    pause_between = pause_between,
+    weight = weight,
+    slow_radius = slow_radius,
+    state = "explore",
     ttl = 0,
     hp = 10,
     start_hp = 10,
@@ -33,82 +27,56 @@ function enemy(room_id, fr, x, y, fly, speed, att_speed, acc, drg, stop_time, pa
 end
 
 -- presets
-function bat(x, y)  return enemy(get_current_room(), {232,234,236,234}, x, y, true, 1.2, 1.6, 0.14, 0.95, 60, 40, 10, 98) end
-function rat(x, y)  return enemy(get_current_room(),{228,230},         x, y, false, 0.5, 0.3,  0.18, 0.99, 35, 90,  2, 20) end
-function blob(x, y) return enemy(get_current_room(),{226},             x, y, false, 0.8, 1.0,  0.12, 0.92, 20, 80,  1, 20) end
+function bat(x, y) return enemy(get_current_room(), { 232, 234, 236, 234 }, x, y, true, 1.2, 1.6, 0.64, 0.95, 40, 40, 10, 50) end
+function rat(x, y) return enemy(get_current_room(), { 228, 230 }, x, y, false, 0.5, 0.8, 0.18, 0.99, 35, 90, 2, 20) end
+function blob(x, y) return enemy(get_current_room(), { 226 }, x, y, false, 0.8, 1.0, 0.12, 0.92, 20, 80, 1, 20) end
 
 baddie_m = { baddies = {} }
 
-function baddie_m.add(b)
-  if #baddie_m.baddies < MAX_BADDIES then
-    b.room_id = get_current_room()
-    add(baddie_m.baddies, b)
-  end
-end
-
-
--- helpers
-local function normalize(x, y)
-  local l = sqrt(x * x + y * y)
-  if l < 0.0001 then return 0, 0, 0 end
-  return x / l, y / l, l
-end
-
-local function clamp_room_local(lx, ly)
-  -- returns clamped local x,y (0..127-SPR_W)
-  local mx = mid(0, lx, 128 - SPR_W)
-  local my = mid(0, ly, 128 - SPR_W)
-  return mx, my
-end
-
 local function solid_box_global(gx, gy)
-  -- check 4 corners of 16x16 sprite at global pos (gx,gy)
-  if solid(gx, gy) then return true end
-  if solid(gx + SPR_W - 1, gy) then return true end
-  if solid(gx, gy + SPR_W - 1) then return true end
-  if solid(gx + SPR_W - 1, gy + SPR_W - 1) then return true end
-  return false
+  return solid(gx, gy)
+      or solid(gx + 15, gy)
+      or solid(gx, gy + 15)
+      or solid(gx + 15, gy + 15)
 end
 
 -- drawing (safe anim advance)
 function baddie_draw(b)
   b.anim += 0.2 * t_increment
   if b.anim > #b.frames + 0.999 then b.anim = 1 end
-  local frame = b.frames[flr(b.anim)]
-  local flip = (b.dx < 0)
+  local frame, flip = b.frames[flr(b.anim)], (b.dx < 0)
   spr(frame, b.x - 4, b.y - 4, 2, 2, flip)
 
   if b.hp < b.start_hp then
     rectfill(b.x, b.y + 10, b.x + b.start_hp, b.y + 10, 0)
-    rectfill(b.x, b.y + 10, b.x + b.hp,       b.y + 10, 9)
+    rectfill(b.x, b.y + 10, b.x + b.hp, b.y + 10, 9)
   end
 
   if b.state == "stop" then
-    sspr(29, 80, 3, 7, b.x + 6, b.y - 4) -- exclamation icon (adjust coords if needed)
+    sspr(29, 80, 3, 7, b.x + 6, b.y - 4)
   end
 end
 
--- manager loops
 function baddie_m.update()
   for b in all(baddie_m.baddies) do
-    -- only update baddies inside current camera view
-    if b.x >= mapx and b.x <= mapx + 127 and b.y >= mapy and b.y <= mapy + 127 then
-      baddie_update(b)
-    end
+    if b and b.x>=mapx and b.x<=mapx+127 and b.y>=mapy and b.y<=mapy+127 then baddie_update(b) end
   end
 end
 
 function baddie_m.draw()
   for b in all(baddie_m.baddies) do
-    if b.x >= mapx and b.x <= mapx + 127 and b.y >= mapy and b.y <= mapy + 127 then
-      baddie_draw(b)
-    end
+    if b and b.x>=mapx and b.x<=mapx+127 and b.y>=mapy and b.y<=mapy+127 then baddie_draw(b) end
   end
 end
 
 -- main per-enemy update
 function baddie_update(b)
   b.ttl -= 1
+
+ local f=b.can_fly and flying_enemy_can_move or ground_enemy_can_move
+ if not f(b)then 
+  sfx(16,3) 
+end
 
   -- apply drag to local velocity
   b.dx *= b.drg
@@ -119,13 +87,10 @@ function baddie_update(b)
   local ly = b.y - mapy
 
   -- SEE / ALERT / ATTACK logic (attack overrides explore)
-  if sees(b, l_rad or 40, 0, 1, 1, 0) then
+  if sees(b, l_rad, 0, 1, 1, 0) then
     -- first sight: if coming from explore -> STOP/ALERT
     if b.state ~= "stop" and b.state ~= "attack" then
-      b.state = "stop"
-      b.alert_time = b.stop_time
-      b.dx, b.dy = 0, 0
-      -- don't move this frame
+      b.state, b.alert_time, b.dx, b.dy = "stop", b.stop_time, 0, 0
       return
     end
 
@@ -140,9 +105,12 @@ function baddie_update(b)
 
     -- ATTACK behaviour: steering arrival in local space
     if b.state == "attack" then
-      -- desired vector toward player (global deltas), convert to local desired
       local desired_gx, desired_gy = p.x - b.x, p.y - b.y -- global delta
-      local ndx, ndy, dist = normalize(desired_gx, desired_gy)
+      local dist, ndx, ndy = sqrt(desired_gx * desired_gx + desired_gy * desired_gy), 0, 0
+      if dist > 0.0001 then
+        ndx, ndy = desired_gx / dist, desired_gy / dist
+      end
+
       -- desired speed slows inside slow_radius
       local desired_speed = b.att_speed
       if dist < b.slow_radius then desired_speed = desired_speed * (dist / max(1, b.slow_radius)) end
@@ -165,15 +133,13 @@ function baddie_update(b)
   else
     -- lost sight: revert to explore if needed
     if b.state == "attack" or b.state == "stop" then
-      b.state = "explore"
-      b.ttl = 0
+      b.state, b.ttl = "explore", 0
     end
 
     -- EXPLORE behaviour: periodic wander impulses
     if b.ttl <= 0 then
-      b.state = "explore"
-      b.ttl = b.pause_between + flr(rnd(b.pause_between))
-      local ang = rnd() * TAU
+      b.state, b.ttl = "explore", b.pause_between + flr(rnd(b.pause_between))
+      local ang = rnd() * 6.28318
       b.dx += cos(ang) * b.speed
       b.dy += sin(ang) * b.speed
     end
@@ -203,29 +169,27 @@ function baddie_update(b)
   end
 
   -- clamp inside room local bounds
-  local clamped_lx, clamped_ly = clamp_room_local(b.x - mapx, b.y - mapy)
-  b.x = mapx + clamped_lx
-  b.y = mapy + clamped_ly
+  b.x = mapx + max(0, min(b.x - mapx, 112))
+  b.y = mapy + max(0, min(b.y - mapy, 112))
 
   -- separation / gentle repel (velocity nudges scaled by weight)
   -- separation from others (velocity nudges, scaled by weight)
-for o in all(baddie_m.baddies) do
-  if o ~= b and o.room_id == b.room_id then
-    local rx, ry = o.x - b.x, o.y - b.y
-    local d = sqrt(rx * rx + ry * ry)
-    if d > 0 and d < 12 then
-      local nxp, nyp = rx / d, ry / d
-      local push = (12 - d) * 0.03 * b.weight
-      -- clamp per-step push so it can't blow up
-      if push > 0.5 then push = 0.5 end
-      o.dx += nxp * push
-      o.dy += nyp * push
-      b.dx -= nxp * push
-      b.dy -= nyp * push
+  for o in all(baddie_m.baddies) do
+    if o ~= b and o.room_id == b.room_id then
+      local rx, ry = o.x - b.x, o.y - b.y
+      local d = sqrt(rx * rx + ry * ry)
+      if d > 0 and d < 12 then
+        local nxp, nyp = rx / d, ry / d
+        local push = (12 - d) * 0.03 * b.weight
+        -- clamp per-step push so it can't blow up
+        if push > 0.5 then push = 0.5 end
+        o.dx += nxp * push
+        o.dy += nyp * push
+        b.dx -= nxp * push
+        b.dy -= nyp * push
+      end
     end
   end
-end
-
 
   -- sanity ttl clamp
   if b.ttl < -300 then b.ttl = 0 end

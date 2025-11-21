@@ -20,11 +20,6 @@ function sprite_collision(o1,o2)
   o1.dx -= dx * bk
   o2.dy -= dy * bk
 
-  -- o2.dx += dx * bk
-  -- o2.dy += dy * bk
-  -- o2.dx -= dx * pk
-  -- o2.dy -= dy * pk
-
   sfx(16,3)
   return true
  end
