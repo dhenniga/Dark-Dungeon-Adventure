@@ -27,9 +27,9 @@ function enemy(room_id, fr, x, y, fly, speed, att_speed, acc, drg, stop_time, pa
 end
 
 -- presets
-function bat(x, y) return enemy(get_current_room(), { 232, 234, 236, 234 }, x, y, true, 1.2, 1.6, 0.64, 0.95, 40, 40, 10, 50) end
+function bat(x, y) return enemy(get_current_room(), { 232, 234, 236, 234 }, x, y, true, 1.2, 1.6, 0.64, 0.95, 40, 40, 100, 50) end
 function rat(x, y) return enemy(get_current_room(), { 228, 230 }, x, y, false, 0.5, 0.8, 0.18, 0.99, 35, 90, 2, 20) end
-function blob(x, y) return enemy(get_current_room(), { 226 }, x, y, false, 0.8, 1.0, 0.12, 0.92, 20, 80, 1, 20) end
+function blob(x, y) return enemy(get_current_room(), { 226 }, x, y, false, 0.8, 1.0, 0.12, 0.92, 20, 80, 0.2, 20) end
 
 baddie_m = { baddies = {} }
 
@@ -65,7 +65,9 @@ end
 
 function baddie_m.draw()
   for b in all(baddie_m.baddies) do
-    if b and b.x>=mapx and b.x<=mapx+127 and b.y>=mapy and b.y<=mapy+127 then baddie_draw(b) end
+    if b and b.x>=mapx and b.x<=mapx+127 and b.y>=mapy and b.y<=mapy+127 then 
+      baddie_draw(b) 
+    end
   end
 end
 
@@ -170,6 +172,7 @@ end
   -- clamp inside room local bounds
   b.x = mapx + max(0, min(b.x - mapx, 112))
   b.y = mapy + max(0, min(b.y - mapy, 112))
+  spr_coll(b,p)
 
   -- separation / gentle repel (velocity nudges scaled by weight)
   -- separation from others (velocity nudges, scaled by weight)

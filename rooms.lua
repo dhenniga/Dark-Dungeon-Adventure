@@ -330,7 +330,7 @@ room(
     light(103, 8, 12),
     obj(80, 80, f.flame),
     light(88, 84, 15),
-    obj(80, 80, f.flame_b),
+    obj(80, 80, f.flame_f),
     obj(32, 32, f.bat),
     obj(48, 48, f.bat),
     obj(64, 64, f.bat),
@@ -406,10 +406,7 @@ room(
     obj(112, 80, f.rat),
     obj(112, 96, f.rat),
     obj(80, 32, f.rat),
-    obj(80, 48, f.rat),
-    -- obj(80, 64, f.rat),
-    -- obj(80, 80, f.rat),
-    -- obj(64, 96, f.rat)
+    obj(80, 48, f.rat)
   }
 )
 
@@ -427,7 +424,7 @@ room(
     { name = "THE LIGHTLESS PIT", flags = rf { pit = true } },
     obj(48, 96, f.flame_f), 
     light(56, 100, 20),
-    obj(64, 32, f.flame_f), 
+    obj(64, 32, f.flame_b), 
     light(72, 36, 20),
 
   }

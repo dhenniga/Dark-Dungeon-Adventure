@@ -13,7 +13,7 @@ end
 
 function _init()
 	cartdata("davidhennigan_dark_dungeon_1")
-	p.x, p.y, p.remaining_hearts, p.keys = 68, 12, 4, 3
+	p.x, p.y, p.remaining_hearts, p.keys = dget(0), dget(1), 4, 3
 	t_increment = 1
 	decode_tiles()
 	reading, show_dialog, darkrooms, quake, zoom_view, allow_movement, raindrops = false, false, false, false, false, true, false
