@@ -40,13 +40,17 @@ function tb_update()
 	end
 end
 
+local it = 0
 function tb_draw()
 	if reading then
+		if it < 25 then it += 1 end
 		t_increment = 0.02
 		fillp(0x5f5f)
-		rectfill(mapx + 5, mapy + 83, mapx + 122, mapy + 120, tb.dots_col)
+		rrectfill(mapx + 6, mapy + 83, outcubic(it,0,120,25),  outcubic(it,0,40,25), 4, tb.dots_col)
 		fillp(0x0000)
-		rect(mapx + 4, mapy + 82, mapx + 122, mapy + 120, tb.outline_col)
+		rrect(mapx + 6, mapy + 83, outcubic(it,0,120,25),  outcubic(it,0,40,25), 4, tb.outline_col)
 		print(sub(tb.str[tb.i], 1, tb.char), mapx + tb.x + 2, mapy + tb.y + 2, tb.text_col)
+	else 
+		it = 0
 	end
 end
