@@ -2,7 +2,8 @@
 
 local it = 0 -- inventory transition timer
 item_selected = 1 -- which slot is currently active
--- player_light_enabled = true
+player_light_enabled = true
+text_anim = 0
 
 -- 🩸 Draw hearts and handle inventory toggle
 function draw_inventory()
@@ -40,6 +41,7 @@ function draw_inventory()
     show_inventory()
   else
     t_increment, it, allow_movement = 1, 0, true
+    text_anim = 0
   end
 end
 
@@ -55,7 +57,8 @@ function show_inventory()
   -- show item name banner
   for o in all(active_objects) do
     if o.flags.name and not reading then
-      pb(o.name, mapx, mapy + 112, 11, 0) -- display the name of the room
+      if text_anim < 12 then text_anim += 1 end
+      pb(o.name, mapx, outcubic(text_anim,127, -14, 12), 11, 0) -- display the name of the room
     end
   end
 
@@ -64,8 +67,8 @@ function show_inventory()
     for i = 1, min(p.keys, 5) do
       local x = mapx + 121 - (i - 1) * 13
       fillp(█)
-      circfill(x, mapy + 6, 6, 129)
-      spr(206, x - 3, mapy + 3)
+      circfill(x, outcubic(text_anim,mapy,6,12), 6, 129)
+      spr(206, x - 3, outcubic(text_anim,mapy,3,12))
     end
   end
 

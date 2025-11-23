@@ -29,15 +29,15 @@ function _init()
 end
 
 function _update60()
-	if stat(53) == -1 then
-		if current_palette == "dungeon" then
-			sfx(20, 3)
-		elseif current_palette == "sewer" then
-			sfx(41, 3)
-		elseif current_palette == "pit" then
-			sfx(42, 3)
-		end
-	end
+	-- if stat(53) == -1 then
+	-- 	if current_palette == "dungeon" then
+	-- 		sfx(20, 3)
+	-- 	elseif current_palette == "sewer" then
+	-- 		sfx(41, 3)
+	-- 	elseif current_palette == "pit" then
+	-- 		sfx(42, 3)
+	-- 	end
+	-- end
 
 	if music_enabled and not stat(57) then music(0) end
 

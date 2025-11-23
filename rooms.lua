@@ -391,7 +391,7 @@ room(
 
 room(
   9, 0, {
-    { name = "THE LIGHTLESS PIT", flags = rf { pit = true } },
+    { name = "THE LIGHTLESS PIT", flags = rf { sewer = true } },
     door(0, 64, true, true),
     light(8, 54, 12),
     light(8, 84, 12),
@@ -421,7 +421,7 @@ room(
 
 room(
   10, 0, {
-    { name = "THE LIGHTLESS PIT", flags = rf { pit = true } },
+    { name = "THE LIGHTLESS PIT", flags = rf { sewer = true } },
     obj(48, 96, f.flame_f),
     light(56, 100, 20),
     obj(64, 32, f.flame_b),
