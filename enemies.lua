@@ -27,7 +27,7 @@ function enemy(room_id, fr, x, y, fly, speed, att_speed, acc, drg, stop_time, pa
 end
 
 -- presets
-function bat(x, y) return enemy(get_current_room(), { 232, 234, 236, 234 }, x, y, true, 1.2, 1.6, 0.64, 0.95, 40, 40, 100, 50) end
+function bat(x, y) return enemy(get_current_room(), { 232, 234, 236, 234 }, x, y, true, 1.2, 1.6, 10, 0.95, 40, 40, 0.1, 60) end
 function rat(x, y) return enemy(get_current_room(), { 228, 230 }, x, y, false, 1.5, 0.8, 0.64, 0.92, 35, 90, 0.1, 10) end  -- happy with the rats
 function blob(x, y) return enemy(get_current_room(), { 226 }, x, y, false, 0.8, 1.0, 0.12, 0.92, 20, 80, 0.2, 20) end
 
