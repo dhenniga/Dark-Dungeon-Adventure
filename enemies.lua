@@ -28,7 +28,7 @@ end
 
 -- presets
 function bat(x, y) return enemy(get_current_room(), { 232, 234, 236, 234 }, x, y, true, 1.2, 1.6, 0.64, 0.95, 40, 40, 100, 50) end
-function rat(x, y) return enemy(get_current_room(), { 228, 230 }, x, y, false, 0.5, 0.8, 0.18, 0.99, 35, 90, 2, 20) end
+function rat(x, y) return enemy(get_current_room(), { 228, 230 }, x, y, false, 1.5, 0.8, 0.64, 0.92, 35, 90, 0.1, 10) end  -- happy with the rats
 function blob(x, y) return enemy(get_current_room(), { 226 }, x, y, false, 0.8, 1.0, 0.12, 0.92, 20, 80, 0.2, 20) end
 
 baddie_m = { baddies = {} }

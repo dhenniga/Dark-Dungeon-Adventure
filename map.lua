@@ -38,9 +38,9 @@ function update_map()
 	 mapx,mapy=new_mapx,new_mapy
 	end
 
-	local offset=0
-	local time_val=flr(time()*0.1)
-	if (quake) offset=(16-rnd(512))*0.001
+	local offset=0 -- used for quake effect
+	local time_val=flr(time()*0.1) -- used for quake effect
+	if (quake) then offset=(16-rnd(512))*0.001 end
 	poke(0x5f2c,zoom_view and 3 or 0)
 	camera(
 		(zoom_view and (p.x-29+offset) or (mapx+offset*time_val)),
@@ -62,7 +62,7 @@ function darkroom()
 	rectfill(mapx,mapy,mapx+128,mapy+128,0)
 	draw_torch_light()
 	draw_character_light()
-	if (raindrops) draw_rain()
+	if (raindrops) then draw_rain() end
 	poke(0x5f55,0x60)
 	pal {1,0,1,0,1,0,0,1,1,1,1,1,0,0,0,0}
 	if zoom_view then

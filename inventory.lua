@@ -2,7 +2,7 @@
 
 local it = 0 -- inventory transition timer
 item_selected = 1 -- which slot is currently active
-player_light_enabled = true
+-- player_light_enabled = true
 
 -- 🩸 Draw hearts and handle inventory toggle
 function draw_inventory()

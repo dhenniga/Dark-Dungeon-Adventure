@@ -37,7 +37,6 @@ room(
   0, 0, {
     { name = "CASTLE ENTRANCE", flags = rf { dungeon = true } },
     obj(64, 0, f.c_rock),
-    obj(32, 32, f.blob),
     arch(64, 0, true, false, false),
     sign(
       33,
@@ -60,9 +59,10 @@ room(
     light(87, 120, 12),
     obj(16, 80, f.vase),
     obj(16, 96, f.vase),
-    obj(32, 96, f.vase),
-    obj(90, 90, f.bat),
-    obj(90, 40, f.rat)
+    obj(32, 96, f.vase)
+    -- obj(32, 32, f.blob),
+    -- obj(90, 90, f.bat),
+    -- obj(90, 40, f.rat)
   }
 )
 room(
@@ -422,11 +422,10 @@ room(
 room(
   10, 0, {
     { name = "THE LIGHTLESS PIT", flags = rf { pit = true } },
-    obj(48, 96, f.flame_f), 
+    obj(48, 96, f.flame_f),
     light(56, 100, 20),
-    obj(64, 32, f.flame_b), 
-    light(72, 36, 20),
-
+    obj(64, 32, f.flame_b),
+    light(72, 36, 20)
   }
 )
 

@@ -5,7 +5,7 @@ function spr_coll(a,b)
   local dx=a.x-b.x dy=a.y-b.y
   local d=sqrt(dx*dx+dy*dy) if d<1 then d=1 end
   dx/=d dy/=d
-  a.dx+=dx*2 a.dy+=dy*2
+  a.dx+=dx*1.2 a.dy+=dy*1.2
   b.dx-=dx b.dy-=dy
   sfx(16,3)
   return true
@@ -27,31 +27,6 @@ function sees(b,max_dist)
 
  return true
 end
-
-
-
--- function sees(b, max_dist, facing, sweep)
---     local max_dist, facing, sweep, dx, dy = max_dist or 128, facing or 0, sweep or 1, p.x - b.x, p.y - b.y
---     local dist_sq = dx*dx + dy*dy
---     if dist_sq > max_dist*max_dist then return false end -- too far
-
---     -- facing check
---     local ang_to_player = atan2(dy, dx)
---     if ang_to_player < 0 then ang_to_player += 1 end
---     local diff = abs(ang_to_player - facing) % 1
---     if diff > sweep and (1 - diff) > sweep then return false end -- facing away
-
---     -- obstacle check (simple step along line)
---     local steps = flr(sqrt(dist_sq) / 4)  -- every 4 pixels
---     for i = 1, steps do
---       local t = i / steps
---       local x = b.x + dx * t
---       local y = b.y + dy * t
---       if solid(x, y) then return false end
---     end
-
---     return true
--- end
 
 function enemy_can_move(a)
   local xl,xr,yt,yb=a.x+a.dx,a.x+a.dx+8,a.y+a.dy,a.y+a.dy+8

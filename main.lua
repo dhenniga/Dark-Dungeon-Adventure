@@ -4,6 +4,8 @@ sewer = "129,7,131,130,129,131,135,132,137,139,9,4,1,14,5"
 pit = "0,7,139,132,128,130,135,4,137,138,9,143,129,14,15"
 local music_enabled = false
 collision_state = false
+darkrooms = false
+player_light_enabled = false
 
 function palette(s)
 	for i, v in ipairs(split(s, ",")) do
@@ -16,7 +18,7 @@ function _init()
 	p.x, p.y, p.remaining_hearts, p.keys = dget(0), dget(1), 4, 3
 	t_increment = 1
 	decode_tiles()
-	reading, show_dialog, darkrooms, quake, zoom_view, allow_movement, raindrops = false, false, false, false, false, true, false
+	reading, show_dialog, quake, zoom_view, allow_movement, raindrops = false, false, false, false, true, false
 	init_rain()
 	poke(0x5f2e, 1)
 
@@ -75,4 +77,5 @@ function _draw()
 	if not darkrooms then print("p.x: " .. flr(p.x) .. ", " .. "p.y: " .. flr(p.y), mapx + 2, mapy + 2, 7) end
 	if not darkrooms then print("mapx: " .. mapx .. ", mapy: " .. mapy, mapx + 2, mapy + 9, 7) end
 	if not darkrooms then circ(p.x + 2, p.y, l_rad, 3) end
+	print(stat(1), mapx + 112, mapy + 2, 7)
 end
