@@ -64,14 +64,14 @@ function _draw()
 	player_attack()
 	draw_player()
 	draw_foreground_sprites()
-
+	draw_player_interact_icon()
 	if darkrooms then
 		darkroom()
 	else
 		palt(0, false) palt(14, true)
 	end
 	draw_inventory()
-	draw_player_interact_icon()
+
 	tb_draw()
 	if not darkrooms then print(get_current_room(), mapx + 106, mapy + 121, 10) end
 	if not darkrooms then print("p.x: " .. flr(p.x) .. ", " .. "p.y: " .. flr(p.y), mapx + 2, mapy + 2, 7) end
