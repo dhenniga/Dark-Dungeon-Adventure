@@ -58,7 +58,7 @@ function show_inventory()
   for o in all(active_objects) do
     if o.flags.name and not reading then
       if text_anim < 12 then text_anim += 1 end
-      pb(o.name, mapx, outcubic(text_anim,127, -14, 12), 11, 0) -- display the name of the room
+      pb(o.name, mapx, outcubic(text_anim,mapy + 127, -14, 12), 11, 0) -- display the name of the room
     end
   end
 
