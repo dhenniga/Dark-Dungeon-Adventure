@@ -32,7 +32,7 @@ function draw_inventory()
   end
 
   -- open inventory with X button
-  if btn(BTN_X) then
+  if btn(BTN_X) and not reading then
     t_increment = .05
     if it < 50 then it += 1 end
     if it == 1 then sfx(10, 3) end
