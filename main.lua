@@ -2,9 +2,9 @@ BTN_L, BTN_R, BTN_U, BTN_D, BTN_X, BTN_O = 0, 1, 2, 3, 4, 5
 dungeon = "128,7,139,132,5,6,135,4,137,138,9,143,13,14,15"
 sewer = "129,7,131,130,129,131,135,132,137,139,9,4,1,14,5"
 pit = "0,7,139,132,128,130,135,4,137,138,9,143,129,14,15"
-local music_enabled = false
-collision_state = false
-darkrooms = false
+local music_enabled = true
+collision_state = true
+darkrooms = true
 player_light_enabled = false
 
 function palette(s)
@@ -15,7 +15,7 @@ end
 
 function _init()
 	cartdata("davidhennigan_dark_dungeon_1")
-	p.x, p.y, p.remaining_hearts, p.keys = dget(0), dget(1), 4, 3
+	p.x, p.y, p.remaining_hearts, p.keys = 62, 21, 4, 1
 	t_increment = 1
 	decode_tiles()
 	reading, show_dialog, quake, zoom_view, allow_movement, raindrops = false, false, false, false, true, false
@@ -29,15 +29,15 @@ function _init()
 end
 
 function _update60()
-	-- if stat(53) == -1 then
-	-- 	if current_palette == "dungeon" then
-	-- 		sfx(20, 3)
-	-- 	elseif current_palette == "sewer" then
-	-- 		sfx(41, 3)
-	-- 	elseif current_palette == "pit" then
-	-- 		sfx(42, 3)
-	-- 	end
-	-- end
+	if stat(53) == -1 then
+		if current_palette == "dungeon" then
+			sfx(20, 3)
+		elseif current_palette == "sewer" then
+			sfx(41, 3)
+		elseif current_palette == "pit" then
+			sfx(42, 3)
+		end
+	end
 
 	if music_enabled and not stat(57) then music(0) end
 
@@ -77,5 +77,5 @@ function _draw()
 	if not darkrooms then print("p.x: " .. flr(p.x) .. ", " .. "p.y: " .. flr(p.y), mapx + 2, mapy + 2, 7) end
 	if not darkrooms then print("mapx: " .. mapx .. ", mapy: " .. mapy, mapx + 2, mapy + 9, 7) end
 	if not darkrooms then circ(p.x + 2, p.y, l_rad, 3) end
-	print(stat(1), mapx + 112, mapy + 2, 7)
+	-- print(stat(1), mapx + 112, mapy + 2, 7)
 end

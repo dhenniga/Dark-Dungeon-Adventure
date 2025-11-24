@@ -487,7 +487,15 @@ function draw_player_interact_icon()
           t_increment = 0.05 tb_init(15, o.text)
         end
         if f.sign then sspr(24, 80, 5, 7, p.x + 8, p.y - 8) end
-        if f.key or f.chest then sspr(29, 80, 3, 7, p.x + 8, p.y - 8) end
+        if f.key then 
+          sspr(29, 80, 3, 7, p.x + 8, p.y - 8)
+          if btnp(BTN_O) then
+            p.keys = (p.keys or 0) + 1
+            del(active_objects, o)
+            sfx(18, 3)
+          end
+         end
+        if f.chest then sspr(29, 80, 3, 7, p.x + 8, p.y - 8) end
         if f.door and f.solid then
           if p.keys > 0 then sspr(113, 96, 5, 8, p.x + 8, p.y - 8) end
           if btnp(BTN_O) then
