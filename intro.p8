@@ -19,6 +19,7 @@ function p4bonus(s,x,y,c,o) -- 34 tokens, 5.7 seconds
   ?s,x,y,c
 end
 
+
 text="PRESS X TO START"
 
 function draw_text()
@@ -27,6 +28,14 @@ function draw_text()
 		--p4bonus(text,34,110,7,0)
 		load("dark_dungeon_adventure.p8")
 	end
+	
+	if (time() > 33) then
+		text="LOADING GAME..."
+		if (time() == 35) then
+		load("dark_dungeon_adventure.p8")
+		end
+	end
+
 end
 
 function _update60()

@@ -2,10 +2,10 @@ BTN_L, BTN_R, BTN_U, BTN_D, BTN_X, BTN_O = 0, 1, 2, 3, 4, 5
 dungeon = "128,7,139,132,5,6,135,4,137,138,9,143,13,14,15"
 sewer = "129,7,131,130,129,131,135,132,137,139,9,4,1,14,5"
 pit = "0,7,139,132,128,130,135,4,137,138,9,143,129,14,15"
-local music_enabled = false
-collision_state = false
-darkrooms = false
-player_light_enabled = false
+local music_enabled = true
+collision_state = true
+darkrooms = true
+player_light_enabled = true
 
 function palette(s)
 	for i, v in ipairs(split(s, ",")) do
@@ -74,8 +74,8 @@ function _draw()
 
 	tb_draw()
 	if not darkrooms then print(get_current_room(), mapx + 106, mapy + 121, 10) end
-	if not darkrooms then print("p.x: " .. flr(p.x) .. ", " .. "p.y: " .. flr(p.y), mapx + 2, mapy + 2, 7) end
-	if not darkrooms then print("mapx: " .. mapx .. ", mapy: " .. mapy, mapx + 2, mapy + 9, 7) end
+	-- if not darkrooms then print("p.x: " .. flr(p.x) .. ", " .. "p.y: " .. flr(p.y), mapx + 2, mapy + 2, 7) end
+	-- if not darkrooms then print("mapx: " .. mapx .. ", mapy: " .. mapy, mapx + 2, mapy + 9, 7) end
 	if not darkrooms then circ(p.x + 2, p.y, l_rad, 3) end
-	print(stat(1), mapx + 112, mapy + 2, 7)
+	-- print(stat(1), mapx + 112, mapy + 2, 7)
 end
