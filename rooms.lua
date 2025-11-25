@@ -440,6 +440,8 @@ room(
 
 function unlock_door(o)
   local ax, ay = mapx + o.x, mapy + o.y
+  printh("unlock door >> x:" .. ax .. " > y:" .. ay)
+  printh(door_states[1])
   door_states[ax .. "_" .. ay] = true
   o.locked, o.flags.solid = false, false
   local dl, dr, dt, db = o.x, 128 - o.x, o.y, 128 - o.y
