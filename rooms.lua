@@ -415,7 +415,8 @@ room(
     { name = "CRUMBLED GROTTO", flags = rf { dungeon = true } },
     obj(40, 80, f.bat),
     obj(90, 50, f.bat),
-    obj(64, 64, f.bat)
+    obj(64, 64, f.bat),
+    key(100, 6)
   }
 )
 

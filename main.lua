@@ -2,7 +2,7 @@ BTN_L, BTN_R, BTN_U, BTN_D, BTN_X, BTN_O = 0, 1, 2, 3, 4, 5
 dungeon = "128,7,139,132,5,6,135,4,137,138,9,143,13,14,15"
 sewer = "129,7,131,130,129,131,135,132,137,139,9,4,1,14,5"
 pit = "0,7,139,132,128,130,135,4,137,138,9,143,129,14,15"
-local music_enabled = true
+local music_enabled = false
 collision_state = true
 darkrooms = true
 player_light_enabled = false
@@ -74,8 +74,7 @@ function _update60()
 end
 
 function _draw()
-    cls()
-    draw_map()
+    draw_background()
     draw_background_sprites()
     baddie_m.draw()
     player_attack()
