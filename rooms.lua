@@ -391,7 +391,7 @@ room(
 
 room(
   9, 0, {
-    { name = "THE LIGHTLESS PIT", flags = rf { sewer = true } },
+    { name = "THE LIGHTLESS PIT", flags = rf { pit = true } },
     door(0, 64, true, true),
     light(8, 54, 12),
     light(8, 84, 12),
@@ -421,7 +421,7 @@ room(
 
 room(
   10, 0, {
-    { name = "THE LIGHTLESS PIT", flags = rf { sewer = true } },
+    { name = "THE LIGHTLESS PIT", flags = rf { pit = true } },
     obj(48, 96, f.flame_f),
     light(56, 100, 20),
     obj(64, 32, f.flame_b),
@@ -438,10 +438,12 @@ room(
   }
 )
 
+--
+
+
+
 function unlock_door(o)
   local ax, ay = mapx + o.x, mapy + o.y
-  printh("unlock door >> x:" .. ax .. " > y:" .. ay)
-  printh(door_states[1])
   door_states[ax .. "_" .. ay] = true
   o.locked, o.flags.solid = false, false
   local dl, dr, dt, db = o.x, 128 - o.x, o.y, 128 - o.y
@@ -458,6 +460,8 @@ function unlock_door(o)
   sfx(8, 3)
 end
 
+--
+
 function door_lights(x, y, fx, fy, flp)
   local a, i = flp and { 240, 241, 241, 240 } or { 224, 225, 225, 224 }, flr(time() * (4 * t_increment) % 4) + 1
   local flip = i > 2
@@ -468,6 +472,8 @@ function door_lights(x, y, fx, fy, flp)
   end
 end
 
+--
+
 function normalize_obj_list(t)
   for o in all(t) do
     if o.flx ~= nil or o.fly ~= nil then
@@ -475,6 +481,8 @@ function normalize_obj_list(t)
     end
   end
 end
+
+--
 
 function draw_player_interact_icon()
   local engaged_now = false
@@ -555,6 +563,8 @@ function draw_background_sprites()
   end
 end
 
+--
+
 function animate_spikes(o)
   local t = flr((time() * t_increment * 3) % 4) + 1
   local f = ({ 78, 79, 94, 79 })[t]
@@ -565,6 +575,8 @@ function animate_spikes(o)
     end
   end
 end
+
+--
 
 function draw_foreground_sprites()
   for obj in all(active_objects) do
@@ -591,20 +603,26 @@ function draw_foreground_sprites()
   end
 end
 
+--
+
 function flames(x, y)
   local a = { 166, 167, 167, 166 }
   local i = flr(time() * 6 * t_increment % #a) + 1
   return spr(a[i], x + 4, y - 8, 1, 2, i > 2, false)
 end
 
+--
+
 function get_current_room() return flr(p.x / 128) .. "_" .. flr(p.y / 128) end
+
+--
 
 function load_room_objects(room_id)
   active_objects = room_objects[room_id] or {}
   normalize_obj_list(active_objects)
   for o in all(active_objects) do
     if o.flags and o.flags.door then
-      o.id = (mapx + o.x) .. "_" .. (mapy + o.y)
+      o.id = (mapx * 128 + o.x) .. "_" .. (mapy * 128 + o.y)
       if door_states[o.id] then
         o.locked = false o.flags.solid = false
       else
@@ -613,6 +631,8 @@ function load_room_objects(room_id)
     end
   end
 end
+
+--
 
 local current_room = ""
 function check_room_change()
@@ -634,6 +654,8 @@ function check_room_change()
   end
 end
 
+--
+
 function draw_torch_light()
   for obj in all(active_objects) do
     if obj.flags.light then
@@ -644,6 +666,8 @@ function draw_torch_light()
     end
   end
 end
+
+--
 
 function draw_flames()
   for obj in all(active_objects) do
