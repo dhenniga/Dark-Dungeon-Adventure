@@ -10,7 +10,8 @@ f = {
   blob = { blob = true },
   flame_b = { flames_back = true },
   flame_f = { flames_fore = true },
-  flame = { flames = true }
+  flame = { flames = true },
+  spike_shooter = { s_shoot = true }
 }
 
 obj = function(x, y, fl) return { x = x, y = y, flags = fl } end
@@ -59,10 +60,8 @@ room(
     light(87, 120, 12),
     obj(16, 80, f.vase),
     obj(16, 96, f.vase),
-    obj(32, 96, f.vase)
-    -- obj(32, 32, f.blob),
-    -- obj(90, 90, f.bat),
-    -- obj(90, 40, f.rat)
+    obj(32, 96, f.vase),
+    obj(86, 8, f.spike_shooter)
   }
 )
 room(
@@ -441,8 +440,6 @@ room(
 
 --
 
-
-
 function unlock_door(o)
   local ax, ay = mapx + o.x, mapy + o.y
   door_states[ax .. "_" .. ay] = true
@@ -498,20 +495,20 @@ function draw_player_interact_icon()
           t_increment = 0.05 tb_init(15, o.text)
         end
         if f.sign then sspr(24, 80, 5, 7, p.x + 8, p.y - 8) end
-        if f.key then 
+        if f.key then
           sspr(29, 80, 3, 7, p.x + 8, p.y - 8)
           if btnp(BTN_O) then
             p.keys = (p.keys or 0) + 1
             del(active_objects, o)
             sfx(18, 3)
           end
-         end
+        end
         if f.chest then sspr(29, 80, 3, 7, p.x + 8, p.y - 8) end
         if f.door and f.solid then
           if p.keys > 0 then sspr(113, 96, 5, 8, p.x + 8, p.y - 8) end
           if btnp(BTN_O) then
             if o.locked and p.keys > 0 then
-              p.keys -= 1 unlock_door(o)
+              p.keys = p.keys - 1 unlock_door(o)
             elseif o.locked then
               sfx(9, 3)
             end
@@ -600,7 +597,12 @@ function draw_foreground_sprites()
         spr(51, mapx + obj.x, mapy + obj.y, 1, 1, obj.flp, true) spr(51, mapx + obj.x, mapy + obj.y + 8, 1, 1, obj.flp, false)
       end
     end
-    if f.flames_fore then flames(mapx + obj.x, mapy + obj.y) end
+    if f.flames_fore then
+      flames(mapx + obj.x, mapy + obj.y)
+    end
+    if f.s_shoot then
+      sspr(112, 56, 7, 5, obj.x, obj.y, 7, 5, false, false)
+    end
   end
 end
 
@@ -661,8 +663,8 @@ function draw_torch_light()
   for obj in all(active_objects) do
     if obj.flags.light then
       local px, py = mapx + obj.x, mapy + obj.y
-      fillp(░) circfill(px, py, obj.r + rnd(3) + 10, 14)
-      fillp(▒) circfill(px, py, obj.r + rnd(3) + 6, 14)
+      fillp(32125.5) circfill(px, py, obj.r + rnd(3) + 10, 14)
+      fillp(23130.5) circfill(px, py, obj.r + rnd(3) + 6, 14)
       fillp(0x0000) circfill(px, py, obj.r + rnd(3) + 3, 14)
     end
   end

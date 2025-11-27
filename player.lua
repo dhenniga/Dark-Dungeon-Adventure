@@ -127,11 +127,11 @@ end
 function draw_character_light()
 	if l_rad > 0 then
 		local px, py = p.x + 2, p.y + 2
-		fillp(░)
+		fillp(32125.5)
 		circfill(px, py, (l_rad - 10) + rnd(3) + l_rad / 1.5, 14)
-		fillp(▒)
+		fillp(23130.5)
 		circfill(px, py, (l_rad - 10) + rnd(3) + l_rad / 3, 14)
-		fillp(█)
+		fillp(0.5)
 		circfill(px, py, (l_rad - 10) + rnd(3) + l_rad / 6, 14)
 	end
 end
