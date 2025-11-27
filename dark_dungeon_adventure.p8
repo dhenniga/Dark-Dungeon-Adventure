@@ -14,7 +14,8 @@ __lua__
 --
 -- proper spikes that shoot
 -- both vertically and 
--- horizontally
+-- horizontally and raise out
+-- of the ground
 --
 -- simple lights out puzzle
 -- game (as a start).

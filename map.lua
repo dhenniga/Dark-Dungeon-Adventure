@@ -59,8 +59,8 @@ function update_map()
 		cur_room_x = new_mapx
 		cur_room_y = new_mapy
 		mapx = new_mapx
-		mapy = new_mapy	
-		prerender_room()		
+		mapy = new_mapy
+		prerender_room()
 	end
 
 	local offset = 0
