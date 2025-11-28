@@ -21,8 +21,8 @@ sign = function(x, y, t) return { x = x, y = y, text = t, flags = { sign = true,
 key = function(x, y) return { x = x, y = y, flags = { key = true, interactable = true } } end
 w_button = function(x, y) return { x = x, y = y, flags = { w_button = true, interactable = true } } end
 chest = function(x, y) return { x = x, y = y, flags = { chest = true, interactable = true, solid = true } } end
-s_shoot_v = function(x, y, flp) return { x = x, y = y, flp = flp, flags = { s_shoot_v = true } } end
-s_shoot_h = function(x, y, flp) return { x = x, y = y, flp = flp, flags = { s_shoot_h = true } } end
+s_shoot_v = function(x, y, active, delay, timing, flp) return { x = x, y = y, active = active, delay = delay * 60, timing = timing * 60, flp = flp, flags = { s_shoot_v = true } } end
+s_shoot_h = function(x, y, active, delay, timing, flp) return { x = x, y = y, active = active, delay = delay * 60, timing = timing * 60, flp = flp, flags = { s_shoot_h = true } } end
 room = function(x, y, t) room_objects[x .. "_" .. y] = t end
 
 --
@@ -61,7 +61,8 @@ room(
     light(87, 120, 12),
     obj(16, 80, f.vase),
     obj(16, 96, f.vase),
-    obj(32, 96, f.vase)
+    obj(32, 96, f.vase),
+    s_shoot_v(36, 114, true, 1, 2, false)
   }
 )
 room(
@@ -348,9 +349,9 @@ room(
     w_button(20, 9),
     w_button(68, 9),
     w_button(116, 9),
-    s_shoot_v(20, 114, false),
-    s_shoot_v(68, 114, false),
-    s_shoot_v(116, 114, false)
+    s_shoot_v(20, 114, true, 2, 3, false),
+    s_shoot_v(68, 114, true, 2, 3, false),
+    s_shoot_v(116, 114, true, 2, 3, false)
   }
 )
 room(
@@ -373,8 +374,8 @@ room(
     light(118, 84, 12),
     arch(120, 64, false, true, false),
     chest(96, 16),
-    s_shoot_v(36, 114, false),
-    w_button(36, 9),
+    s_shoot_v(36, 114, true, 2, 3, false),
+    w_button(36, 9)
   }
 )
 room(
@@ -606,6 +607,7 @@ function draw_foreground_sprites()
       flames(mapx + obj.x, mapy + obj.y)
     end
     if f.s_shoot_v then
+      add(shooters, s_shoot_v(mapx + obj.x, mapy + obj.y, obj.active, obj.delay, obj.timing, obj.flp))
       sspr(112, 56, 8, 5, mapx + obj.x, mapy + obj.y, 8, 5, false, obj.flp)
     end
     if f.s_shoot_h then
@@ -684,4 +686,53 @@ function draw_flames()
   for obj in all(active_objects) do
     if obj.flags.flames then flames(mapx + obj.x, mapy + obj.y) end
   end
+end
+
+--
+
+shooters = {}
+arrows = {}
+
+function update_shooters()
+  for s in all(shooters) do
+    if s.active then
+      s.delay = s.delay - 1
+      if s.delay <= 0 then
+        fire_arrow(s)
+        sfx(3, 3)
+        s.delay = s.timing -- next shot after “timing” seconds
+      end
+    end
+  end
+end
+
+function fire_arrow(s)
+  local dx = s.flp and -2 or 2
+  -- left or right
+  local ax = s.flp and (s.x - 4) or (s.x + 4)
+
+  add(
+    arrows, {
+      x = ax,
+      y = s.y,
+      dx = dx
+    }
+  )
+end
+
+function update_arrows()
+  for i = #arrows, 1, -1 do
+    local a = arrows[i]
+    a.x = a.x + a.dx
+
+    -- remove if off-screen of current room
+    if a.x < mapx - 8 or a.x > mapx + 136 then
+      deli(arrows, i)
+    end
+  end
+end
+
+function draw_arrows()
+for a in all(arrows) do
+  sspr(117, 48, 3, 8, mapx + a.x, mapy + a.y, 3, 8) -- use your actual sprite coords
 end
