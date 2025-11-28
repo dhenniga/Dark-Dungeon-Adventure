@@ -49,7 +49,7 @@ function tb_draw()
 		rrectfill(mapx + 3, mapy + 83, outcubic(it,0,120,25),  outcubic(it,0,40,25), 4, tb.dots_col)
 		fillp(0x0000)
 		rrect(mapx + 3, mapy + 83, outcubic(it,0,120,25),  outcubic(it,0,40,25), 4, tb.outline_col)
-		print(sub(tb.str[tb.i], 1, tb.char), mapx + tb.x + 2, mapy + tb.y + 2, tb.text_col)
+		print(sub(tb.str[tb.i], 1, tb.char), mapx + tb.x -1, mapy + tb.y + 2, tb.text_col)
 	else 
 		it = 0
 	end

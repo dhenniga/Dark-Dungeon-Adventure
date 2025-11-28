@@ -10,8 +10,7 @@ f = {
   blob = { blob = true },
   flame_b = { flames_back = true },
   flame_f = { flames_fore = true },
-  flame = { flames = true },
-  spike_shooter = { s_shoot = true }
+  flame = { flames = true }
 }
 
 obj = function(x, y, fl) return { x = x, y = y, flags = fl } end
@@ -22,6 +21,8 @@ sign = function(x, y, t) return { x = x, y = y, text = t, flags = { sign = true,
 key = function(x, y) return { x = x, y = y, flags = { key = true, interactable = true } } end
 w_button = function(x, y) return { x = x, y = y, flags = { w_button = true, interactable = true } } end
 chest = function(x, y) return { x = x, y = y, flags = { chest = true, interactable = true, solid = true } } end
+s_shoot_v = function(x, y, flp) return { x = x, y = y, flp = flp, flags = { s_shoot_v = true } } end
+s_shoot_h = function(x, y, flp) return { x = x, y = y, flp = flp, flags = { s_shoot_h = true } } end
 room = function(x, y, t) room_objects[x .. "_" .. y] = t end
 
 --
@@ -60,8 +61,7 @@ room(
     light(87, 120, 12),
     obj(16, 80, f.vase),
     obj(16, 96, f.vase),
-    obj(32, 96, f.vase),
-    obj(86, 8, f.spike_shooter)
+    obj(32, 96, f.vase)
   }
 )
 room(
@@ -347,7 +347,10 @@ room(
     { name = "SPIKES OF DOOM", flags = rf { sewer = true, rain = true } },
     w_button(20, 9),
     w_button(68, 9),
-    w_button(116, 9)
+    w_button(116, 9),
+    s_shoot_v(20, 114, false),
+    s_shoot_v(68, 114, false),
+    s_shoot_v(116, 114, false)
   }
 )
 room(
@@ -369,7 +372,9 @@ room(
     light(118, 54, 12),
     light(118, 84, 12),
     arch(120, 64, false, true, false),
-    chest(96, 16)
+    chest(96, 16),
+    s_shoot_v(36, 114, false),
+    w_button(36, 9),
   }
 )
 room(
@@ -600,8 +605,11 @@ function draw_foreground_sprites()
     if f.flames_fore then
       flames(mapx + obj.x, mapy + obj.y)
     end
-    if f.s_shoot then
-      sspr(112, 56, 7, 5, obj.x, obj.y, 7, 5, false, false)
+    if f.s_shoot_v then
+      sspr(112, 56, 8, 5, mapx + obj.x, mapy + obj.y, 8, 5, false, obj.flp)
+    end
+    if f.s_shoot_h then
+      sspr(112, 48, 5, 8, mapx + obj.x, mapy + obj.y, 5, 8, obj.flp, false)
     end
   end
 end
