@@ -2,9 +2,9 @@ BTN_L, BTN_R, BTN_U, BTN_D, BTN_X, BTN_O = 0, 1, 2, 3, 4, 5
 dungeon = "128,7,139,132,5,6,135,4,137,138,9,143,13,14,15"
 sewer = "129,7,131,130,129,131,135,132,137,139,9,4,1,14,5"
 pit = "0,7,139,132,128,130,135,4,137,138,9,143,129,14,15"
-local music_enabled = false
+local music_enabled = true
 collision_state = true
-darkrooms = false
+darkrooms = true
 player_light_enabled = false
 
 function palette(s)
@@ -64,6 +64,7 @@ function _update60()
 	update_player()
 	update_shooters()
 	update_arrows()
+
 	mapx, mapy = band(p.x, 0xFFFFFF80), band(p.y, 0xFFFFFF80)
 	baddie_m.update()
 	if player_light_enabled and lanturn_timer < 12 then
@@ -84,7 +85,6 @@ end
 function _draw()
 	draw_background()
 	draw_background_sprites()
-
 	baddie_m.draw()
 	player_attack()
 	draw_player()

@@ -1,7 +1,9 @@
 
 # Dark Dungeons Instrustions
 
-Dark Dungeons is a 2D dungeon exploration game where the player is tasked to survive the
+Dark Dungeons is a 2D dungeon exploration game set in and around the Castle of Eternal Darkness, a place where darkness hides feinds and treasures, puzzles and traps.  The basic loop of the game is "find keys, unlock doors and battle the various enemies.
+
+where the player is tasked to survive the
 various creatures and pitfall and reach the end before sucumming to the dank stench of 
 the dungeon.  You'll need to find keys to unlock doors, 
 

@@ -21,8 +21,12 @@ sign = function(x, y, t) return { x = x, y = y, text = t, flags = { sign = true,
 key = function(x, y) return { x = x, y = y, flags = { key = true, interactable = true } } end
 w_button = function(x, y) return { x = x, y = y, flags = { w_button = true, interactable = true } } end
 chest = function(x, y) return { x = x, y = y, flags = { chest = true, interactable = true, solid = true } } end
-s_shoot_v = function(x, y, active, delay, timing, flp) return { x = x, y = y, active = active, delay = delay * 60, timing = timing * 60, flp = flp, flags = { s_shoot_v = true } } end
-s_shoot_h = function(x, y, active, delay, timing, flp) return { x = x, y = y, active = active, delay = delay * 60, timing = timing * 60, flp = flp, flags = { s_shoot_h = true } } end
+-- s_shoot_v = function(x, y, active, delay, timing, flp) return { x = x, y = y, active = active, delay = delay, timing = timing, flp = flp, flags = { s_shoot_v = true } } end
+-- s_shoot_h = function(x, y, active, delay, timing, flp) return { x = x, y = y, active = active, delay = delay, timing = timing, flp = flp, flags = { s_shoot_h = true } } end
+
+s_shoot_v = function(x, y, active, delay, timing, flp) return { x = x, y = y, active = active, delay = delay, timing = timing, flp = flp, next_fire = delay, flags = { s_shoot_v = true } } end
+s_shoot_h = function(x, y, active, delay, timing, flp) return { x = x, y = y, active = active, delay = delay, timing = timing, flp = flp, next_fire = delay, flags = { s_shoot_h = true } } end
+
 room = function(x, y, t) room_objects[x .. "_" .. y] = t end
 
 --
@@ -62,7 +66,8 @@ room(
     obj(16, 80, f.vase),
     obj(16, 96, f.vase),
     obj(32, 96, f.vase),
-    s_shoot_v(36, 114, true, 1, 2, false)
+    s_shoot_v(36, 114, true, 60, 120, false),
+    s_shoot_h(8, 36, true, 60, 120, false)
   }
 )
 room(
@@ -690,49 +695,56 @@ end
 
 --
 
-shooters = {}
 arrows = {}
+
+-- dir: 0=up 1=down 2=right 3=left
+function spawn_arrow(s)
+  local d, vx, vy
+  if s.flags.s_shoot_v then
+    d = s.flp and 1 or 0
+    vx = 0 vy = (d == 1) and 1 or -1
+  else
+    d = s.flp and 3 or 2
+    vy = 0 vx = (d == 2) and 1 or -1
+  end
+  add(arrows, { x = s.x, y = s.y, vx = vx, vy = vy, d = d })
+end
 
 function update_shooters()
   for s in all(shooters) do
     if s.active then
-      s.delay = s.delay - 1
-      if s.delay <= 0 then
-        fire_arrow(s)
-        sfx(3, 3)
-        s.delay = s.timing -- next shot after “timing” seconds
+      s.next_fire -= 1 / 60
+      if s.next_fire <= 0 then
+        spawn_arrow(s)
+        s.next_fire = s.timing
       end
     end
   end
 end
 
-function fire_arrow(s)
-  local dx = s.flp and -2 or 2
-  -- left or right
-  local ax = s.flp and (s.x - 4) or (s.x + 4)
-
-  add(
-    arrows, {
-      x = ax,
-      y = s.y,
-      dx = dx
-    }
-  )
-end
-
 function update_arrows()
-  for i = #arrows, 1, -1 do
-    local a = arrows[i]
-    a.x = a.x + a.dx
-
-    -- remove if off-screen of current room
-    if a.x < mapx - 8 or a.x > mapx + 136 then
-      deli(arrows, i)
+  for a in all(arrows) do
+    a.x += a.vx a.y += a.vy
+    if a.x < 0 or a.x > 128 or a.y < 0 or a.y > 128 then
+      del(arrows, a)
     end
   end
 end
 
+-- draw lookup: {sx,sy,w,h,fx,fy}
+local adraw = {
+  { 117, 48, 3, 8, false, false }, -- up
+  { 117, 48, 3, 8, false, true }, -- down
+  { 112, 61, 8, 3, false, false }, -- right
+  { 112, 61, 8, 3, true, false } -- left
+}
+
 function draw_arrows()
-for a in all(arrows) do
-  sspr(117, 48, 3, 8, mapx + a.x, mapy + a.y, 3, 8) -- use your actual sprite coords
+  for a in all(arrows) do
+    local d = adraw[a.d + 1]
+    sspr(
+      d[1], d[2], d[3], d[4],
+      mapx + a.x + 3, mapy + a.y, d[3], d[4], d[5], d[6]
+    )
+  end
 end
