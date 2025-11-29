@@ -707,32 +707,34 @@ function spawn_arrow(s)
   local d, vx, vy
   if s.flags.s_shoot_v then
     d = s.flp and 1 or 0
-    vx = 0 vy = (d == 1 and s.speed or -s.speed)
+    vx = 0 vy = s.speed * (d == 1 and 1 or -1)
   else
     d = s.flp and 3 or 2
-    vy = 0 vx = (d == 2 and s.speed or -s.speed)
+    vy = 0 vx = s.speed * (d == 2 and 1 or -1)
   end
   add(arrows, { x = mapx + s.x, y = mapy + s.y, vx = vx, vy = vy, d = d })
   sfx(19, 3)
 end
 
 function update_shooters()
-  for s in all(shooters) do
-    if s.active then
-      s.delay -= 1 * t_increment
-      if s.delay <= 0 then
-        spawn_arrow(s)
-        s.delay = s.timing
+  if mapx == cur_room_x and mapy == cur_room_y then
+    for s in all(shooters) do
+      if s.active then
+        s.delay -= t_increment
+        if s.delay <= 0 then
+          spawn_arrow(s)
+          s.delay = s.timing
+        end
       end
     end
   end
 end
 
 function update_arrows()
-  local l, r, t, b = mapx, mapx + 128, mapy, mapy + 128
   for a in all(arrows) do
-    a.x += a.vx * t_increment a.y += a.vy * t_increment
-    if a.x < l or a.x > r or a.y < t or a.y > b then del(arrows, a) end
+    a.x += a.vx * t_increment
+    a.y += a.vy * t_increment
+    if a.x < mapx or a.x > mapx + 120 or a.y < mapy or a.y > mapy + 120 then del(arrows, a) end
   end
 end
 
