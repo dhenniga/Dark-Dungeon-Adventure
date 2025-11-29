@@ -63,8 +63,11 @@ room(
     obj(16, 80, f.vase),
     obj(16, 96, f.vase),
     obj(32, 96, f.vase),
-    s_shoot_v(36, 114, true, 1, 60, 3, false),
-    s_shoot_h(8, 36, true, 1, 60, 3, false)
+    s_shoot_v(36, 114, true, 1, 60, 2, false),
+    s_shoot_h(8, 36, true, 1, 70, 2, false),
+
+    s_shoot_v(48, 6, true, 1, 80, 2, true), -- DOWN
+    s_shoot_h(112, 48, true, 1, 90, 2, true) -- RIGHT TO LEFT
   }
 )
 room(
@@ -710,6 +713,7 @@ function spawn_arrow(s)
     vy = 0 vx = (d == 2 and s.speed or -s.speed)
   end
   add(arrows, { x = mapx + s.x, y = mapy + s.y, vx = vx, vy = vy, d = d })
+  sfx(19, 3)
 end
 
 function update_shooters()
@@ -718,7 +722,7 @@ function update_shooters()
       s.delay -= 1 * t_increment
       if s.delay <= 0 then
         spawn_arrow(s)
-        s.delay = s.timing * t_increment
+        s.delay = s.timing
       end
     end
   end
@@ -733,10 +737,10 @@ function update_arrows()
 end
 
 local adraw = {
-  { 117, 48, 3, 8, false, false },
-  { 117, 48, 3, 8, false, true },
-  { 112, 61, 8, 3, false, false },
-  { 112, 61, 8, 3, true, false }
+  { 117, 48, 3, 8, false, false, 2, -4 }, -- DOWN to UP -- DONE
+  { 117, 48, 3, 8, false, true, 3, 2 }, -- UP to DOWN
+  { 112, 61, 8, 3, false, false, 2, 2 }, -- LEFT to RIGHT -- DONE
+  { 112, 61, 8, 3, true, false, -4, 2 } -- RIGHT to LEFT
 }
 
 function draw_arrows()
@@ -744,7 +748,7 @@ function draw_arrows()
     local d = adraw[a.d + 1]
     sspr(
       d[1], d[2], d[3], d[4],
-      mapx + a.x, mapy + a.y, d[3], d[4], d[5], d[6]
+      mapx + a.x + d[7], mapy + a.y + d[8], d[3], d[4], d[5], d[6]
     )
   end
 end
