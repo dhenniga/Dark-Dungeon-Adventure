@@ -2,9 +2,9 @@ BTN_L, BTN_R, BTN_U, BTN_D, BTN_X, BTN_O = 0, 1, 2, 3, 4, 5
 dungeon = "128,7,139,132,5,6,135,4,137,138,9,143,13,14,15"
 sewer = "129,7,131,130,129,131,135,132,137,139,9,4,1,14,5"
 pit = "0,7,139,132,128,130,135,4,137,138,9,143,129,14,15"
-local music_enabled = true
-collision_state = true
-darkrooms = true
+local music_enabled = false
+collision_state = false
+darkrooms = false
 player_light_enabled = false
 
 function palette(s)
@@ -15,7 +15,8 @@ end
 
 function _init()
 	cartdata("davidhennigan_dark_dungeon_1")
-	p.x, p.y, p.remaining_hearts, p.keys = 67, 12, 4, 5
+	-- p.x, p.y, p.remaining_hearts, p.keys = 67, 12, 4, 5
+	p.x, p.y, p.remaining_hearts, p.keys = dget(), dget(1), 12, 4, 5
 	t_increment = 1
 	cls()
 	decode_tiles()
@@ -100,17 +101,18 @@ function _draw()
 	draw_inventory()
 
 	tb_draw()
-	if not darkrooms then
-		print(get_current_room(), mapx + 106, mapy + 121, 10)
-	end
-	if not darkrooms then
-		print("p.x: " .. flr(p.x) .. ", " .. "p.y: " .. flr(p.y), mapx + 2, mapy + 2, 7)
-	end
-	if not darkrooms then
-		print("mapx: " .. mapx .. ", mapy: " .. mapy, mapx + 2, mapy + 9, 7)
-	end
-	if not darkrooms then
-		circ(p.x + 2, p.y, l_rad, 3)
-	end
-	-- print(stat(1), mapx + 112, mapy + 2, 7)
+	-- if not darkrooms then
+	-- 	print(get_current_room(), mapx + 106, mapy + 121, 10)
+	-- end
+	-- if not darkrooms then
+	-- 	print("px:" .. flr(p.x) .. ", " .. "py:" .. flr(p.y), mapx + 2, mapy + 2, 7)
+	-- end
+	-- if not darkrooms then
+	-- 	print("mx:" .. mapx .. ", my:" .. mapy, mapx + 2, mapy + 9, 7)
+	-- end
+	-- if not darkrooms then
+	-- 	circ(p.x + 2, p.y, l_rad, 3)
+	-- end
+	-- if not darkrooms then print("cpu:" .. stat(1), mapx + 97, mapy + 2, 7) end
+	-- if not darkrooms then print("mem:" .. stat(0), mapx + 85, mapy + 8, 7) end
 end

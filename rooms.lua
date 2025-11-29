@@ -21,11 +21,8 @@ sign = function(x, y, t) return { x = x, y = y, text = t, flags = { sign = true,
 key = function(x, y) return { x = x, y = y, flags = { key = true, interactable = true } } end
 w_button = function(x, y) return { x = x, y = y, flags = { w_button = true, interactable = true } } end
 chest = function(x, y) return { x = x, y = y, flags = { chest = true, interactable = true, solid = true } } end
--- s_shoot_v = function(x, y, active, delay, timing, flp) return { x = x, y = y, active = active, delay = delay, timing = timing, flp = flp, flags = { s_shoot_v = true } } end
--- s_shoot_h = function(x, y, active, delay, timing, flp) return { x = x, y = y, active = active, delay = delay, timing = timing, flp = flp, flags = { s_shoot_h = true } } end
-
-s_shoot_v = function(x, y, active, delay, timing, flp) return { x = x, y = y, active = active, delay = delay, timing = timing, flp = flp, next_fire = delay, flags = { s_shoot_v = true } } end
-s_shoot_h = function(x, y, active, delay, timing, flp) return { x = x, y = y, active = active, delay = delay, timing = timing, flp = flp, next_fire = delay, flags = { s_shoot_h = true } } end
+s_shoot_v = function(x, y, active, delay, timing, speed, flp) return { x = x, y = y, active = active, delay = delay, timing = timing, speed = speed, flp = flp, flags = { s_shoot_v = true } } end
+s_shoot_h = function(x, y, active, delay, timing, speed, flp) return { x = x, y = y, active = active, delay = delay, timing = timing, speed = speed, flp = flp, flags = { s_shoot_h = true } } end
 
 room = function(x, y, t) room_objects[x .. "_" .. y] = t end
 
@@ -66,8 +63,8 @@ room(
     obj(16, 80, f.vase),
     obj(16, 96, f.vase),
     obj(32, 96, f.vase),
-    s_shoot_v(36, 114, true, 60, 120, false),
-    s_shoot_h(8, 36, true, 60, 120, false)
+    s_shoot_v(36, 114, true, 1, 60, 3, false),
+    s_shoot_h(8, 36, true, 1, 60, 3, false)
   }
 )
 room(
@@ -85,7 +82,9 @@ room(
     obj(96, 80, f.vase),
     obj(20, 90, f.bat),
     obj(100, 32, f.rat),
-    obj(32, 48, f.vase)
+    obj(32, 48, f.vase),
+    s_shoot_v(36, 114, true, 1, 60, 3, false),
+    s_shoot_h(8, 36, true, 1, 60, 3, false)
   }
 )
 room(
@@ -354,9 +353,9 @@ room(
     w_button(20, 9),
     w_button(68, 9),
     w_button(116, 9),
-    s_shoot_v(20, 114, true, 2, 3, false),
-    s_shoot_v(68, 114, true, 2, 3, false),
-    s_shoot_v(116, 114, true, 2, 3, false)
+    s_shoot_v(20, 114, true, 1, 60, 3, false),
+    s_shoot_v(68, 114, true, 1, 60, 3, false),
+    s_shoot_v(116, 114, true, 1, 60, 3, false)
   }
 )
 room(
@@ -379,7 +378,7 @@ room(
     light(118, 84, 12),
     arch(120, 64, false, true, false),
     chest(96, 16),
-    s_shoot_v(36, 114, true, 2, 3, false),
+    s_shoot_v(36, 114, true, 1, 60, 3, false),
     w_button(36, 9)
   }
 )
@@ -611,12 +610,12 @@ function draw_foreground_sprites()
     if f.flames_fore then
       flames(mapx + obj.x, mapy + obj.y)
     end
-    if f.s_shoot_v then
-      add(shooters, s_shoot_v(mapx + obj.x, mapy + obj.y, obj.active, obj.delay, obj.timing, obj.flp))
-      sspr(112, 56, 8, 5, mapx + obj.x, mapy + obj.y, 8, 5, false, obj.flp)
-    end
-    if f.s_shoot_h then
-      sspr(112, 48, 5, 8, mapx + obj.x, mapy + obj.y, 5, 8, obj.flp, false)
+    if f.s_shoot_v or f.s_shoot_h then
+      local v = f.s_shoot_v
+      sspr(112, v and 56 or 48, v and 8 or 5, v and 5 or 8, mapx + obj.x, mapy + obj.y, v and 8 or 5, v and 5 or 8, v and false or obj.flp, v and obj.flp or false)
+      if not obj.added then
+        add(shooters, obj) obj.added = true
+      end
     end
   end
 end
@@ -662,7 +661,10 @@ function check_room_change()
     load_room_objects(current_room)
 
     -- set palette based on room flags
-    local flags = room_objects[current_room][1].flags
+    local flags = {}
+    if room_objects[current_room] and room_objects[current_room][1] and room_objects[current_room][1].flags then
+      flags = room_objects[current_room][1].flags
+    end
 
     palette(flags.dungeon and dungeon or flags.sewer and sewer or pit)
     current_palette = flags.dungeon and "dungeon" or flags.sewer and "sewer" or "pit"
@@ -696,47 +698,45 @@ end
 --
 
 arrows = {}
+shooters = {}
 
--- dir: 0=up 1=down 2=right 3=left
 function spawn_arrow(s)
   local d, vx, vy
   if s.flags.s_shoot_v then
     d = s.flp and 1 or 0
-    vx = 0 vy = (d == 1) and 1 or -1
+    vx = 0 vy = (d == 1 and s.speed or -s.speed)
   else
     d = s.flp and 3 or 2
-    vy = 0 vx = (d == 2) and 1 or -1
+    vy = 0 vx = (d == 2 and s.speed or -s.speed)
   end
-  add(arrows, { x = s.x, y = s.y, vx = vx, vy = vy, d = d })
+  add(arrows, { x = mapx + s.x, y = mapy + s.y, vx = vx, vy = vy, d = d })
 end
 
 function update_shooters()
   for s in all(shooters) do
     if s.active then
-      s.next_fire -= 1 / 60
-      if s.next_fire <= 0 then
+      s.delay -= 1 * t_increment
+      if s.delay <= 0 then
         spawn_arrow(s)
-        s.next_fire = s.timing
+        s.delay = s.timing * t_increment
       end
     end
   end
 end
 
 function update_arrows()
+  local l, r, t, b = mapx, mapx + 128, mapy, mapy + 128
   for a in all(arrows) do
-    a.x += a.vx a.y += a.vy
-    if a.x < 0 or a.x > 128 or a.y < 0 or a.y > 128 then
-      del(arrows, a)
-    end
+    a.x += a.vx * t_increment a.y += a.vy * t_increment
+    if a.x < l or a.x > r or a.y < t or a.y > b then del(arrows, a) end
   end
 end
 
--- draw lookup: {sx,sy,w,h,fx,fy}
 local adraw = {
-  { 117, 48, 3, 8, false, false }, -- up
-  { 117, 48, 3, 8, false, true }, -- down
-  { 112, 61, 8, 3, false, false }, -- right
-  { 112, 61, 8, 3, true, false } -- left
+  { 117, 48, 3, 8, false, false },
+  { 117, 48, 3, 8, false, true },
+  { 112, 61, 8, 3, false, false },
+  { 112, 61, 8, 3, true, false }
 }
 
 function draw_arrows()
@@ -744,7 +744,7 @@ function draw_arrows()
     local d = adraw[a.d + 1]
     sspr(
       d[1], d[2], d[3], d[4],
-      mapx + a.x + 3, mapy + a.y, d[3], d[4], d[5], d[6]
+      mapx + a.x, mapy + a.y, d[3], d[4], d[5], d[6]
     )
   end
 end
