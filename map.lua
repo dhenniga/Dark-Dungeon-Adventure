@@ -11,9 +11,9 @@ function decode_tiles()
         for i = 0, 1 do
             for j = 0, 1 do
                 local o = shl(sx, 3) + shl(i, 2) + shl(sy, 8) + shl(j, 7)
-                local p = tonum("0x" .. sub(tiledat, 1 + o, 2 + o))
+                local k = tonum("0x" .. sub(tiledat, 1 + o, 2 + o))
                 add(t, {
-                    sp = p,
+                    sp = k,
                     x_offset = i * 8,
                     y_offset = j * 8,
                     hf = sub(tiledat, 3 + o, 3 + o) == "1",
@@ -139,7 +139,7 @@ end
 function draw_rain()
     for raindrop in all(r) do
         local length = raindrop.v == 1 and 2 or 1
-        local color = 12 - 11 * (raindrop.v - 1)
-        line(mapx + raindrop.x, mapy + raindrop.y, mapx + raindrop.x - length, mapy + raindrop.y - length, color)
+        local col = 12 - 11 * (raindrop.v - 1)
+        line(mapx + raindrop.x, mapy + raindrop.y, mapx + raindrop.x - length, mapy + raindrop.y - length, col)
     end
 end

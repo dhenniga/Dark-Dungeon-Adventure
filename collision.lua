@@ -2,7 +2,8 @@
 
 function spr_coll(a,b)
  if a.x<b.x+8 and a.x+8>b.x and a.y<b.y+8 and a.y+8>b.y then
-  local dx=a.x-b.x dy=a.y-b.y
+  local dx=a.x-b.x 
+  local dy=a.y-b.y
   local d=sqrt(dx*dx+dy*dy) if d<1 then d=1 end
   dx/=d dy/=d
   a.dx+=dx*1.2 a.dy+=dy*1.2
@@ -104,7 +105,6 @@ function is_fall_tile(x,y)
   end
   return false
 end
-
 
 
 

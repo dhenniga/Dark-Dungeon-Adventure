@@ -87,9 +87,9 @@ end
   local lx = b.x - mapx
   local ly = b.y - mapy
 
-  -- SEE / ALERT / ATTACK logic (attack overrides explore)
+  -- 𝘴𝘦𝘦 / 𝘢𝘭𝘦𝘳𝘵 / 𝘢𝘵𝘵𝘢𝘤𝘬 logic (attack overrides explore)
   if sees(b, l_rad, 0, 1, 1, 0) then
-    -- first sight: if coming from explore -> STOP/ALERT
+    -- first sight: if coming from explore -> 𝘴𝘵𝘰𝘱/𝘢𝘭𝘦𝘳𝘵
     if b.state ~= "stop" and b.state ~= "attack" then
       b.state, b.alert_time, b.dx, b.dy = "stop", b.stop_time, 0, 0
       return
@@ -104,7 +104,7 @@ end
       return
     end
 
-    -- ATTACK behaviour: steering arrival in local space
+    -- 𝘢𝘵𝘵𝘢𝘤𝘬 behaviour: steering arrival in local space
     if b.state == "attack" then
       local desired_gx, desired_gy = p.x - b.x, (p.y - 5) - b.y -- global delta
       local dist, ndx, ndy = sqrt(desired_gx * desired_gx + desired_gy * desired_gy), 0, 0
@@ -137,7 +137,7 @@ end
       b.state, b.ttl = "explore", 0
     end
 
-    -- EXPLORE behaviour: periodic wander impulses
+    -- 𝘦𝘹𝘱𝘭𝘰𝘳𝘦 behaviour: periodic wander impulses
     if b.ttl <= 0 then
       b.state, b.ttl = "explore", b.pause_between + flr(rnd(b.pause_between))
       local ang = rnd() * 6.28318
@@ -146,7 +146,7 @@ end
     end
   end
 
-  -- PROPOSED local next position (operate in local coords to keep additions small)
+  -- 𝘱𝘳𝘰𝘱𝘰𝘴𝘦𝘥 local next position (operate in local coords to keep additions small)
   local nx_local = lx + b.dx * t_increment
   local ny_local = ly + b.dy * t_increment
 

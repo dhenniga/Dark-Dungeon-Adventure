@@ -1,4 +1,5 @@
-BTN_L, BTN_R, BTN_U, BTN_D, BTN_X, BTN_O, dungeon, sewer, pit, music_enabled, collision_state, darkrooms, player_light_enabled, reading, show_dialog, quake, allow_movement, raindrops = 0, 1, 2, 3, 4, 5, "128,7,139,132,5,6,135,4,137,138,9,143,13,14,15", "129,7,131,130,129,131,135,132,137,139,9,4,1,14,5", "0,7,139,132,128,130,135,4,137,138,9,143,129,14,15", true, true, true, false, false, false, false, true, false
+
+𝘣𝘵𝘯_𝘭, 𝘣𝘵𝘯_𝘳, 𝘣𝘵𝘯_𝘶, 𝘣𝘵𝘯_𝘥, 𝘣𝘵𝘯_𝘹, 𝘣𝘵𝘯_𝘰, dungeon, sewer, pit, music_enabled, collision_state, darkrooms, player_light_enabled, reading, quake, allow_movement, raindrops, mapx, mapy, l_rad, current_palette = 0, 1, 2, 3, 4, 5, "128,7,139,132,5,6,135,4,137,138,9,143,13,14,15", "129,7,131,130,129,131,135,132,137,139,9,4,1,14,5", "0,7,139,132,128,130,135,4,137,138,9,143,129,14,15", true, true, true, false, false, false, true, false, 0, 0, 0, ""
 
 function palette(s)
 	for i, v in ipairs(split(s, ",")) do
@@ -19,18 +20,18 @@ function _init()
 		music(0)
 	end
 	menuitem(
-		1, "TOGGLE MUSIC", function()
+		1, "𝘵𝘰𝘨𝘨𝘭𝘦 𝘮𝘶𝘴𝘪𝘤", function()
 			music_enabled = not music_enabled
 			music(music_enabled and 0 or -1)
 		end
 	)
 	menuitem(
-		2, "TOGGLE COLLISION", function()
+		2, "𝘵𝘰𝘨𝘨𝘭𝘦 𝘤𝘰𝘭𝘭𝘪𝘴𝘪𝘰𝘯", function()
 			collision_state = not collision_state
 		end
 	)
 	menuitem(
-		3, "TOGGLE DEVMODE", function()
+		3, "𝘵𝘰𝘨𝘨𝘭𝘦 𝘥𝘦𝘷𝘮𝘰𝘥𝘦", function()
 			darkrooms = not darkrooms
 		end
 	)
@@ -53,18 +54,11 @@ function _update60()
 	update_shooters()
 	update_arrows()
 
-	mapx, mapy = band(p.x, 0xFFFFFF80), band(p.y, 0xFFFFFF80)
+	mapx, mapy = band(p.x, 0xffffff80), band(p.y, 0xffffff80)
 	baddie_m.update()
 
 	lanturn_timer = mid(0, lanturn_timer + (player_light_enabled and 0.5 or -0.25), 12)
 
-
-	-- if player_light_enabled and lanturn_timer < 12 then
-	-- 	lanturn_timer = lanturn_timer + 0.5
-	-- end
-	-- if lanturn_timer > 0 then
-	-- 	lanturn_timer = lanturn_timer - 0.25
-	-- end
 	l_rad = outelastic(lanturn_timer, 0, 35, 30)
 
 	if reading then tb_update() end

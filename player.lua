@@ -10,7 +10,7 @@ p = {
 	drg = 0.9,
 	cooldown = 0,
 	total_hearts = 5,
-	remaining_hearts = 5,
+	remaining_hearts = 3,
 	fall_dir = nil,
 	keys = 1,
 	engaged = false,
@@ -43,8 +43,14 @@ function draw_player()
 		sfx(13, 3)
 	end
 
-	if not p.fall_dir then
-  	spr(player_atk and 194 or (p.moving and ({198,200,202,204})[flr(running)] or ({192,194,196})[flr(idle)]), p.x-4,p.y-8,2,2,p.direction)
+	if not player_atk then
+		if p.moving then 
+			if not p.fall_dir then spr(({198,200,202,204})[flr(running)], p.x - 4, p.y - 8, 2, 2, p.direction) end
+		else
+			if not p.fall_dir then spr(({192,194,196})[flr(idle)], p.x - 4, p.y - 8, 2, 2, p.direction) end
+		end
+	else
+		spr(194, p.x - 4, p.y - 8, 2, 2, p.direction)
 	end
 
 	if p.fall_dir then
@@ -72,7 +78,7 @@ function player_attack()
 	local sword_frames={72,74,106,108}
 
 	-- start attack on button press if not already attacking
-	if btnp(BTN_O) and not p.engaged and not player_atk then
+	if btnp(𝘣𝘵𝘯_𝘰) and not p.engaged and not player_atk then
 		player_atk=true
 		p.atk_t=time() -- start timestamp
 		sfx(14,3)
@@ -96,14 +102,14 @@ end
 
 function update_player()
 	if p.fall_dir or not allow_movement then return end
-	if btn(BTN_L) then
+	if btn(𝘣𝘵𝘯_𝘭) then
 		p.dx -= p.acc p.direction = true
 	end
-	if btn(BTN_R) then
+	if btn(𝘣𝘵𝘯_𝘳) then
 		p.dx += p.acc p.direction = false
 	end
-	if btn(BTN_U) then p.dy -= p.acc end
-	if btn(BTN_D) then p.dy += p.acc end
+	if btn(𝘣𝘵𝘯_𝘶) then p.dy -= p.acc end
+	if btn(𝘣𝘵𝘯_𝘥) then p.dy += p.acc end
 	p.dx, p.dy = mid(-1, p.dx, 1), mid(-1, p.dy, 1)
 	if player_can_move(p) then
 		p.x += p.dx p.y += p.dy

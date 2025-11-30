@@ -1,5 +1,5 @@
 -- textbox
-
+tb = {}
 function tb_init(voice, string)
 	reading = true
 	tb = {
@@ -27,8 +27,8 @@ function tb_update()
 			tb.cur = 0
 			if (ord(tb.str[tb.i], tb.char) != 32) sfx(tb.voice, 3)
 		end
-		if (btnp(BTN_O)) tb.char = #tb.str[tb.i]
-	elseif btnp(BTN_O) then
+		if (btnp(𝘣𝘵𝘯_𝘰)) tb.char = #tb.str[tb.i]
+	elseif btnp(𝘣𝘵𝘯_𝘰) then
 		if #tb.str > tb.i then
 			tb.i += 1
 			tb.cur = 0

@@ -1,11 +1,11 @@
 -- inventory.lua
 
-local it = 0 -- inventory transition timer
+i_transition = 0 -- inventory transition timer
 item_selected = 1 -- which slot is currently active
 player_light_enabled = true
 local text_anim = 0
 
--- 🩸 Draw hearts and handle inventory toggle
+-- ユかたま 𝘥raw hearts and handle inventory toggle
 function draw_inventory()
   -- lanturn lighting
   for x = 121, 125 do
@@ -18,28 +18,28 @@ function draw_inventory()
     spr(p.remaining_hearts>=i and 238 or 239,mapx+(i<<3)-8,mapy+118)
   end
 
-  -- open inventory with X button
-  if btn(BTN_X) and not reading then
+  -- open inventory with 𝘹 button
+  if btn(𝘣𝘵𝘯_𝘹) and not reading then
     t_increment = .05
-    if it < 50 then it += 1 end
-    if it == 1 then sfx(10, 3) end
+    if i_transition < 50 then i_transition += 1 end
+    if i_transition == 1 then sfx(10, 3) end
     p.dx, p.dy = 0, 0
     allow_movement = false
     show_inventory()
   else
-    t_increment, it, allow_movement = 1, 0, true
+    t_increment, i_transition, allow_movement = 1, 0, true
     text_anim = 0
   end
 end
 
--- 🧷 Pretty border text print helper
+-- ユかせほ 𝘱retty border text print helper
 function pb(s, x, y, c, o)
   color(o)
   ?'\-f' .. s .. '\^g\-h' .. s .. '\^g\|f' .. s .. '\^g\|h' .. s, x, y
   ?s, x, y, c
 end
 
--- 🗝️ Full inventory display overlay
+-- ユか❎えヤま◆ 𝘧ull inventory display overlay
 function show_inventory()
   -- show item name banner
   for o in all(active_objects) do
@@ -49,7 +49,7 @@ function show_inventory()
     end
   end
 
-  -- 🔑 draw collected keys (up to 5)
+  -- ユか⬆️➡️ draw collected keys (up to 5)
   if p.keys > 0 then
     for i = 1, min(p.keys, 5) do
       local x = mapx + 121 - (i - 1) * 13
@@ -59,7 +59,7 @@ function show_inventory()
     end
   end
 
-  local dirs = { BTN_U, BTN_D, BTN_L, BTN_R }
+  local dirs = { 𝘣𝘵𝘯_𝘶, 𝘣𝘵𝘯_𝘥, 𝘣𝘵𝘯_𝘭, 𝘣𝘵𝘯_𝘳 }
   for i = 1, 4 do
     if btnp(dirs[i]) then
       if i == 1 then
@@ -70,9 +70,9 @@ function show_inventory()
   end
 
   -- elastic animations
-  local outs, knob, ob = {}, outelastic(it, 0, 9, 50), outelastic(it, 0, 10, 50)
+  local outs, knob, ob = {}, outelastic(i_transition, 0, 9, 50), outelastic(i_transition, 0, 10, 50)
   for i = 1, 4 do
-    outs[i] = outelastic(it, 0, 11 + (item_selected == i and 7 or 0), 50)
+    outs[i] = outelastic(i_transition, 0, 11 + (item_selected == i and 7 or 0), 50)
   end
 
   -- background black border for top
@@ -81,10 +81,10 @@ function show_inventory()
   end
 
   -- backgruond back
-  circfill(p.x + 2, p.y, outelastic(it, 0, 26, 26), 0)
+  circfill(p.x + 2, p.y, outelastic(i_transition, 0, 26, 26), 0)
 
   -- backgruond front
-  circfill(p.x + 2, p.y, outelastic(it, 0, 25, 25), 5)
+  circfill(p.x + 2, p.y, outelastic(i_transition, 0, 25, 25), 5)
 
   -- selection circles
   circfill(p.x + 2, p.y - 20, knob, 5)
@@ -93,10 +93,10 @@ function show_inventory()
   circfill(p.x - 19, p.y, knob, 5)
 
   --light
-  spr(207, p.x - 1, outelastic(it, p.y, -25, 25), 1, 2)
+  spr(207, p.x - 1, outelastic(i_transition, p.y, -25, 25), 1, 2)
 
   --sword
-  spr(72, outelastic(it, p.x, 16, 25), p.y - 8, 2, 2)
+  spr(72, outelastic(i_transition, p.x, 16, 25), p.y - 8, 2, 2)
 
   -- draw character
   spr(192, p.x - 4, p.y - 8, 2, 2, p.direction)
