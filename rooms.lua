@@ -29,7 +29,7 @@ room = function(x, y, t) room_objects[x .. "_" .. y] = t end
 --
 
 rf = function(t)
-  local f = { name = true, dungeon = false, sewer = false, pit = false, zoom = false, rain = false }
+  local f = { name = true, dungeon = false, sewer = false, pit = false, rain = false }
   for k, v in pairs(t) do
     f[k] = v
   end
@@ -542,7 +542,6 @@ end
 function draw_background_sprites()
   for obj in all(active_objects) do
     local f = obj.flags
-    if f.zoom ~= nil then zoom_view = f.zoom end
     if f.rain ~= nil then raindrops = f.rain end
     if f.quake ~= nil then quake = f.quake end
     if f.sewer then
@@ -734,7 +733,23 @@ function update_arrows()
   for a in all(arrows) do
     a.x += a.vx * t_increment
     a.y += a.vy * t_increment
-    if a.x < mapx or a.x > mapx + 120 or a.y < mapy or a.y > mapy + 120 then del(arrows, a) end
+    -- player hitbox (8×8 or whatever you use)
+    if a.x < p.x + 8 and a.x + 8 > p.x
+        and a.y < p.y + 8 and a.y + 8 > p.y then
+      dx = p.x - a.x
+      dy = p.y - a.y
+      d = dx * dx + dy * dy
+      if d < 1 then d = 1 end
+      p.dx += dx / d * 5
+      p.dy += dy / d * 5
+      p.remaining_hearts -= 1
+
+      del(arrows, a)
+    end
+
+    if a.x < mapx or a.x > mapx + 120 or a.y < mapy or a.y > mapy + 120 then
+      del(arrows, a)
+    end
   end
 end
 

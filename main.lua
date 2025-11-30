@@ -1,11 +1,4 @@
-BTN_L, BTN_R, BTN_U, BTN_D, BTN_X, BTN_O = 0, 1, 2, 3, 4, 5
-dungeon = "128,7,139,132,5,6,135,4,137,138,9,143,13,14,15"
-sewer = "129,7,131,130,129,131,135,132,137,139,9,4,1,14,5"
-pit = "0,7,139,132,128,130,135,4,137,138,9,143,129,14,15"
-local music_enabled = false
-collision_state = false
-darkrooms = false
-player_light_enabled = false
+BTN_L, BTN_R, BTN_U, BTN_D, BTN_X, BTN_O, dungeon, sewer, pit, music_enabled, collision_state, darkrooms, player_light_enabled, reading, show_dialog, quake, allow_movement, raindrops = 0, 1, 2, 3, 4, 5, "128,7,139,132,5,6,135,4,137,138,9,143,13,14,15", "129,7,131,130,129,131,135,132,137,139,9,4,1,14,5", "0,7,139,132,128,130,135,4,137,138,9,143,129,14,15", true, true, true, false, false, false, false, true, false
 
 function palette(s)
 	for i, v in ipairs(split(s, ",")) do
@@ -15,12 +8,10 @@ end
 
 function _init()
 	cartdata("davidhennigan_dark_dungeon_1")
-	-- p.x, p.y, p.remaining_hearts, p.keys = 67, 12, 4, 5
-	p.x, p.y, p.remaining_hearts, p.keys = dget(), dget(1), 12, 4, 5
+	p.x, p.y, p.remaining_hearts, p.keys = 67, 12, 5, 5
 	t_increment = 1
 	cls()
 	decode_tiles()
-	reading, show_dialog, quake, zoom_view, allow_movement, raindrops = false, false, false, false, true, false
 	init_rain()
 	poke(0x5f2e, 1)
 
@@ -46,14 +37,10 @@ function _init()
 end
 
 function _update60()
-	if stat(53) == -1 then
-		if current_palette == "dungeon" then
-			sfx(20, 3)
-		elseif current_palette == "sewer" then
-			sfx(41, 3)
-		elseif current_palette == "pit" then
-			sfx(42, 3)
-		end
+
+	if stat(53)==-1 then
+  	local t={dungeon=20,sewer=41,pit=42}
+  	sfx(t[current_palette],3)
 	end
 
 	if music_enabled and not stat(57) then
@@ -68,19 +55,20 @@ function _update60()
 
 	mapx, mapy = band(p.x, 0xFFFFFF80), band(p.y, 0xFFFFFF80)
 	baddie_m.update()
-	if player_light_enabled and lanturn_timer < 12 then
-		lanturn_timer = lanturn_timer + 0.5
-	end
-	if lanturn_timer > 0 then
-		lanturn_timer = lanturn_timer - 0.25
-	end
+
+	lanturn_timer = mid(0, lanturn_timer + (player_light_enabled and 0.5 or -0.25), 12)
+
+
+	-- if player_light_enabled and lanturn_timer < 12 then
+	-- 	lanturn_timer = lanturn_timer + 0.5
+	-- end
+	-- if lanturn_timer > 0 then
+	-- 	lanturn_timer = lanturn_timer - 0.25
+	-- end
 	l_rad = outelastic(lanturn_timer, 0, 35, 30)
-	if reading then
-		tb_update()
-	end
-	if raindrops then
-		update_rain()
-	end
+
+	if reading then tb_update() end
+	if raindrops then update_rain() end
 end
 
 function _draw()

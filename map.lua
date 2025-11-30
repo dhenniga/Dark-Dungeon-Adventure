@@ -73,10 +73,7 @@ function update_map()
         offset = (16 - rnd(512)) * 0.001
     end
 
-    poke(0x5f2c, zoom_view and 3 or 0)
-
-    camera((zoom_view and (p.x - 29 + offset) or (mapx + offset * time_val)),
-        (zoom_view and (p.y - 31 + offset) or (mapy + offset * time_val)))
+    camera(mapx + offset * time_val, mapy + offset * time_val)
 end
 
 --
@@ -104,11 +101,7 @@ function darkroom()
     end
     poke(0x5f55, 0x60)
     pal {1, 0, 1, 0, 1, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0}
-    if zoom_view then
-        sspr(0, 0, 64, 64, p.x - 29, p.y - 31)
-    else
-        sspr(0, 0, 128, 128, mapx, mapy)
-    end
+		sspr(0, 0, 128, 128, mapx, mapy)
     pal(0)
     palt(14, true)
     palt(0, false)

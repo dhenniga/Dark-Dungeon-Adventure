@@ -3,7 +3,7 @@
 local it = 0 -- inventory transition timer
 item_selected = 1 -- which slot is currently active
 player_light_enabled = true
-text_anim = 0
+local text_anim = 0
 
 -- 🩸 Draw hearts and handle inventory toggle
 function draw_inventory()
@@ -14,21 +14,8 @@ function draw_inventory()
     end
   end
 
-  for i = 1, p.total_hearts do
-    local filled = p.remaining_hearts >= i
-    if zoom_view then
-      -- draw small hearts above player
-      sspr(
-        filled and 96 or 101, 8, 3, 3,
-        p.x + (i << 2) - 32, p.y + 29
-      )
-    else
-      -- draw hearts in HUD
-      spr(
-        filled and 238 or 239,
-        mapx + (i << 3) - 8, mapy + 118
-      )
-    end
+  for i=1,p.total_hearts do
+    spr(p.remaining_hearts>=i and 238 or 239,mapx+(i<<3)-8,mapy+118)
   end
 
   -- open inventory with X button

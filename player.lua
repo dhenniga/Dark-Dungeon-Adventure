@@ -10,7 +10,7 @@ p = {
 	drg = 0.9,
 	cooldown = 0,
 	total_hearts = 5,
-	remaining_hearts = 3,
+	remaining_hearts = 5,
 	fall_dir = nil,
 	keys = 1,
 	engaged = false,
@@ -43,14 +43,8 @@ function draw_player()
 		sfx(13, 3)
 	end
 
-	if not player_atk then
-		if p.moving then 
-			if not p.fall_dir then spr(({198,200,202,204})[flr(running)], p.x - 4, p.y - 8, 2, 2, p.direction) end
-		else
-			if not p.fall_dir then spr(({192,194,196})[flr(idle)], p.x - 4, p.y - 8, 2, 2, p.direction) end
-		end
-	else
-		spr(194, p.x - 4, p.y - 8, 2, 2, p.direction)
+	if not p.fall_dir then
+  	spr(player_atk and 194 or (p.moving and ({198,200,202,204})[flr(running)] or ({192,194,196})[flr(idle)]), p.x-4,p.y-8,2,2,p.direction)
 	end
 
 	if p.fall_dir then
