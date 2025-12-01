@@ -63,10 +63,10 @@ room(
     obj(16, 80, f.vase),
     obj(16, 96, f.vase),
     obj(32, 96, f.vase),
-    s_shoot_v(36, 114, true, 1, 60, 2, false),
-    s_shoot_h(8, 36, true, 1, 70, 2, false),
-    s_shoot_v(48, 6, true, 1, 80, 2, true), -- 𝘥𝘰𝘸𝘯
-    s_shoot_h(112, 48, true, 1, 90, 2, true) -- 𝘳𝘪𝘨𝘩𝘵 𝘵𝘰 𝘭𝘦𝘧𝘵
+    s_shoot_v(96, 108, true, 1, 60, 1, false), -- GOOD
+    s_shoot_h(16, 36, true, 1, 60, 1, false),
+    s_shoot_v(50, 16, true, 1, 60, 1, true), -- 𝘥𝘰𝘸𝘯 _ GOOD
+    s_shoot_h(112, 48, true, 1, 60, 1, true) -- 𝘳𝘪𝘨𝘩𝘵 𝘵𝘰 𝘭𝘦𝘧𝘵
   }
 )
 room(
@@ -590,30 +590,60 @@ end
 function draw_foreground_sprites()
   for a_obj in all(active_objects) do
     local flag = a_obj.flags
+
     if flag.bat and not a_obj.spawned then
       add(baddie_m.baddies, bat(mapx + a_obj.x, mapy + a_obj.y)) a_obj.spawned = true
     end
+
     if flag.rat and not a_obj.spawned then
       add(baddie_m.baddies, rat(mapx + a_obj.x, mapy + a_obj.y)) a_obj.spawned = true
     end
+
     if flag.blob and not a_obj.spawned then
       add(baddie_m.baddies, blob(mapx + a_obj.x, mapy + a_obj.y)) a_obj.spawned = true
     end
+
     if flag.door_arches then
       if a_obj.vori then
         if a_obj.flp == false then rectfill(mapx + a_obj.x - 4, mapy + a_obj.y + 2, mapx + a_obj.x + 19, mapy + a_obj.y - 6, 0) end
         if a_obj.flp == true then rectfill(mapx + a_obj.x - 4, mapy + a_obj.y + 5, mapx + a_obj.x + 19, mapy + a_obj.y + 13, 0) end
-        spr(49, mapx + a_obj.x + 8, mapy + a_obj.y, 1, 1, false, a_obj.flp) spr(49, mapx + a_obj.x, mapy + a_obj.y, 1, 1, true, a_obj.flp)
+        spr(49, mapx + a_obj.x + 8, mapy + a_obj.y, 1, 1, false, a_obj.flp)
+        spr(49, mapx + a_obj.x, mapy + a_obj.y, 1, 1, true, a_obj.flp)
       else
-        spr(51, mapx + a_obj.x, mapy + a_obj.y, 1, 1, a_obj.flp, true) spr(51, mapx + a_obj.x, mapy + a_obj.y + 8, 1, 1, a_obj.flp, false)
+        spr(51, mapx + a_obj.x, mapy + a_obj.y, 1, 1, a_obj.flp, true)
+        spr(51, mapx + a_obj.x, mapy + a_obj.y + 8, 1, 1, a_obj.flp, false)
       end
     end
+
     if flag.flames_fore then
       flames(mapx + a_obj.x, mapy + a_obj.y)
     end
+
     if flag.s_shoot_v or flag.s_shoot_h then
       local v = flag.s_shoot_v
-      sspr(112, v and 56 or 48, v and 8 or 5, v and 5 or 8, mapx + a_obj.x, mapy + a_obj.y, v and 8 or 5, v and 5 or 8, v and false or a_obj.flp, v and a_obj.flp or false)
+
+      local ox, oy
+      if v then
+        ox = 0
+        oy = a_obj.flp and -8 or 8
+      else
+        ox = a_obj.flp and 8 or -8
+        oy = 0
+      end
+
+      sspr(
+        112,
+        v and 56 or 48,
+        v and 8 or 5,
+        v and 5 or 8,
+        mapx + a_obj.x + ox,
+        mapy + a_obj.y + oy,
+        v and 8 or 5,
+        v and 5 or 8,
+        v and false or a_obj.flp,
+        v and a_obj.flp or false
+      )
+
       if not a_obj.added then
         add(shooters, a_obj) a_obj.added = true
       end
@@ -694,22 +724,22 @@ arrows = {}
 shooters = {}
 
 function spawn_arrow(shooter)
-  local direction, vx, vy
+  local direction, dx, dy
   if shooter.flags.s_shoot_v then
     direction = shooter.flp and 1 or 0
-    vx = 0
-    vy = shooter.speed * (direction == 1 and 1 or -1)
+    dx = 0
+    dy = shooter.speed * (direction == 1 and 1 or -1)
   else
     direction = shooter.flp and 3 or 2
-    vy = 0
-    vx = shooter.speed * (direction == 2 and 1 or -1)
+    dy = 0
+    dx = shooter.speed * (direction == 2 and 1 or -1)
   end
   add(
     arrows, {
       x = mapx + shooter.x,
       y = mapy + shooter.y,
-      vx = vx,
-      vy = vy,
+      dx = dx,
+      dy = dy,
       d = direction
     }
   )
@@ -717,7 +747,7 @@ function spawn_arrow(shooter)
 end
 
 function update_shooters()
-  -- if mapx == cur_room_x and mapy == cur_room_y then
+  if mapx == cur_room_x and mapy == cur_room_y then
   for shooter in all(shooters) do
     if shooter.active then
       shooter.delay -= t_increment
@@ -728,40 +758,52 @@ function update_shooters()
     end
   end
 end
--- end
+end
 
 function update_arrows()
   for arrow in all(arrows) do
     -- move the arrow
-    arrow.x += arrow.vx * t_increment
-    arrow.y += arrow.vy * t_increment
+    arrow.x += arrow.dx * t_increment
+    arrow.y += arrow.dy * t_increment
+
+    if solid(arrow.x, arrow.y) then
+      del(arrows, arrow)
+    end
 
     -- collision with player
-    if arrow.x < p.x + 8 and arrow.x + 8 > p.x and arrow.y < p.y + 8 and arrow.y + 8 > p.y then
+    if spr_coll(p, arrow) then
       p.remaining_hearts -= 1
-      p.dx, p.dy = arrow.vx, arrow.vy
+      -- p.dx, p.dy = arrow.dx, arrow.dy
       del(arrows, arrow)
     end
 
     -- arrow leaves the screen
-    if arrow.x < mapx or arrow.x > mapx + 120 or arrow.y < mapy or arrow.y > mapy + 120 then
+    if arrow.x < mapx or arrow.x > mapx + 127 or arrow.y < mapy or arrow.y > mapy + 127 then
       del(arrows, arrow)
     end
   end
 end
 
+-- local adraw = {
+--   { 117, 48, 3, 8, false, false, 2, 4 }, -- 𝘥𝘰𝘸𝘯 to 𝘶𝘱 -- 𝘥𝘰𝘯𝘦
+--   { 117, 48, 3, 8, false, true, 2, -6 }, -- 𝘶𝘱 to 𝘥𝘰𝘸𝘯
+--   { 112, 61, 8, 3, false, false, -6, 2 }, -- 𝘭𝘦𝘧𝘵 to 𝘳𝘪𝘨𝘩𝘵 -- 𝘥𝘰𝘯𝘦
+--   { 112, 61, 8, 3, true, false, 4, 2 } -- 𝘳𝘪𝘨𝘩𝘵 to 𝘭𝘦𝘧𝘵
+-- }
+
 local adraw = {
-  { 117, 48, 3, 8, false, false, 2, -4 }, -- 𝘥𝘰𝘸𝘯 to 𝘶𝘱 -- 𝘥𝘰𝘯𝘦
-  { 117, 48, 3, 8, false, true, 3, 2 }, -- 𝘶𝘱 to 𝘥𝘰𝘸𝘯
-  { 112, 61, 8, 3, false, false, 2, 2 }, -- 𝘭𝘦𝘧𝘵 to 𝘳𝘪𝘨𝘩𝘵 -- 𝘥𝘰𝘯𝘦
-  { 112, 61, 8, 3, true, false, -4, 2 } -- 𝘳𝘪𝘨𝘩𝘵 to 𝘭𝘦𝘧𝘵
+  { 2, 0 }, -- 𝘥𝘰𝘸𝘯 to 𝘶𝘱 -- 𝘥𝘰𝘯𝘦
+  { 2, -3 }, -- 𝘶𝘱 to 𝘥𝘰𝘸𝘯
+  { -3, 2 }, -- 𝘭𝘦𝘧𝘵 to 𝘳𝘪𝘨𝘩𝘵 -- 𝘥𝘰𝘯𝘦
+  { 0, 2 } -- 𝘳𝘪𝘨𝘩𝘵 to 𝘭𝘦𝘧𝘵
 }
 
 function draw_arrows()
   for arrow in all(arrows) do
     local d = adraw[arrow.d + 1]
-    sspr(
-      d[1], d[2], d[3], d[4], mapx + arrow.x + d[7], mapy + arrow.y + d[8], d[3], d[4], d[5], d[6]
-    )
+          sspr(112,104,4,4,mapx + arrow.x + d[1], mapy + arrow.y + d[2],4,4)
+    -- sspr(
+    --   d[1], d[2], d[3], d[4], mapx + arrow.x + d[7], mapy + arrow.y + d[8], d[3], d[4], d[5], d[6]
+    -- )
   end
 end
