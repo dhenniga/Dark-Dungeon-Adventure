@@ -49,9 +49,8 @@ function show_inventory()
     end
   end
 
-  -- ユか⬆️➡️ draw collected keys (up to 5)
   if p.keys > 0 then
-    for i = 1, min(p.keys, 5) do
+    for i = 1, min(p.keys, 10) do
       local x = mapx + 121 - (i - 1) * 13
       fillp(█)
       circfill(x, outcubic(text_anim,mapy,6,12), 6, 129)

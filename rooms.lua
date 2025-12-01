@@ -1,5 +1,5 @@
 --rooms
-room_objects, door_states, active_objects = {}, {}, {}
+room_objects, door_states, active_objects, arrows, shooters = {}, {}, {}, {}, {}
 f = {
   rock = { rock = true, solid = true },
   c_rock = { c_rock = true, solid = true },
@@ -168,13 +168,20 @@ room(
   1,
   2,
   {
-    { name = "𝘵𝘩𝘦 𝘱𝘪𝘵 𝘮𝘢𝘻𝘦", flags = rf { pit = true } },
+    { name = "NEEDS A NAME", flags = rf { pit = true } },
     obj(16, 16, { stairs_down = true, solid = true }),
     obj(16, 64, f.spike),
     obj(32, 96, f.spike),
     obj(48, 64, f.spike),
     sign(48, 5, { "𝘵𝘩𝘳𝘦𝘦 𝘣𝘶𝘵𝘵𝘰𝘯𝘴 𝘮𝘶𝘴𝘵 𝘣𝘦\n𝘱𝘳𝘦𝘴𝘴𝘦𝘥 𝘵𝘰 𝘳𝘦𝘷𝘦𝘢𝘭 𝘵𝘩𝘦\n𝘩𝘪𝘥𝘥𝘦𝘯 𝘴𝘵𝘢𝘪𝘳𝘤𝘢𝘴𝘦.\n\n𝘸𝘩𝘦𝘳𝘦 𝘤𝘰𝘶𝘭𝘥 𝘵𝘩𝘦𝘺 𝘣𝘦?" }),
     w_button(100, 73)
+  }
+)
+room(
+  1,
+  3,
+  {
+    { name = "NEEDS A NAME", flags = rf { dungeon = true } }
   }
 )
 room(
@@ -213,6 +220,13 @@ room(
   }
 )
 room(
+  2,
+  3,
+  {
+    { name = "NEEDS A NAME", flags = rf { dungeon = true } }
+  }
+)
+room(
   3,
   0,
   {
@@ -233,6 +247,13 @@ room(
 room(
   3, 2, {
     { name = "𝘵𝘩𝘦 𝘱𝘪𝘵 𝘮𝘢𝘻𝘦", flags = rf { pit = true } }
+  }
+)
+room(
+  3,
+  3,
+  {
+    { name = "NEEDS A NAME", flags = rf { dungeon = true } }
   }
 )
 room(
@@ -589,22 +610,21 @@ end
 
 function draw_foreground_sprites()
   for a_obj in all(active_objects) do
-    local flag = a_obj.flags
+    local flag, ax, ay = a_obj.flags, a_obj.x, a_obj.y
 
     if flag.bat and not a_obj.spawned then
-      add(baddie_m.baddies, bat(mapx + a_obj.x, mapy + a_obj.y)) a_obj.spawned = true
+      add(baddie_m.baddies, bat(mapx + ax, mapy + ay)) a_obj.spawned = true
     end
 
     if flag.rat and not a_obj.spawned then
-      add(baddie_m.baddies, rat(mapx + a_obj.x, mapy + a_obj.y)) a_obj.spawned = true
+      add(baddie_m.baddies, rat(mapx + ax, mapy + ay)) a_obj.spawned = true
     end
 
     if flag.blob and not a_obj.spawned then
-      add(baddie_m.baddies, blob(mapx + a_obj.x, mapy + a_obj.y)) a_obj.spawned = true
+      add(baddie_m.baddies, blob(mapx + ax, mapy + ay)) a_obj.spawned = true
     end
 
     if flag.door_arches then
-      local ax, ay = a_obj.x, a_obj.y
       if a_obj.vori then
         if a_obj.flp == false then rectfill(mapx + ax - 4, mapy + ay + 2, mapx + ax + 19, mapy + ay - 6, 0) end
         if a_obj.flp == true then rectfill(mapx + ax - 4, mapy + ay + 5, mapx + ax + 19, mapy + ay + 13, 0) end
@@ -617,7 +637,7 @@ function draw_foreground_sprites()
     end
 
     if flag.flames_fore then
-      flames(mapx + a_obj.x, mapy + a_obj.y)
+      flames(mapx + ax, mapy + ay)
     end
 
     if flag.s_shoot_v or flag.s_shoot_h then
@@ -637,8 +657,8 @@ function draw_foreground_sprites()
         v and 56 or 48,
         v and 8 or 5,
         v and 5 or 8,
-        mapx + a_obj.x + ox,
-        mapy + a_obj.y + oy,
+        mapx + ax + ox,
+        mapy + ay + oy,
         v and 8 or 5,
         v and 5 or 8,
         v and false or a_obj.flp,
@@ -711,18 +731,15 @@ end
 function draw_torch_light()
   for a_obj in all(active_objects) do
     if a_obj.flags.light then
-      local px, py = mapx + a_obj.x, mapy + a_obj.y
-      fillp(32125.5) circfill(px, py, a_obj.r + rnd(3) + 10, 14)
-      fillp(23130.5) circfill(px, py, a_obj.r + rnd(3) + 6, 14)
-      fillp(0x0000) circfill(px, py, a_obj.r + rnd(3) + 3, 14)
+      local px, py, pr = mapx + a_obj.x, mapy + a_obj.y, a_obj.r
+      fillp(32125.5) circfill(px, py, pr + rnd(3) + 10, 14)
+      fillp(23130.5) circfill(px, py, pr + rnd(3) + 6, 14)
+      fillp(0x0000) circfill(px, py, pr + rnd(3) + 3, 14)
     end
   end
 end
 
 --
-
-arrows = {}
-shooters = {}
 
 function spawn_arrow(shooter)
   local direction, dx, dy
@@ -749,16 +766,16 @@ end
 
 function update_shooters()
   if mapx == cur_room_x and mapy == cur_room_y then
-  for shooter in all(shooters) do
-    if shooter.active then
-      shooter.delay -= t_increment
-      if shooter.delay <= 0 then
-        spawn_arrow(shooter)
-        shooter.delay = shooter.timing
+    for shooter in all(shooters) do
+      if shooter.active then
+        shooter.delay -= t_increment
+        if shooter.delay <= 0 then
+          spawn_arrow(shooter)
+          shooter.delay = shooter.timing
+        end
       end
     end
   end
-end
 end
 
 function update_arrows()
@@ -785,13 +802,6 @@ function update_arrows()
   end
 end
 
--- local adraw = {
---   { 117, 48, 3, 8, false, false, 2, 4 }, -- 𝘥𝘰𝘸𝘯 to 𝘶𝘱 -- 𝘥𝘰𝘯𝘦
---   { 117, 48, 3, 8, false, true, 2, -6 }, -- 𝘶𝘱 to 𝘥𝘰𝘸𝘯
---   { 112, 61, 8, 3, false, false, -6, 2 }, -- 𝘭𝘦𝘧𝘵 to 𝘳𝘪𝘨𝘩𝘵 -- 𝘥𝘰𝘯𝘦
---   { 112, 61, 8, 3, true, false, 4, 2 } -- 𝘳𝘪𝘨𝘩𝘵 to 𝘭𝘦𝘧𝘵
--- }
-
 local adraw = {
   { 2, 0 }, -- 𝘥𝘰𝘸𝘯 to 𝘶𝘱 -- 𝘥𝘰𝘯𝘦
   { 2, -3 }, -- 𝘶𝘱 to 𝘥𝘰𝘸𝘯
@@ -802,9 +812,6 @@ local adraw = {
 function draw_arrows()
   for arrow in all(arrows) do
     local d = adraw[arrow.d + 1]
-          sspr(112,104,5,5,mapx + arrow.x + d[1], mapy + arrow.y + d[2],5,5)
-    -- sspr(
-    --   d[1], d[2], d[3], d[4], mapx + arrow.x + d[7], mapy + arrow.y + d[8], d[3], d[4], d[5], d[6]
-    -- )
+    sspr(112, 104, 5, 5, mapx + arrow.x + d[1], mapy + arrow.y + d[2], 5, 5)
   end
 end

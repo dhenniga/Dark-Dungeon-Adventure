@@ -44,10 +44,10 @@ function draw_player()
 	end
 
 	if not player_atk then
-		if p.moving then 
-			if not p.fall_dir then spr(({198,200,202,204})[flr(running)], p.x - 4, p.y - 8, 2, 2, p.direction) end
+		if p.moving then
+			if not p.fall_dir then spr(({ 198, 200, 202, 204 })[flr(running)], p.x - 4, p.y - 8, 2, 2, p.direction) end
 		else
-			if not p.fall_dir then spr(({192,194,196})[flr(idle)], p.x - 4, p.y - 8, 2, 2, p.direction) end
+			if not p.fall_dir then spr(({ 192, 194, 196 })[flr(idle)], p.x - 4, p.y - 8, 2, 2, p.direction) end
 		end
 	else
 		spr(194, p.x - 4, p.y - 8, 2, 2, p.direction)
@@ -75,25 +75,25 @@ end
 
 function player_attack()
 	-- sword frames
-	local sword_frames={72,74,106,108}
+	local sword_frames = { 72, 74, 106, 108 }
 
 	-- start attack on button press if not already attacking
 	if btnp(𝘣𝘵𝘯_𝘰) and not p.engaged and not player_atk then
-		player_atk=true
-		p.atk_t=time() -- start timestamp
-		sfx(14,3)
+		player_atk = true
+		p.atk_t = time() -- start timestamp
+		sfx(14, 3)
 	end
 
 	-- handle active attack animation
 	if player_atk then
-		local t=time()-p.atk_t
-		local i=flr(t*12)%#sword_frames+1 -- control frame timing
-		local o=p.direction and -12 or 4
-		spr(sword_frames[i],p.x+o,p.y-10,2,2,p.direction)
+		local t = time() - p.atk_t
+		local i = flr(t * 12) % #sword_frames + 1 -- control frame timing
+		local o = p.direction and -12 or 4
+		spr(sword_frames[i], p.x + o, p.y - 10, 2, 2, p.direction)
 
 		-- attack lasts ~0.3s
-		if t>0.3 then
-			player_atk=false
+		if t > 0.3 then
+			player_atk = false
 		end
 	end
 end
@@ -102,14 +102,14 @@ end
 
 function update_player()
 	if p.fall_dir or not allow_movement then return end
-	if btn(𝘣𝘵𝘯_𝘭) then
+	if btn(BTN_L) then
 		p.dx -= p.acc p.direction = true
 	end
-	if btn(𝘣𝘵𝘯_𝘳) then
+	if btn(BTN_R) then
 		p.dx += p.acc p.direction = false
 	end
-	if btn(𝘣𝘵𝘯_𝘶) then p.dy -= p.acc end
-	if btn(𝘣𝘵𝘯_𝘥) then p.dy += p.acc end
+	if btn(BTN_U) then p.dy -= p.acc end
+	if btn(BTN_D) then p.dy += p.acc end
 	p.dx, p.dy = mid(-1, p.dx, 1), mid(-1, p.dy, 1)
 	if player_can_move(p) then
 		p.x += p.dx p.y += p.dy

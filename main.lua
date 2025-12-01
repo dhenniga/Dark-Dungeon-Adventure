@@ -1,7 +1,4 @@
-BTN_L, BTN_R, BTN_U, BTN_D, BTN_X, BTN_O, dungeon, sewer, pit, player_light_enabled, reading, quake, allow_movement, raindrops =
-    0, 1, 2, 3, 4, 5, "128,7,139,132,5,6,135,4,137,138,9,143,13,14,15",
-    "129,7,131,130,129,131,135,132,137,139,9,4,1,14,5", "0,7,139,132,128,130,135,4,137,138,9,143,129,14,15", false,
-    false, false, true, false
+BTN_L, BTN_R, BTN_U, BTN_D, BTN_X, BTN_O, dungeon, sewer, pit, player_light_enabled, reading, quake, allow_movement, raindrops = 0, 1, 2, 3, 4, 5, "128,7,139,132,5,6,135,4,137,138,9,143,13,14,15", "129,7,131,130,129,131,135,132,137,139,9,4,1,14,5", "0,7,139,132,128,130,135,4,137,138,9,143,129,14,15", false, false, false, true, false
 
 music_enabled = false
 collision_state = false
@@ -25,20 +22,25 @@ function _init()
     if music_enabled then
         music(0)
     end
-    menuitem(1, "TOGGLE MUSIC", function()
-        music_enabled = not music_enabled
-        music(music_enabled and 0 or -1)
-    end)
-    menuitem(2, "TOGGLE COLLISION", function()
-        collision_state = not collision_state
-    end)
-    menuitem(3, "TOGGLE DEVMODE", function()
-        darkrooms = not darkrooms
-    end)
+    menuitem(
+        1, "TOGGLE MUSIC", function()
+            music_enabled = not music_enabled
+            music(music_enabled and 0 or -1)
+        end
+    )
+    menuitem(
+        2, "TOGGLE COLLISION", function()
+            collision_state = not collision_state
+        end
+    )
+    menuitem(
+        3, "TOGGLE DEVMODE", function()
+            darkrooms = not darkrooms
+        end
+    )
 end
 
 function _update60()
-
     if stat(53) == -1 then
         local t = {
             dungeon = 20,
@@ -60,15 +62,7 @@ function _update60()
 
     mapx, mapy = band(p.x, 0xFFFFFF80), band(p.y, 0xFFFFFF80)
     baddie_m.update()
-
     lanturn_timer = mid(0, lanturn_timer + (player_light_enabled and 0.5 or -0.25), 12)
-
-    -- if player_light_enabled and lanturn_timer < 12 then
-    -- 	lanturn_timer = lanturn_timer + 0.5
-    -- end
-    -- if lanturn_timer > 0 then
-    -- 	lanturn_timer = lanturn_timer - 0.25
-    -- end
     l_rad = outelastic(lanturn_timer, 0, 35, 30)
 
     if reading then
@@ -99,20 +93,10 @@ function _draw()
     tb_draw()
     if not darkrooms then
         print(get_current_room(), mapx + 106, mapy + 121, 10)
-    end
-    if not darkrooms then
         print("px:" .. flr(p.x) .. ", " .. "py:" .. flr(p.y), mapx + 2, mapy + 2, 7)
-    end
-    if not darkrooms then
         print("mx:" .. mapx .. ", my:" .. mapy, mapx + 2, mapy + 9, 7)
-    end
-    if not darkrooms then
         circ(p.x + 2, p.y, l_rad, 3)
-    end
-    if not darkrooms then
         print("cpu:" .. stat(1), mapx + 97, mapy + 2, 7)
-    end
-    if not darkrooms then
         print("mem:" .. stat(0), mapx + 85, mapy + 8, 7)
     end
 end
