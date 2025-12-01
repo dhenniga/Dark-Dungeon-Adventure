@@ -540,7 +540,7 @@ end
 
 function draw_background_sprites()
   for a_obj in all(active_objects) do
-    local flag = a_obj.flags
+    local flag, ax, ay, afx, afy = a_obj.flags, a_obj.x, a_obj.y, a_obj.fx, a_obj.fy
     if flag.rain ~= nil then raindrops = flag.rain end
     if flag.quake ~= nil then quake = flag.quake end
     if flag.sewer then
@@ -550,25 +550,25 @@ function draw_background_sprites()
     elseif flag.pit then
       palette(pit)
     end
-    if flag.vase then spr(172, mapx + a_obj.x, mapy + a_obj.y, 2, 2) end
-    if flag.sign then spr(170, mapx + a_obj.x, mapy + a_obj.y, 2, 2) end
-    if flag.key then spr(254, mapx + a_obj.x, mapy + a_obj.y, 2, 1) end
+    if flag.vase then spr(172, mapx + ax, mapy + ay, 2, 2) end
+    if flag.sign then spr(170, mapx + ax, mapy + ay, 2, 2) end
+    if flag.key then spr(254, mapx + ax, mapy + ay, 2, 1) end
     if flag.door then
       if a_obj.flp then
-        if a_obj.locked then spr(168, mapx + a_obj.x, mapy + a_obj.y, 2, 2, a_obj.fy, a_obj.fx) end
+        if a_obj.locked then spr(168, mapx + ax, mapy + ay, 2, 2, afy, afx) end
       else
-        if a_obj.locked then spr(128, mapx + a_obj.x, mapy + a_obj.y, 2, 2, a_obj.fx, a_obj.fy) end
+        if a_obj.locked then spr(128, mapx + ax, mapy + ay, 2, 2, afx, afy) end
       end
-      door_lights(mapx + a_obj.x, mapy + a_obj.y, a_obj.fx, a_obj.fy, a_obj.flp)
+      door_lights(mapx + ax, mapy + ay, afx, afy, a_obj.flp)
     end
-    if flag.chest then spr(13, mapx + a_obj.x, mapy + a_obj.y, 2, 2, a_obj.fx, a_obj.fy) end
-    if flag.rock then spr(134, mapx + a_obj.x, mapy + a_obj.y, 2, 2) end
-    if flag.stairs_down then spr(130, mapx + a_obj.x, mapy + a_obj.y, 2, 2) end
-    if flag.stairs_up then spr(132, mapx + a_obj.x, mapy + a_obj.y, 2, 2) end
-    if flag.c_rock then spr(136, mapx + a_obj.x, mapy + a_obj.y, 2, 2) end
+    if flag.chest then spr(13, mapx + ax, mapy + ay, 2, 2, afx, afy) end
+    if flag.rock then spr(134, mapx + ax, mapy + ay, 2, 2) end
+    if flag.stairs_down then spr(130, mapx + ax, mapy + ay, 2, 2) end
+    if flag.stairs_up then spr(132, mapx + ax, mapy + ay, 2, 2) end
+    if flag.c_rock then spr(136, mapx + ax, mapy + ay, 2, 2) end
     if flag.spike_tile then animate_spikes(a_obj) end
-    if flag.w_button then spr(95, mapx + a_obj.x, mapy + a_obj.y, 1, 1) end
-    if flag.flames_back then flames(mapx + a_obj.x, mapy + a_obj.y) end
+    if flag.w_button then spr(95, mapx + ax, mapy + ay, 1, 1) end
+    if flag.flames_back then flames(mapx + ax, mapy + ay) end
   end
 end
 
@@ -604,14 +604,15 @@ function draw_foreground_sprites()
     end
 
     if flag.door_arches then
+      local ax, ay = a_obj.x, a_obj.y
       if a_obj.vori then
-        if a_obj.flp == false then rectfill(mapx + a_obj.x - 4, mapy + a_obj.y + 2, mapx + a_obj.x + 19, mapy + a_obj.y - 6, 0) end
-        if a_obj.flp == true then rectfill(mapx + a_obj.x - 4, mapy + a_obj.y + 5, mapx + a_obj.x + 19, mapy + a_obj.y + 13, 0) end
-        spr(49, mapx + a_obj.x + 8, mapy + a_obj.y, 1, 1, false, a_obj.flp)
-        spr(49, mapx + a_obj.x, mapy + a_obj.y, 1, 1, true, a_obj.flp)
+        if a_obj.flp == false then rectfill(mapx + ax - 4, mapy + ay + 2, mapx + ax + 19, mapy + ay - 6, 0) end
+        if a_obj.flp == true then rectfill(mapx + ax - 4, mapy + ay + 5, mapx + ax + 19, mapy + ay + 13, 0) end
+        spr(49, mapx + ax + 8, mapy + ay, 1, 1, false, a_obj.flp)
+        spr(49, mapx + ax, mapy + ay, 1, 1, true, a_obj.flp)
       else
-        spr(51, mapx + a_obj.x, mapy + a_obj.y, 1, 1, a_obj.flp, true)
-        spr(51, mapx + a_obj.x, mapy + a_obj.y + 8, 1, 1, a_obj.flp, false)
+        spr(51, mapx + ax, mapy + ay, 1, 1, a_obj.flp, true)
+        spr(51, mapx + ax, mapy + ay + 8, 1, 1, a_obj.flp, false)
       end
     end
 
@@ -801,7 +802,7 @@ local adraw = {
 function draw_arrows()
   for arrow in all(arrows) do
     local d = adraw[arrow.d + 1]
-          sspr(112,104,4,4,mapx + arrow.x + d[1], mapy + arrow.y + d[2],4,4)
+          sspr(112,104,5,5,mapx + arrow.x + d[1], mapy + arrow.y + d[2],5,5)
     -- sspr(
     --   d[1], d[2], d[3], d[4], mapx + arrow.x + d[7], mapy + arrow.y + d[8], d[3], d[4], d[5], d[6]
     -- )
