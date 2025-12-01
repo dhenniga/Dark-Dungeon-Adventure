@@ -62,19 +62,18 @@ room(
     light(87, 120, 12),
     obj(16, 80, f.vase),
     obj(16, 96, f.vase),
-    obj(32, 96, f.vase),
-    s_shoot_v(36, 114, true, 1, 60, 2, false),
-    s_shoot_h(8, 36, true, 1, 70, 2, false),
+    obj(32, 96, f.vase)
+    -- s_shoot_v(36, 114, true, 1, 60, 2, false),
+    -- s_shoot_h(8, 36, true, 1, 70, 2, false),
 
-    s_shoot_v(48, 6, true, 1, 80, 2, true), -- 𝘥𝘰𝘸𝘯
-    s_shoot_h(112, 48, true, 1, 90, 2, true) -- 𝘳𝘪𝘨𝘩𝘵 𝘵𝘰 𝘭𝘦𝘧𝘵
+    -- s_shoot_v(48, 6, true, 1, 80, 2, true), -- 𝘥𝘰𝘸𝘯
+    -- s_shoot_h(112, 48, true, 1, 90, 2, true) -- 𝘳𝘪𝘨𝘩𝘵 𝘵𝘰 𝘭𝘦𝘧𝘵
   }
 )
 room(
   0,
   1,
   {
-
     { name = "𝘤𝘢𝘴𝘵𝘭𝘦 𝘨𝘢𝘳𝘥𝘦𝘯 𝘴𝘵𝘰𝘳𝘢𝘨𝘦", flags = rf { sewer = true, rain = true } },
     door(64, 0, false, false),
     arch(64, 0, true, false, false),
@@ -695,27 +694,27 @@ end
 arrows = {}
 shooters = {}
 
-function spawn_arrow(s)
+function spawn_arrow(shooter)
   local direction, vx, vy
-  if s.flags.s_shoot_v then
-    direction = s.flp and 1 or 0
-    vx = 0 vy = s.speed * (direction == 1 and 1 or -1)
+  if shooter.flags.s_shoot_v then
+    direction = shooter.flp and 1 or 0
+    vx = 0 vy = shooter.speed * (direction == 1 and 1 or -1)
   else
-    direction = s.flp and 3 or 2
-    vy = 0 vx = s.speed * (direction == 2 and 1 or -1)
+    direction = shooter.flp and 3 or 2
+    vy = 0 vx = shooter.speed * (direction == 2 and 1 or -1)
   end
-  add(arrows, { x = mapx + s.x, y = mapy + s.y, vx = vx, vy = vy, d = direction })
+  add(arrows, { x = shooter.x, y = shooter.y, vx = vx, vy = vy, d = direction })
   sfx(19, 3)
 end
 
 function update_shooters()
   if mapx == cur_room_x and mapy == cur_room_y then
-    for s in all(shooters) do
-      if s.active then
-        s.delay -= t_increment
-        if s.delay <= 0 then
-          spawn_arrow(s)
-          s.delay = s.timing
+    for shooter in all(shooters) do
+      if shooter.active then
+        shooter.delay -= t_increment
+        if shooter.delay <= 0 then
+          spawn_arrow(shooter)
+          shooter.delay = shooter.timing
         end
       end
     end
@@ -723,25 +722,21 @@ function update_shooters()
 end
 
 function update_arrows()
-  for a in all(arrows) do
-    a.x += a.vx * t_increment
-    a.y += a.vy * t_increment
-    -- player hitbox (8れ❎8 or whatever you use)
-    if a.x < p.x + 8 and a.x + 8 > p.x
-        and a.y < p.y + 8 and a.y + 8 > p.y then
-      local qx = p.x - a.x
-      local qy = p.y - a.y
-      local d = qx * qx + qy * qy
-      if d < 1 then d = 1 end
-      p.dx += qx / d * 5
-      p.dy += qy / d * 5
-      p.remaining_hearts -= 1
+  for arrow in all(arrows) do
+    -- move the arrow
+    arrow.x += arrow.vx * t_increment
+    arrow.y += arrow.vy * t_increment
 
-      del(arrows, a)
+    -- collision with player
+    if arrow.x < p.x + 8 and arrow.x + 8 > p.x and arrow.y < p.y + 8 and arrow.y + 8 > p.y then
+      p.remaining_hearts -= 1
+      p.dx, p.dy = arrow.vx, arrow.vy
+      del(arrows, arrow)
     end
 
-    if a.x < mapx or a.x > mapx + 120 or a.y < mapy or a.y > mapy + 120 then
-      del(arrows, a)
+    -- arrow leaves the screen
+    if arrow.x < mapx or arrow.x > mapx + 120 or arrow.y < mapy or arrow.y > mapy + 120 then
+      del(arrows, arrow)
     end
   end
 end
@@ -754,11 +749,10 @@ local adraw = {
 }
 
 function draw_arrows()
-  for a in all(arrows) do
-    local d = adraw[a.d + 1]
+  for arrow in all(arrows) do
+    local d = adraw[arrow.d + 1]
     sspr(
-      d[1], d[2], d[3], d[4],
-      mapx + a.x + d[7], mapy + a.y + d[8], d[3], d[4], d[5], d[6]
+      d[1], d[2], d[3], d[4], arrow.x + d[7], arrow.y + d[8], d[3], d[4], d[5], d[6]
     )
   end
 end
