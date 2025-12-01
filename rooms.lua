@@ -62,12 +62,11 @@ room(
     light(87, 120, 12),
     obj(16, 80, f.vase),
     obj(16, 96, f.vase),
-    obj(32, 96, f.vase)
-    -- s_shoot_v(36, 114, true, 1, 60, 2, false),
-    -- s_shoot_h(8, 36, true, 1, 70, 2, false),
-
-    -- s_shoot_v(48, 6, true, 1, 80, 2, true), -- 𝘥𝘰𝘸𝘯
-    -- s_shoot_h(112, 48, true, 1, 90, 2, true) -- 𝘳𝘪𝘨𝘩𝘵 𝘵𝘰 𝘭𝘦𝘧𝘵
+    obj(32, 96, f.vase),
+    s_shoot_v(36, 114, true, 1, 60, 2, false),
+    s_shoot_h(8, 36, true, 1, 70, 2, false),
+    s_shoot_v(48, 6, true, 1, 80, 2, true), -- 𝘥𝘰𝘸𝘯
+    s_shoot_h(112, 48, true, 1, 90, 2, true) -- 𝘳𝘪𝘨𝘩𝘵 𝘵𝘰 𝘭𝘦𝘧𝘵
   }
 )
 room(
@@ -86,8 +85,8 @@ room(
     obj(20, 90, f.bat),
     obj(100, 32, f.rat),
     obj(32, 48, f.vase),
-    s_shoot_v(36, 114, true, 1, 60, 3, false),
-    s_shoot_h(8, 36, true, 1, 60, 3, false)
+    s_shoot_v(36, 114, true, 1, 60, 2, false),
+    s_shoot_h(8, 36, true, 1, 70, 2, false)
   }
 )
 room(
@@ -698,28 +697,38 @@ function spawn_arrow(shooter)
   local direction, vx, vy
   if shooter.flags.s_shoot_v then
     direction = shooter.flp and 1 or 0
-    vx = 0 vy = shooter.speed * (direction == 1 and 1 or -1)
+    vx = 0
+    vy = shooter.speed * (direction == 1 and 1 or -1)
   else
     direction = shooter.flp and 3 or 2
-    vy = 0 vx = shooter.speed * (direction == 2 and 1 or -1)
+    vy = 0
+    vx = shooter.speed * (direction == 2 and 1 or -1)
   end
-  add(arrows, { x = shooter.x, y = shooter.y, vx = vx, vy = vy, d = direction })
+  add(
+    arrows, {
+      x = mapx + shooter.x,
+      y = mapy + shooter.y,
+      vx = vx,
+      vy = vy,
+      d = direction
+    }
+  )
   sfx(19, 3)
 end
 
 function update_shooters()
-  if mapx == cur_room_x and mapy == cur_room_y then
-    for shooter in all(shooters) do
-      if shooter.active then
-        shooter.delay -= t_increment
-        if shooter.delay <= 0 then
-          spawn_arrow(shooter)
-          shooter.delay = shooter.timing
-        end
+  -- if mapx == cur_room_x and mapy == cur_room_y then
+  for shooter in all(shooters) do
+    if shooter.active then
+      shooter.delay -= t_increment
+      if shooter.delay <= 0 then
+        spawn_arrow(shooter)
+        shooter.delay = shooter.timing
       end
     end
   end
 end
+-- end
 
 function update_arrows()
   for arrow in all(arrows) do
@@ -752,7 +761,7 @@ function draw_arrows()
   for arrow in all(arrows) do
     local d = adraw[arrow.d + 1]
     sspr(
-      d[1], d[2], d[3], d[4], arrow.x + d[7], arrow.y + d[8], d[3], d[4], d[5], d[6]
+      d[1], d[2], d[3], d[4], mapx + arrow.x + d[7], mapy + arrow.y + d[8], d[3], d[4], d[5], d[6]
     )
   end
 end
