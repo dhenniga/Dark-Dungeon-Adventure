@@ -30,21 +30,13 @@ end
 
 -- presets
 function bat(x, y) return enemy(get_current_room(), { 232, 234, 236, 234 }, x, y, true, 1.2, 1.6, 10, 0.95, 40, 40, 0.1, 60) end
-function rat(x, y) return enemy(get_current_room(), { 228, 230 }, x, y, false, 1.5, 0.8, 0.64, 0.92, 35, 90, 0.1, 10) end  -- happy with the rats
+function rat(x, y) return enemy(get_current_room(), { 228, 230 }, x, y, false, 1.5, 0.8, 0.64, 0.92, 35, 90, 0.1, 10) end -- happy with the rats
 function blob(x, y) return enemy(get_current_room(), { 226 }, x, y, false, 0.8, 1.0, 0.12, 0.92, 20, 80, 0.2, 20) end
 
 --
 
-local function solid_box_global(gx, gy)
-  return solid(gx, gy)
-      or solid(gx + 15, gy)
-      or solid(gx, gy + 15)
-      or solid(gx + 15, gy + 15)
-end
-
 -- drawing (safe anim advance)
 function baddie_draw(b)
-
   -- animation
   b.anim += 0.2 * t_increment
   if b.anim > #b.frames + 0.999 then b.anim = 1 end
@@ -67,7 +59,7 @@ end
 
 function baddie_m.update()
   for b in all(baddie_m.baddies) do
-    if b and b.x>=mapx and b.x<=mapx+127 and b.y>=mapy and b.y<=mapy+127 then baddie_update(b) end
+    if b and b.x >= mapx and b.x <= mapx + 127 and b.y >= mapy and b.y <= mapy + 127 then baddie_update(b) end
   end
 end
 
@@ -75,8 +67,8 @@ end
 
 function baddie_m.draw()
   for b in all(baddie_m.baddies) do
-    if b and b.x>=mapx and b.x<=mapx+127 and b.y>=mapy and b.y<=mapy+127 then 
-      baddie_draw(b) 
+    if b and b.x >= mapx and b.x <= mapx + 127 and b.y >= mapy and b.y <= mapy + 127 then
+      baddie_draw(b)
     end
   end
 end
@@ -88,20 +80,18 @@ function baddie_update(b)
   b.ttl -= 1
 
   if b.stagger > 0 then
-  b.stagger -= 1
-end
+    b.stagger -= 1
+  end
 
-
- if not enemy_can_move(b) then 
-  b.dx = 0
-  b.dy = 0
-  sfx(16,3) 
-end
+  if not enemy_can_move(b) then
+    b.dx = 0
+    b.dy = 0
+    sfx(16, 3)
+  end
 
   -- apply drag to local velocity
   b.dx *= b.drg
   b.dy *= b.drg
-
 
   -- 𝘴𝘦𝘦 / 𝘢𝘭𝘦𝘳𝘵 / 𝘢𝘵𝘵𝘢𝘤𝘬 logic (attack overrides explore)
   if sees(b, l_rad, 0, 1, 1, 0) then
@@ -120,32 +110,26 @@ end
       return
     end
 
-    -- 𝘢𝘵𝘵𝘢𝘤𝘬 behaviour: steering arrival in local space
     if b.state == "attack" and b.stagger <= 0 then
-      local desired_gx, desired_gy = p.x - b.x, (p.y - 5) - b.y -- global delta
-      local dist, ndx, ndy = sqrt(desired_gx * desired_gx + desired_gy * desired_gy), 0, 0
-      if dist > 0.0001 then
-        ndx, ndy = desired_gx / dist, desired_gy / dist
+      dx = p.x - b.x
+      dy = p.y - 5 - b.y
+      d = sqrt(dx * dx + dy * dy)
+      if d > 0 then
+        dx /= d dy /= d
       end
-
-      -- desired speed slows inside slow_radius
-      local desired_speed = b.att_speed
-      if dist < b.slow_radius then desired_speed = desired_speed * (dist / max(1, b.slow_radius)) end
-      local desired_vx, desired_vy = ndx * desired_speed, ndy * desired_speed
-
-      -- convert desired_v (global) to local vector is the same numerically, we operate on b.dx/b.dy (local px/frame)
-      local steer_x, steer_y = desired_vx - b.dx, desired_vy - b.dy
-      local sl = sqrt(steer_x * steer_x + steer_y * steer_y)
-      if sl > 0 then
-        local lim = b.acc
-        if sl > lim then steer_x, steer_y = steer_x / sl * lim, steer_y / sl * lim end
-        b.dx += steer_x
-        b.dy += steer_y
+      sp = b.att_speed
+      if d < b.slow_radius then sp *= d / max(1, b.slow_radius) end
+      dx *= sp dy *= sp
+      sx = dx - b.dx sy = dy - b.dy
+      sl = sqrt(sx * sx + sy * sy)
+      if sl > b.acc then
+        sx = sx / sl * b.acc sy = sy / sl * b.acc
       end
-
-      -- clamp speed to att_speed
-      local vl = sqrt(b.dx * b.dx + b.dy * b.dy)
-      if vl > b.att_speed then b.dx, b.dy = (b.dx / vl) * b.att_speed, (b.dy / vl) * b.att_speed end
+      b.dx += sx b.dy += sy
+      v = sqrt(b.dx * b.dx + b.dy * b.dy)
+      if v > b.att_speed then
+        b.dx = b.dx / v * b.att_speed b.dy = b.dy / v * b.att_speed
+      end
     end
   else
     -- lost sight: revert to explore if needed
@@ -164,48 +148,36 @@ end
 
   --
 
-  -- compute local coordinates relative to current camera
-  local lx = b.x - mapx
-  local ly = b.y - mapy
+  local nx = b.x + b.dx * t_increment
+  local ny = b.y + b.dy * t_increment
 
-  -- 𝘱𝘳𝘰𝘱𝘰𝘴𝘦𝘥 local next position (operate in local coords to keep additions small)
-  local nx_local = lx + b.dx * t_increment
-  local ny_local = ly + b.dy * t_increment
-
-  -- convert back to global
-  local nx_global = mapx + nx_local
-  local ny_global = mapy + ny_local
-
-  -- per-axis solid checks using global hitbox corners
-  if not solid_box_global(nx_global, b.y) then
-    b.x = nx_global
-  else
-    b.dx = 0
-    -- small nudge away from obstacle
-    -- try sliding: if x blocked, attempt small backstep
+  -- hitbox helper
+  function sb(gx, gy)
+    return solid(gx, gy)
+        or solid(gx + 15, gy)
+        or solid(gx, gy + 15)
+        or solid(gx + 15, gy + 15)
   end
 
-  if not solid_box_global(b.x, ny_global) then
-    b.y = ny_global
-  else
-    b.dy = 0
-  end
+  -- x move
+  if not sb(nx, b.y) then b.x = nx else b.dx = 0 end
 
-  -- clamp inside room local bounds
+  -- y move
+  if not sb(b.x, ny) then b.y = ny else b.dy = 0 end
+
+  -- clamp
   b.x = mapx + max(0, min(b.x - mapx, 112))
   b.y = mapy + max(0, min(b.y - mapy, 112))
-  spr_coll(b,p)
 
-  -- separation / gentle repel (velocity nudges scaled by weight)
-  -- separation from others (velocity nudges, scaled by weight)
+  spr_coll(b, p)
+
   for o in all(baddie_m.baddies) do
     if o ~= b and o.room_id == b.room_id then
       local rx, ry = o.x - b.x, o.y - b.y
       local d = sqrt(rx * rx + ry * ry)
       if d > 0 and d < 12 then
         local nxp, nyp = rx / d, ry / d
-        local push = (12 - d) * 0.03 * b.weight
-        -- clamp per-step push so it can't blow up
+        local push = (12 - d) * b.weight
         if push > 0.5 then push = 0.5 end
         o.dx += nxp * push
         o.dy += nyp * push
