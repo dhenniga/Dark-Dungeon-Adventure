@@ -78,9 +78,9 @@ function _draw()
     draw_background_sprites()
     baddie_m.draw()
     player_attack()
+    draw_arrows()
     draw_player()
     draw_foreground_sprites()
-    draw_arrows()
     if darkrooms then
         darkroom()
     else
@@ -92,11 +92,11 @@ function _draw()
 
     tb_draw()
     if not darkrooms then
-        print(get_current_room(), mapx + 106, mapy + 121, 10)
-        print("px:" .. flr(p.x) .. ", " .. "py:" .. flr(p.y), mapx + 2, mapy + 2, 7)
-        print("mx:" .. mapx .. ", my:" .. mapy, mapx + 2, mapy + 9, 7)
+        pb(get_current_room(), mapx + 106, 121, 10)
+        pb("px:" .. flr(p.x) .. ", " .. "py:" .. flr(p.y), mapx + 2, mapy + 2, 7)
+        pb("mx:" .. mapx .. ", my:" .. mapy, mapx + 2, mapy + 9, 7)
         circ(p.x + 2, p.y, l_rad, 3)
-        print("cpu:" .. stat(1), mapx + 97, mapy + 2, 7)
-        print("mem:" .. stat(0), mapx + 85, mapy + 8, 7)
+        pb("cpu:" .. stat(1), mapx + 97, mapy + 2, 7)
+        pb("mem:" .. stat(0), mapx + 85, mapy + 8, 7)
     end
 end

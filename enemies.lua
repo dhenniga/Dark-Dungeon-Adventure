@@ -1,4 +1,5 @@
 -- enemies.lua
+baddie_m = { baddies = {} }
 
 function enemy(room_id, fr, x, y, fly, speed, att_speed, acc, drg, stop_time, pause_between, weight, slow_radius)
   return {
@@ -22,7 +23,8 @@ function enemy(room_id, fr, x, y, fly, speed, att_speed, acc, drg, stop_time, pa
     ttl = 0,
     hp = 10,
     start_hp = 10,
-    alert_time = 0
+    alert_time = 0,
+    stagger = 0
   }
 end
 
@@ -31,7 +33,7 @@ function bat(x, y) return enemy(get_current_room(), { 232, 234, 236, 234 }, x, y
 function rat(x, y) return enemy(get_current_room(), { 228, 230 }, x, y, false, 1.5, 0.8, 0.64, 0.92, 35, 90, 0.1, 10) end  -- happy with the rats
 function blob(x, y) return enemy(get_current_room(), { 226 }, x, y, false, 0.8, 1.0, 0.12, 0.92, 20, 80, 0.2, 20) end
 
-baddie_m = { baddies = {} }
+--
 
 local function solid_box_global(gx, gy)
   return solid(gx, gy)
@@ -42,26 +44,34 @@ end
 
 -- drawing (safe anim advance)
 function baddie_draw(b)
+
+  -- animation
   b.anim += 0.2 * t_increment
   if b.anim > #b.frames + 0.999 then b.anim = 1 end
   local frame, flip = b.frames[flr(b.anim)], (b.dx < 0)
   spr(frame, b.x - 4, b.y - 4, 2, 2, flip)
 
+  -- health bar
   if b.hp < b.start_hp then
     rectfill(b.x, b.y + 10, b.x + b.start_hp, b.y + 10, 0)
     rectfill(b.x, b.y + 10, b.x + b.hp, b.y + 10, 9)
   end
 
+  --  alert icon
   if b.state == "stop" then
     sspr(29, 80, 3, 7, b.x + 6, b.y - 4)
   end
 end
+
+--
 
 function baddie_m.update()
   for b in all(baddie_m.baddies) do
     if b and b.x>=mapx and b.x<=mapx+127 and b.y>=mapy and b.y<=mapy+127 then baddie_update(b) end
   end
 end
+
+--
 
 function baddie_m.draw()
   for b in all(baddie_m.baddies) do
@@ -71,11 +81,20 @@ function baddie_m.draw()
   end
 end
 
+--
+
 -- main per-enemy update
 function baddie_update(b)
   b.ttl -= 1
 
+  if b.stagger > 0 then
+  b.stagger -= 1
+end
+
+
  if not enemy_can_move(b) then 
+  b.dx = 0
+  b.dy = 0
   sfx(16,3) 
 end
 
@@ -83,9 +102,6 @@ end
   b.dx *= b.drg
   b.dy *= b.drg
 
-  -- compute local coordinates relative to current camera
-  local lx = b.x - mapx
-  local ly = b.y - mapy
 
   -- 𝘴𝘦𝘦 / 𝘢𝘭𝘦𝘳𝘵 / 𝘢𝘵𝘵𝘢𝘤𝘬 logic (attack overrides explore)
   if sees(b, l_rad, 0, 1, 1, 0) then
@@ -105,7 +121,7 @@ end
     end
 
     -- 𝘢𝘵𝘵𝘢𝘤𝘬 behaviour: steering arrival in local space
-    if b.state == "attack" then
+    if b.state == "attack" and b.stagger <= 0 then
       local desired_gx, desired_gy = p.x - b.x, (p.y - 5) - b.y -- global delta
       local dist, ndx, ndy = sqrt(desired_gx * desired_gx + desired_gy * desired_gy), 0, 0
       if dist > 0.0001 then
@@ -145,6 +161,12 @@ end
       b.dy += sin(ang) * b.speed
     end
   end
+
+  --
+
+  -- compute local coordinates relative to current camera
+  local lx = b.x - mapx
+  local ly = b.y - mapy
 
   -- 𝘱𝘳𝘰𝘱𝘰𝘴𝘦𝘥 local next position (operate in local coords to keep additions small)
   local nx_local = lx + b.dx * t_increment

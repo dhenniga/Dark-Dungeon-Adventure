@@ -14,7 +14,8 @@ p = {
 	fall_dir = nil,
 	keys = 1,
 	engaged = false,
-	moving = false
+	moving = false,
+	recoil = 0
 }
 
 local idle = 1

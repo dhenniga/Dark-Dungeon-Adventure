@@ -590,6 +590,36 @@ function draw_background_sprites()
     if flag.spike_tile then animate_spikes(a_obj) end
     if flag.w_button then spr(95, mapx + ax, mapy + ay, 1, 1) end
     if flag.flames_back then flames(mapx + ax, mapy + ay) end
+
+    if flag.s_shoot_v or flag.s_shoot_h then
+      local v = flag.s_shoot_v
+
+      local ox, oy
+      if v then
+        ox = 0
+        oy = a_obj.flp and -8 or 8
+      else
+        ox = a_obj.flp and 8 or -8
+        oy = 0
+      end
+
+      sspr(
+        112,
+        v and 56 or 48,
+        v and 8 or 5,
+        v and 5 or 8,
+        mapx + ax + ox,
+        mapy + ay + oy,
+        v and 8 or 5,
+        v and 5 or 8,
+        v and false or a_obj.flp,
+        v and a_obj.flp or false
+      )
+
+      if not a_obj.added then
+        add(shooters, a_obj) a_obj.added = true
+      end
+    end
   end
 end
 
@@ -638,36 +668,6 @@ function draw_foreground_sprites()
 
     if flag.flames_fore then
       flames(mapx + ax, mapy + ay)
-    end
-
-    if flag.s_shoot_v or flag.s_shoot_h then
-      local v = flag.s_shoot_v
-
-      local ox, oy
-      if v then
-        ox = 0
-        oy = a_obj.flp and -8 or 8
-      else
-        ox = a_obj.flp and 8 or -8
-        oy = 0
-      end
-
-      sspr(
-        112,
-        v and 56 or 48,
-        v and 8 or 5,
-        v and 5 or 8,
-        mapx + ax + ox,
-        mapy + ay + oy,
-        v and 8 or 5,
-        v and 5 or 8,
-        v and false or a_obj.flp,
-        v and a_obj.flp or false
-      )
-
-      if not a_obj.added then
-        add(shooters, a_obj) a_obj.added = true
-      end
     end
   end
 end
