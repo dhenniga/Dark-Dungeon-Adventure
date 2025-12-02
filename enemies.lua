@@ -150,25 +150,13 @@ function baddie_update(b)
 
   local nx = b.x + b.dx * t_increment
   local ny = b.y + b.dy * t_increment
-
-  -- hitbox helper
-  function sb(gx, gy)
-    return solid(gx, gy)
-        or solid(gx + 15, gy)
-        or solid(gx, gy + 15)
-        or solid(gx + 15, gy + 15)
+  function sb(x, y)
+    return solid(x, y) or solid(x + 15, y) or solid(x, y + 15) or solid(x + 15, y + 15)
   end
-
-  -- x move
   if not sb(nx, b.y) then b.x = nx else b.dx = 0 end
-
-  -- y move
   if not sb(b.x, ny) then b.y = ny else b.dy = 0 end
-
-  -- clamp
   b.x = mapx + max(0, min(b.x - mapx, 112))
   b.y = mapy + max(0, min(b.y - mapy, 112))
-
   spr_coll(b, p)
 
   for o in all(baddie_m.baddies) do
