@@ -1,4 +1,3 @@
-
 -- Tween
 function asin(x)
   local n = x < 0 and 1 or 0

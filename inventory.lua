@@ -14,8 +14,8 @@ function draw_inventory()
     end
   end
 
-  for i=1,p.total_hearts do
-    spr(p.remaining_hearts>=i and 238 or 239,mapx+(i<<3)-8,mapy+118)
+  for i = 1, p.total_hearts do
+    spr(p.remaining_hearts >= i and 238 or 239, mapx + (i << 3) - 8, mapy + 118)
   end
 
   -- open inventory with 𝘹 button
@@ -45,7 +45,7 @@ function show_inventory()
   for o in all(active_objects) do
     if o.flags.name and not reading then
       if text_anim < 12 then text_anim += 1 end
-      pb(o.name, mapx, outcubic(text_anim,mapy + 127, -14, 12), 11, 0) -- display the name of the room
+      pb(o.name, mapx, outcubic(text_anim, mapy + 127, -14, 12), 11, 0) -- display the name of the room
     end
   end
 
@@ -53,8 +53,8 @@ function show_inventory()
     for i = 1, min(p.keys, 10) do
       local x = mapx + 121 - (i - 1) * 13
       fillp(█)
-      circfill(x, outcubic(text_anim,mapy,6,12), 6, 129)
-      spr(206, x - 3, outcubic(text_anim,mapy,3,12))
+      circfill(x, outcubic(text_anim, mapy, 6, 12), 6, 129)
+      spr(206, x - 3, outcubic(text_anim, mapy, 3, 12))
     end
   end
 
