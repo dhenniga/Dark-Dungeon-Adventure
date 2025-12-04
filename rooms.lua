@@ -1,5 +1,5 @@
 --rooms
-room_objects, door_states, active_objects, arrows, shooters = {}, {}, {}, {}, {}
+room_objects, door_states, active_objects, cannonballs, cannons = {}, {}, {}, {}, {}
 f = {
   rock = { rock = true, solid = true },
   c_rock = { c_rock = true, solid = true },
@@ -15,8 +15,8 @@ f = {
 
 obj = function(x, y, fl) return { x = x, y = y, flags = fl } end
 light = function(x, y, rad) return { x = x, y = y, r = rad, flags = { light = true } } end
-door = function(x, y, flx, fly) return { x = x, y = y, flx = flx, fly = fly, flp = flx, fx = flx, fy = fly, flags = { door = true, solid = true, interactable = true, locked = true } } end
-arch = function(x, y, v, flx, fly) return { x = x, y = y, vori = v, flx = flx, fly = fly, flp = flx, fx = flx, fy = fly, flags = { door_arches = true } } end
+door = function(x, y, flx, fly) return { x = x, y = y, flx = flx, fly = fly, flp = flx, flags = { door = true, solid = true, interactable = true, locked = true } } end
+arch = function(x, y, v, flx, fly) return { x = x, y = y, vori = v, flx = flx, fly = fly, flp = flx, flags = { door_arches = true } } end
 sign = function(x, y, t) return { x = x, y = y, text = t, flags = { sign = true, interactable = true, solid = true } } end
 key = function(x, y) return { x = x, y = y, flags = { key = true, interactable = true } } end
 w_button = function(x, y) return { x = x, y = y, flags = { w_button = true, interactable = true } } end
@@ -35,6 +35,8 @@ rf = function(t)
   end
   return w
 end
+
+--
 
 room(
   0, 0, {
@@ -64,7 +66,7 @@ room(
     obj(16, 96, f.vase),
     obj(32, 96, f.vase),
     s_shoot_v(96, 108, true, 1, 60, 1, false), -- GOOD
-    s_shoot_h(16, 36, true, 1, 60, 1, false),
+    s_shoot_h(16, 36, true, 1, 60, 1, false), -- left to right
     s_shoot_v(50, 16, true, 1, 60, 1, true), -- 𝘥𝘰𝘸𝘯 _ GOOD
     s_shoot_h(112, 48, true, 1, 60, 1, true) -- 𝘳𝘪𝘨𝘩𝘵 𝘵𝘰 𝘭𝘦𝘧𝘵
   }
@@ -561,9 +563,8 @@ end
 
 function draw_background_sprites()
   for a_obj in all(active_objects) do
-    local flag, ax, ay, afx, afy = a_obj.flags, a_obj.x, a_obj.y, a_obj.fx, a_obj.fy
+    local flag, ax, ay, afx, afy = a_obj.flags, a_obj.x, a_obj.y, a_obj.flx, a_obj.fly
     if flag.rain ~= nil then raindrops = flag.rain end
-    if flag.quake ~= nil then quake = flag.quake end
     if flag.sewer then
       palette(sewer)
     elseif flag.dungeon then
@@ -582,7 +583,7 @@ function draw_background_sprites()
       end
       door_lights(mapx + ax, mapy + ay, afx, afy, a_obj.flp)
     end
-    if flag.chest then spr(13, mapx + ax, mapy + ay, 2, 2, afx, afy) end
+    if flag.chest then spr(13, mapx + ax, mapy + ay, 2, 2) end
     if flag.rock then spr(134, mapx + ax, mapy + ay, 2, 2) end
     if flag.stairs_down then spr(130, mapx + ax, mapy + ay, 2, 2) end
     if flag.stairs_up then spr(132, mapx + ax, mapy + ay, 2, 2) end
@@ -617,7 +618,7 @@ function draw_background_sprites()
       )
 
       if not a_obj.added then
-        add(shooters, a_obj) a_obj.added = true
+        add(cannons, a_obj) a_obj.added = true
       end
     end
   end
@@ -741,21 +742,21 @@ end
 
 --
 
-function spawn_arrow(shooter)
+function spawn_cannonball(cannon)
   local direction, dx, dy
-  if shooter.flags.s_shoot_v then
-    direction = shooter.flp and 1 or 0
+  if cannon.flags.s_shoot_v then
+    direction = cannon.flp and 1 or 0
     dx = 0
-    dy = shooter.speed * (direction == 1 and 1 or -1)
+    dy = cannon.speed * (direction == 1 and 1 or -1)
   else
-    direction = shooter.flp and 3 or 2
+    direction = cannon.flp and 3 or 2
     dy = 0
-    dx = shooter.speed * (direction == 2 and 1 or -1)
+    dx = cannon.speed * (direction == 2 and 1 or -1)
   end
   add(
-    arrows, {
-      x = mapx + shooter.x,
-      y = mapy + shooter.y,
+    cannonballs, {
+      x = mapx + cannon.x,
+      y = mapy + cannon.y,
       dx = dx,
       dy = dy,
       d = direction
@@ -764,54 +765,53 @@ function spawn_arrow(shooter)
   sfx(19, 3)
 end
 
-function update_shooters()
+function update_cannons()
   if mapx == cur_room_x and mapy == cur_room_y then
-    for shooter in all(shooters) do
-      if shooter.active then
-        shooter.delay -= t_increment
-        if shooter.delay <= 0 then
-          spawn_arrow(shooter)
-          shooter.delay = shooter.timing
+    for cannon in all(cannons) do
+      if cannon.active then
+        cannon.delay -= t_increment
+        if cannon.delay <= 0 then
+          spawn_cannonball(cannon)
+          cannon.delay = cannon.timing
         end
       end
     end
   end
 end
 
-function update_arrows()
-  for arrow in all(arrows) do
-    -- move the arrow
-    arrow.x += arrow.dx * t_increment
-    arrow.y += arrow.dy * t_increment
+function update_cannonballs()
+  for cannonball in all(cannonballs) do
+    -- move the cannonball
+    cannonball.x += cannonball.dx * t_increment
+    cannonball.y += cannonball.dy * t_increment
 
-    if solid(arrow.x, arrow.y) then
-      del(arrows, arrow)
+    if solid(cannonball.x, cannonball.y) then
+      del(cannonballs, cannonball)
     end
 
     -- collision with player
-    if spr_coll(p, arrow) then
+    if spr_coll(p, cannonball) then
       p.remaining_hearts -= 1
-      -- p.dx, p.dy = arrow.dx, arrow.dy
-      del(arrows, arrow)
+      del(cannonballs, cannonball)
     end
 
-    -- arrow leaves the screen
-    if arrow.x < mapx or arrow.x > mapx + 127 or arrow.y < mapy or arrow.y > mapy + 127 then
-      del(arrows, arrow)
+    -- cannonball leaves the screen
+    if cannonball.x < mapx or cannonball.x > mapx + 127 or cannonball.y < mapy or cannonball.y > mapy + 127 then
+      del(cannonballs, cannonball)
     end
   end
 end
 
 local adraw = {
-  { 2, 0 }, -- 𝘥𝘰𝘸𝘯 to 𝘶𝘱 -- 𝘥𝘰𝘯𝘦
-  { 2, -3 }, -- 𝘶𝘱 to 𝘥𝘰𝘸𝘯
-  { -3, 2 }, -- 𝘭𝘦𝘧𝘵 to 𝘳𝘪𝘨𝘩𝘵 -- 𝘥𝘰𝘯𝘦
-  { 0, 2 } -- 𝘳𝘪𝘨𝘩𝘵 to 𝘭𝘦𝘧𝘵
+  { 1, 6 }, -- 𝘥𝘰𝘸𝘯 to 𝘶𝘱 -- 𝘥𝘰𝘯𝘦
+  { 1, -6 }, -- 𝘶𝘱 to 𝘥𝘰𝘸𝘯
+  { -6, 1 }, -- 𝘭𝘦𝘧𝘵 to 𝘳𝘪𝘨𝘩𝘵 -- 𝘥𝘰𝘯𝘦
+  { 6, 1 } -- 𝘳𝘪𝘨𝘩𝘵 to 𝘭𝘦𝘧𝘵
 }
 
-function draw_arrows()
-  for arrow in all(arrows) do
-    local d = adraw[arrow.d + 1]
-    sspr(112, 104, 5, 5, mapx + arrow.x + d[1], mapy + arrow.y + d[2], 5, 5)
+function draw_cannonballs()
+  for cannonball in all(cannonballs) do
+    local d = adraw[cannonball.d + 1]
+    sspr(112, 104, 7, 7, mapx + cannonball.x + d[1], mapy + cannonball.y + d[2], 7, 7)
   end
 end

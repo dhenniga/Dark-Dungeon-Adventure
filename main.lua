@@ -1,8 +1,8 @@
-BTN_L, BTN_R, BTN_U, BTN_D, BTN_X, BTN_O, dungeon, sewer, pit, player_light_enabled, reading, quake, allow_movement, raindrops = 0, 1, 2, 3, 4, 5, "128,7,139,132,5,6,135,4,137,138,9,143,13,14,15", "129,7,131,130,129,131,135,132,137,139,9,4,1,14,5", "0,7,139,132,128,130,135,4,137,138,9,143,129,14,15", false, false, false, true, false
+BTN_L, BTN_R, BTN_U, BTN_D, BTN_X, BTN_O, dungeon, sewer, pit, player_light_enabled, reading, allow_movement, raindrops = 0, 1, 2, 3, 4, 5, "128,7,139,132,5,6,135,4,137,138,9,143,13,14,15", "129,7,131,130,129,131,135,132,137,139,9,4,1,14,5", "0,7,139,132,128,130,135,4,137,138,9,143,129,14,15", false, false, true, false
 
-music_enabled = false
+music_enabled = true
 collision_state = true
-darkrooms = false
+darkrooms = true
 
 function palette(s)
   for i, v in ipairs(split(s, ",")) do
@@ -12,7 +12,7 @@ end
 
 function _init()
   cartdata("davidhennigan_dark_dungeon_1")
-  p.x, p.y, p.remaining_hearts, p.keys = 67, 12, 5, 5
+  p.x, p.y, p.remaining_hearts, p.keys = 67, 16, 5, 5
   t_increment = 1
   cls()
   decode_tiles()
@@ -57,8 +57,8 @@ function _update60()
   update_map()
   check_room_change()
   update_player()
-  update_shooters()
-  update_arrows()
+  update_cannons()
+  update_cannonballs()
 
   mapx, mapy = band(p.x, 0xFFFFFF80), band(p.y, 0xFFFFFF80)
   baddie_m.update()
@@ -78,7 +78,7 @@ function _draw()
   draw_background_sprites()
   baddie_m.draw()
   player_attack()
-  draw_arrows()
+  draw_cannonballs()
   draw_player()
   draw_foreground_sprites()
   if darkrooms then

@@ -1,5 +1,4 @@
 -- player
-
 p = {
 	x = 64,
 	y = 40,
@@ -25,12 +24,13 @@ lanturn_timer = 0
 tp = 19
 
 function draw_player()
-	p.moving = p.dx ~= 0 or p.dy ~= 0
-	p.curr_speed = max(abs(p.dx), abs(p.dy)) / 4.5
+	local px, py, pdx, pdy = p.x, p.y, p.dx, p.dy
+	p.moving = pdx ~= 0 or pdy ~= 0
+	p.curr_speed = max(abs(pdx), abs(pdy)) / 4.5
 
 	-- diag movement speed
-	if p.dx * p.dy != 0 then
-		p.dx *= 0.55 p.dy *= 0.55
+	if pdx * pdy != 0 then
+		pdx *= 0.55 pdy *= 0.55
 	end
 
 	-- idle animation
@@ -46,9 +46,9 @@ function draw_player()
 
 	if not player_atk then
 		if p.moving then
-			if not p.fall_dir then spr(({ 198, 200, 202, 204 })[flr(running)], p.x - 4, p.y - 8, 2, 2, p.direction) end
+			if not p.fall_dir then spr(split("198, 200, 202, 204")[flr(running)], p.x - 4, p.y - 8, 2, 2, p.direction) end
 		else
-			if not p.fall_dir then spr(({ 192, 194, 196 })[flr(idle)], p.x - 4, p.y - 8, 2, 2, p.direction) end
+			if not p.fall_dir then spr(split("192, 194, 196")[flr(idle)], p.x - 4, p.y - 8, 2, 2, p.direction) end
 		end
 	else
 		spr(194, p.x - 4, p.y - 8, 2, 2, p.direction)
@@ -76,7 +76,7 @@ end
 
 function player_attack()
 	-- sword frames
-	local sword_frames = { 72, 74, 106, 108 }
+	local sword_frames = split("72, 74, 106, 108")
 
 	-- start attack on button press if not already attacking
 	if btnp(𝘣𝘵𝘯_𝘰) and not p.engaged and not player_atk then

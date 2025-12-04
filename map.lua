@@ -66,14 +66,7 @@ function update_map()
     mapy = new_mapy
     prerender_room()
   end
-
-  local offset = 0
-  local time_val = flr(time() * 0.1)
-  if quake then
-    offset = (16 - rnd(512)) * 0.001
-  end
-
-  camera(mapx + offset * time_val, mapy + offset * time_val)
+  camera(mapx, mapy)
 end
 
 --
@@ -89,9 +82,9 @@ function darkroom()
   memcpy(0x0, 0x6000, 0x2000)
   poke(0x5f55, 0x0)
   if current_palette == "sewer" then
-    fillp(rnd({ 23130.5, 32125.5, -2560.5, 0.5, -2624.5, 3855.5 })) -- fillp(rnd({ ▒, ░, … }))
+    fillp(rnd(split("23130.5, 32125.5, -2560.5, 0.5, -2624.5, 3855.5"))) -- fillp(rnd({ ▒, ░, … }))
   else
-    fillp(rnd({ 23130.5, 32125.5, -2560.5 })) -- fillp(rnd({ ▒, ░, … }))
+    fillp(rnd(split("23130.5, 32125.5, -2560.5"))) -- fillp(rnd({ ▒, ░, … }))
   end
   rectfill(mapx, mapy, mapx + 128, mapy + 128, 0)
   draw_torch_light()
@@ -100,7 +93,7 @@ function darkroom()
     draw_rain()
   end
   poke(0x5f55, 0x60)
-  pal { 1, 0, 1, 0, 1, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0 }
+  pal(split("1, 0, 1, 0, 1, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0"))
   sspr(0, 0, 128, 128, mapx, mapy)
   pal(0)
   palt(14, true)
@@ -112,34 +105,23 @@ end
 
 function init_rain()
   for i = 1, 400 do
-    r[i] = {
-      x = rnd(256) - 128,
-      y = rnd(128),
-      v = 1 + flr(rnd(2))
-    }
+    r[i] = { x = rnd(256) - 128, y = rnd(128), v = flr(rnd(2)) + 1 }
   end
 end
 
---
-
 function update_rain()
-  for raindrop in all(r) do
-    local speed_factor = 3 / raindrop.v * t_increment
-    raindrop.x = raindrop.x + speed_factor
-    raindrop.y = raindrop.y + speed_factor
-
-    if raindrop.y >= 134 then
-      raindrop.x, raindrop.y, raindrop.v = rnd(256) - 127, -6, 1 + flr(rnd(2))
+  for d in all(r) do
+    local s = 3 / d.v * t_increment
+    d.x += s d.y += s
+    if d.y > 133 then
+      d.x, d.y, d.v = rnd(256) - 128, -6, flr(rnd(2)) + 1
     end
   end
 end
 
---
-
 function draw_rain()
-  for raindrop in all(r) do
-    local length = raindrop.v == 1 and 2 or 1
-    local col = 12 - 11 * (raindrop.v - 1)
-    line(mapx + raindrop.x, mapy + raindrop.y, mapx + raindrop.x - length, mapy + raindrop.y - length, col)
+  for d in all(r) do
+    local l, c, x, y = 3 - d.v, 13 - d.v, mapx + d.x, mapy + d.y
+    line(x, y, x - l, y - l, c)
   end
 end

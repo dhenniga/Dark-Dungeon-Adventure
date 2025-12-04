@@ -29,29 +29,34 @@ function enemy(room_id, fr, x, y, fly, speed, att_speed, acc, drg, stop_time, pa
 end
 
 -- presets
-function bat(x, y) return enemy(get_current_room(), { 232, 234, 236, 234 }, x, y, true, 1.2, 1.6, 10, 0.95, 40, 40, 0.1, 60) end
-function rat(x, y) return enemy(get_current_room(), { 228, 230 }, x, y, false, 1.5, 0.8, 0.64, 0.92, 35, 90, 0.1, 10) end -- happy with the rats
+function bat(x, y) return enemy(get_current_room(), split("232, 234, 236, 234"), x, y, true, 1.2, 1.6, 10, 0.95, 40, 40, 0.1, 60) end
+function rat(x, y) return enemy(get_current_room(), split("228, 230"), x, y, false, 1.5, 0.8, 0.64, 0.92, 35, 90, 0.1, 10) end -- happy with the rats
 function blob(x, y) return enemy(get_current_room(), { 226 }, x, y, false, 0.8, 1.0, 0.12, 0.92, 20, 80, 0.2, 20) end
 
 --
 
 -- drawing (safe anim advance)
 function baddie_draw(b)
+  local bx, by = b.x, b.y
   -- animation
   b.anim += 0.2 * t_increment
   if b.anim > #b.frames + 0.999 then b.anim = 1 end
   local frame, flip = b.frames[flr(b.anim)], (b.dx < 0)
-  spr(frame, b.x - 4, b.y - 4, 2, 2, flip)
+  spr(frame, bx - 4, by - 4, 2, 2, flip)
 
   -- health bar
   if b.hp < b.start_hp then
-    rectfill(b.x, b.y + 10, b.x + b.start_hp, b.y + 10, 0)
-    rectfill(b.x, b.y + 10, b.x + b.hp, b.y + 10, 9)
+    rectfill(bx, by + 10, bx + b.start_hp, by + 10, 0)
+    rectfill(bx, by + 10, bx + b.hp, by + 10, 9)
   end
 
   --  alert icon
   if b.state == "stop" then
-    sspr(29, 80, 3, 7, b.x + 6, b.y - 4)
+    sspr(29, 80, 3, 7, bx + 6, by - 4)
+  end
+
+  if b.state == "stop" or b.state == "attack" then
+    if not darkrooms then line(p.x, p.y, bx + 8, by + 4, 5) end
   end
 end
 
