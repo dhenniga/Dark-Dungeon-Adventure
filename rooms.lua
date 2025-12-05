@@ -10,13 +10,14 @@ f = {
   blob = { blob = true },
   flame_b = { flames_back = true },
   flame_f = { flames_fore = true },
-  flame = { flames = true }
+  flame = { flames = true },
+  arch = { arch = true }
 }
 
 obj = function(x, y, fl) return { x = x, y = y, flags = fl } end
-light = function(x, y, rad) return { x = x, y = y, r = rad, flags = { light = true } } end
+light = function(x, y, rad) return { x = x, y = y, rad = rad, flags = { light = true } } end
 door = function(x, y, flx, fly) return { x = x, y = y, flx = flx, fly = fly, flp = flx, flags = { door = true, solid = true, interactable = true, locked = true } } end
-arch = function(x, y, v, flx, fly) return { x = x, y = y, vori = v, flx = flx, fly = fly, flp = flx, flags = { door_arches = true } } end
+arch = function(x, y, v, flx, fly) return { x = x, y = y, vori = v, flx = flx, fly = fly, flp = flx, flags = { arch = true } } end
 sign = function(x, y, t) return { x = x, y = y, text = t, flags = { sign = true, interactable = true, solid = true } } end
 key = function(x, y) return { x = x, y = y, flags = { key = true, interactable = true } } end
 w_button = function(x, y) return { x = x, y = y, flags = { w_button = true, interactable = true } } end
@@ -38,37 +39,91 @@ end
 
 --
 
+local function convert(v)
+  if v == nil or v == "nil" then return nil end
+  if v == "true" then return true end
+  if v == "false" then return false end
+  local num = tonum(v)
+  if num ~= nil then return num end
+  return v
+end
+
+function obj2(str)
+  local t, out = split(str), {}
+
+  out.x = convert(t[2])
+  out.y = convert(t[3])
+  out.vori = convert(t[4])
+  out.rad = convert(t[5])
+  out.flx = convert(t[6])
+  out.fly = convert(t[7])
+  out.flp = convert(t[8])
+  out.interactable = convert(t[9])
+  out.solid = convert(t[10])
+  out.locked = convert(t[11])
+  out.text = convert(t[12])
+  out.active = convert(t[13])
+  out.delay = convert(t[14])
+  out.timing = convert(t[15])
+  out.speed = convert(t[16])
+
+  -- flags from the first entry
+  local flag_name = t[1]
+  out.flags = { [flag_name] = true, solid = out.solid, interactable = out.interactable, locked = out.locked }
+
+  return out
+end
+
+function sign_dialog(index)
+  local alltext = {
+    {
+      "𝘸𝘦𝘭𝘤𝘰𝘮𝘦 𝘵𝘰 𝘵𝘩𝘦 𝘥𝘢𝘳𝘬 𝘥𝘶𝘯𝘨𝘦𝘰𝘯𝘴\n𝘰𝘧 𝘵𝘩𝘦 𝘴𝘱𝘰𝘰𝘬𝘺 𝘤𝘢𝘴𝘵𝘭𝘦 𝘰𝘧\n𝘯𝘢𝘮𝘦. 𝘤𝘰𝘯𝘵𝘢𝘪𝘯𝘦𝘥 𝘸𝘪𝘵𝘩𝘪𝘯 𝘵𝘩𝘦𝘴𝘦\n𝘥𝘢𝘯𝘬 𝘸𝘢𝘭𝘭𝘴 𝘢𝘳𝘦 𝘴𝘦𝘤𝘳𝘦𝘵𝘴,\n𝘵𝘳𝘪𝘢𝘭𝘴, 𝘮𝘰𝘯𝘴𝘵𝘦𝘳𝘴 𝘢𝘯𝘥...",
+      "...𝘵𝘳𝘦𝘢𝘴𝘶𝘳𝘦𝘴 𝘣𝘦𝘺𝘰𝘯𝘥\n𝘺𝘰𝘶𝘳 𝘸𝘪𝘭𝘥𝘦𝘴𝘵 𝘪𝘮𝘢𝘨𝘪𝘯𝘢𝘵𝘪𝘰𝘯.\n\n𝘢𝘳𝘮𝘦𝘥 𝘰𝘯𝘭𝘺 𝘸𝘪𝘵𝘩 𝘢 𝘴𝘸𝘰𝘳𝘥 𝘢𝘯𝘥\n𝘺𝘰𝘶𝘳 𝘦𝘭𝘷𝘦𝘯 𝘱𝘰𝘸𝘦𝘳 𝘰𝘧...",
+      "𝘪𝘭𝘭𝘶𝘮𝘪𝘯𝘢𝘵𝘪𝘰𝘯, 𝘺𝘰𝘶 𝘮𝘶𝘴𝘵\n𝘣𝘳𝘢𝘷𝘦 𝘵𝘩𝘦 𝘵𝘦𝘳𝘳𝘰𝘳𝘴 𝘪𝘯 𝘵𝘩𝘦\n𝘥𝘢𝘳𝘬.\n𝘮𝘢𝘺 𝘨𝘰𝘥 𝘩𝘢𝘷𝘦 𝘮𝘦𝘳𝘤𝘺\n𝘰𝘯 𝘺𝘰𝘶𝘳 𝘴𝘰𝘶𝘭!"
+    },
+    {
+      "𝘢𝘩𝘦𝘢𝘥 𝘭𝘪𝘦𝘴 𝘺𝘰𝘶𝘳 𝘨𝘳𝘦𝘢𝘵𝘦𝘴𝘵\n𝘤𝘩𝘢𝘭𝘭𝘦𝘯𝘨𝘦 𝘴𝘰 𝘧𝘢𝘳...\n\n...𝘵𝘩𝘦 𝘥𝘳𝘦𝘢𝘥𝘦𝘥 𝘣𝘰𝘴𝘴𝘯𝘢𝘮𝘦",
+      "𝘩𝘦'𝘴 𝘵𝘰𝘶𝘨𝘩 𝘢𝘯𝘥 𝘧𝘢𝘴𝘵 𝘣𝘶𝘵 𝘩𝘦\n𝘥𝘰𝘦𝘴𝘯'𝘵 𝘴𝘦𝘦 𝘵𝘰𝘰 𝘸𝘦𝘭𝘭 𝘪𝘯\n𝘵𝘩𝘦 𝘥𝘢𝘳𝘬. 𝘵𝘩𝘢𝘵 𝘤𝘰𝘶𝘭𝘥 𝘮𝘢𝘬𝘦\n𝘢𝘭𝘭 𝘵𝘩𝘦 𝘥𝘪𝘧𝘧𝘦𝘳𝘦𝘯𝘤𝘦."
+    },
+    {
+      "𝘵𝘩𝘳𝘦𝘦 𝘣𝘶𝘵𝘵𝘰𝘯𝘴 𝘮𝘶𝘴𝘵 𝘣𝘦\n𝘱𝘳𝘦𝘴𝘴𝘦𝘥 𝘵𝘰 𝘳𝘦𝘷𝘦𝘢𝘭 𝘵𝘩𝘦\n𝘩𝘪𝘥𝘥𝘦𝘯 𝘴𝘵𝘢𝘪𝘳𝘤𝘢𝘴𝘦.\n\n𝘸𝘩𝘦𝘳𝘦 𝘤𝘰𝘶𝘭𝘥 𝘵𝘩𝘦𝘺 𝘣𝘦?"
+    },
+    {
+      "𝘵𝘩𝘦 𝘬𝘦𝘺 𝘰𝘯 𝘵𝘩𝘦 𝘵𝘢𝘣𝘭𝘦\n𝘶𝘯𝘭𝘰𝘤𝘬𝘴 𝘢 𝘥𝘰𝘰𝘳 𝘰𝘯 𝘵𝘩𝘪𝘴\n𝘧𝘭𝘰𝘰𝘳...\n\n𝘣𝘶𝘵 𝘸𝘩𝘪𝘤𝘩 𝘰𝘯𝘦?"
+    },
+    {
+      "𝘵𝘩𝘦 𝘯𝘦𝘹𝘵 𝘳𝘰𝘰𝘮 𝘩𝘢𝘴 𝘴𝘱𝘪𝘬𝘦𝘴\n𝘵𝘩𝘢𝘵 𝘴𝘩𝘰𝘰𝘵 𝘧𝘳𝘰𝘮 𝘣𝘰𝘵𝘵𝘰𝘮 𝘵𝘰\n𝘵𝘰𝘱. 𝘺𝘰𝘶 𝘩𝘢𝘷𝘦 𝘵𝘰 𝘱𝘳𝘦𝘴𝘴 𝘵𝘩𝘦\n𝘣𝘶𝘵𝘵𝘰𝘯 𝘢𝘵 𝘵𝘩𝘦 𝘵𝘰𝘱 𝘵𝘰 𝘴𝘵𝘰𝘱\n𝘵𝘩𝘦 𝘴𝘱𝘪𝘬𝘦𝘴 𝘢𝘯𝘥 𝘤𝘭𝘰𝘴𝘦...",
+      "𝘵𝘩𝘦 𝘱𝘪𝘵𝘴 𝘥𝘰𝘰𝘳𝘴."
+    }
+  }
+  return alltext[index]
+end
+
+--
+
 room(
   0, 0, {
     { name = "𝘤𝘢𝘴𝘵𝘭𝘦 𝘦𝘯𝘵𝘳𝘢𝘯𝘤𝘦", flags = rf { dungeon = true } },
-    obj(64, 0, f.c_rock),
-    arch(64, 0, true, false, false),
-    sign(
-      33,
-      5,
-      {
-        "𝘸𝘦𝘭𝘤𝘰𝘮𝘦 𝘵𝘰 𝘵𝘩𝘦 𝘥𝘢𝘳𝘬 𝘥𝘶𝘯𝘨𝘦𝘰𝘯𝘴\n𝘰𝘧 𝘵𝘩𝘦 𝘴𝘱𝘰𝘰𝘬𝘺 𝘤𝘢𝘴𝘵𝘭𝘦 𝘰𝘧\n𝘯𝘢𝘮𝘦. 𝘤𝘰𝘯𝘵𝘢𝘪𝘯𝘦𝘥 𝘸𝘪𝘵𝘩𝘪𝘯 𝘵𝘩𝘦𝘴𝘦\n𝘥𝘢𝘯𝘬 𝘸𝘢𝘭𝘭𝘴 𝘢𝘳𝘦 𝘴𝘦𝘤𝘳𝘦𝘵𝘴,\n𝘵𝘳𝘪𝘢𝘭𝘴, 𝘮𝘰𝘯𝘴𝘵𝘦𝘳𝘴 𝘢𝘯𝘥...",
-        "...𝘵𝘳𝘦𝘢𝘴𝘶𝘳𝘦𝘴 𝘣𝘦𝘺𝘰𝘯𝘥\n𝘺𝘰𝘶𝘳 𝘸𝘪𝘭𝘥𝘦𝘴𝘵 𝘪𝘮𝘢𝘨𝘪𝘯𝘢𝘵𝘪𝘰𝘯.\n\n𝘢𝘳𝘮𝘦𝘥 𝘰𝘯𝘭𝘺 𝘸𝘪𝘵𝘩 𝘢 𝘴𝘸𝘰𝘳𝘥 𝘢𝘯𝘥\n𝘺𝘰𝘶𝘳 𝘦𝘭𝘷𝘦𝘯 𝘱𝘰𝘸𝘦𝘳 𝘰𝘧...",
-        "𝘪𝘭𝘭𝘶𝘮𝘪𝘯𝘢𝘵𝘪𝘰𝘯, 𝘺𝘰𝘶 𝘮𝘶𝘴𝘵\n𝘣𝘳𝘢𝘷𝘦 𝘵𝘩𝘦 𝘵𝘦𝘳𝘳𝘰𝘳𝘴 𝘪𝘯 𝘵𝘩𝘦\n𝘥𝘢𝘳𝘬.\n𝘮𝘢𝘺 𝘨𝘰𝘥 𝘩𝘢𝘷𝘦 𝘮𝘦𝘳𝘤𝘺\n𝘰𝘯 𝘺𝘰𝘶𝘳 𝘴𝘰𝘶𝘭!"
-      }
-    ),
-    obj(64, 64, f.rock),
-    obj(80, 64, f.rock),
-    obj(16, 16, f.flame_b),
-    light(24, 20, 20),
-    obj(96, 16, f.flame_b),
-    light(104, 20, 20),
-    arch(64, 120, true, true, true),
-    door(64, 112, false, true),
-    light(56, 120, 12),
-    light(87, 120, 12),
-    obj(16, 80, f.vase),
-    obj(16, 96, f.vase),
-    obj(32, 96, f.vase),
-    s_shoot_v(96, 108, true, 1, 60, 1, false), -- GOOD
-    s_shoot_h(16, 36, true, 1, 60, 1, false), -- left to right
-    s_shoot_v(50, 16, true, 1, 60, 1, true), -- 𝘥𝘰𝘸𝘯 _ GOOD
-    s_shoot_h(112, 48, true, 1, 60, 1, true) -- 𝘳𝘪𝘨𝘩𝘵 𝘵𝘰 𝘭𝘦𝘧𝘵
+    obj2("c_rock,64,0,nil,nil,nil,nil,nil,nil,true,nil,nil,nil,nil,nil,nil"),
+    obj2("arch,64,0,true,nil,false,false,nil,nil,nil,nil,nil,nil,nil,nil,nil"),
+    obj2("sign,33,5,nil,nil,nil,nil,nil,true,true,nil,1,nil,nil,nil,nil"),
+    obj2("rock,64,64,nil,nil,nil,nil,nil,nil,true,nil,nil,nil,nil,nil,nil"),
+    obj2("rock,80,64,nil,nil,nil,nil,nil,nil,true,nil,nil,nil,nil,nil,nil"),
+    obj2("flames_back,16,16,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil"),
+    obj2("light,24,20,nil,20,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil"),
+    obj2("flames_back,96,16,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil"),
+    obj2("light,104,20,nil,20,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil"),
+    obj2("arch,64,120,true,nil,true,true,nil,nil,nil,nil,nil,nil,nil,nil,nil"),
+    obj2("door,64,112,nil,nil,false,true,nil,true,true,true,nil,nil,nil,nil,nil"),
+    obj2("light,56,120,nil,12,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil"),
+    obj2("light,87,120,nil,12,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil"),
+    obj2("vase,16,80,nil,nil,nil,nil,nil,nil,true,nil,nil,nil,nil,nil,nil"),
+    obj2("vase,16,96,nil,nil,nil,nil,nil,nil,true,nil,nil,nil,nil,nil,nil"),
+    obj2("vase,32,96,nil,nil,nil,nil,nil,nil,true,nil,nil,nil,nil,nil,nil"),
+    obj2("s_shoot_v,96,108,nil,nil,nil,nil,false,nil,nil,nil,nil,true,1,60,1"),
+    obj2("s_shoot_h,16,36,nil,nil,nil,nil,false,nil,nil,nil,nil,true,1,60,1"),
+    obj2("s_shoot_v,50,16,nil,nil,nil,nil,true,nil,nil,nil,nil,true,1,60,1"),
+    obj2("s_shoot_h,112,48,nil,nil,nil,nil,true,nil,nil,nil,nil,true,1,60,1")
   }
 )
 room(
@@ -76,19 +131,20 @@ room(
   1,
   {
     { name = "𝘤𝘢𝘴𝘵𝘭𝘦 𝘨𝘢𝘳𝘥𝘦𝘯 𝘴𝘵𝘰𝘳𝘢𝘨𝘦", flags = rf { sewer = true, rain = true } },
-    door(64, 0, false, false),
-    arch(64, 0, true, false, false),
-    light(56, 8, 12),
-    light(87, 8, 12),
-    obj(112, 96, f.vase),
-    obj(112, 80, f.vase),
-    obj(96, 96, f.vase),
-    obj(96, 80, f.vase),
-    obj(20, 90, f.bat),
-    obj(100, 32, f.rat),
-    obj(32, 48, f.vase),
-    s_shoot_v(36, 114, true, 1, 60, 2, false),
-    s_shoot_h(8, 36, true, 1, 70, 2, false)
+
+    obj2("door,64,0,nil,nil,false,false,nil,true,true,true,nil,nil,nil,nil,nil"),
+    obj2("arch,64,0,true,nil,false,false,nil,nil,nil,nil,nil,nil,nil,nil,nil"),
+    obj2("light,56,8,nil,12,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil"),
+    obj2("light,87,8,nil,12,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil"),
+    obj2("vase,112,96,nil,nil,nil,nil,nil,nil,true,nil,nil,nil,nil,nil,nil"),
+    obj2("vase,112,80,nil,nil,nil,nil,nil,nil,true,nil,nil,nil,nil,nil,nil"),
+    obj2("vase,96,96,nil,nil,nil,nil,nil,nil,true,nil,nil,nil,nil,nil,nil"),
+    obj2("vase,96,80,nil,nil,nil,nil,nil,nil,true,nil,nil,nil,nil,nil,nil"),
+    obj2("bat,20,90,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil"),
+    obj2("rat,100,32,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil"),
+    obj2("vase,32,48,nil,nil,nil,nil,nil,nil,true,nil,nil,nil,nil,nil,nil"),
+    obj2("s_shoot_v,36,114,nil,nil,nil,nil,false,nil,nil,nil,nil,true,1,60,1"),
+    obj2("s_shoot_h,8,36,nil,nil,nil,nil,false,nil,nil,nil,nil,true,1,60,1")
   }
 )
 room(
@@ -495,13 +551,13 @@ end
 
 --
 
-function door_lights(x, y, fx, fy, flp)
-  local a, i = flp and { 240, 241, 241, 240 } or { 224, 225, 225, 224 }, flr(time() * (4 * t_increment) % 4) + 1
+function door_lights(x, y, flx, fly, flp)
+  local a, i = flp and split("240, 241, 241, 240") or split("224, 225, 225, 224"), flr(time() * (4 * t_increment) % 4) + 1
   local flip = i > 2
   if flp then
-    spr(a[i], x + 4, y - 12, 1, 1, fx, flip) spr(a[i], x + 4, y + 20, 1, 1, fx, flip)
+    spr(a[i], x + 4, y - 12, 1, 1, flx, flip) spr(a[i], x + 4, y + 20, 1, 1, flx, flip)
   else
-    spr(a[i], x - 12, y + 4, 1, 1, flip, fy) spr(a[i], x + 20, y + 4, 1, 1, flip, fy)
+    spr(a[i], x - 12, y + 4, 1, 1, flip, fly) spr(a[i], x + 20, y + 4, 1, 1, flip, fly)
   end
 end
 
@@ -527,7 +583,7 @@ function draw_player_interact_icon()
       if len > 0 and len < 22 then
         engaged_now = true
         if flag.sign and not reading and val == 0 and btn(𝘣𝘵𝘯_𝘰) then
-          t_increment = 0.05 tb_init(15, o.text)
+          t_increment = 0.05 tb_init(15, sign_dialog(o.text))
         end
         if flag.sign then sspr(24, 80, 5, 7, p.x + 8, p.y - 8) end
         if flag.key then
@@ -655,7 +711,7 @@ function draw_foreground_sprites()
       add(baddie_m.baddies, blob(mapx + ax, mapy + ay)) a_obj.spawned = true
     end
 
-    if flag.door_arches then
+    if flag.arch then
       if a_obj.vori then
         if a_obj.flp == false then rectfill(mapx + ax - 4, mapy + ay + 2, mapx + ax + 19, mapy + ay - 6, 0) end
         if a_obj.flp == true then rectfill(mapx + ax - 4, mapy + ay + 5, mapx + ax + 19, mapy + ay + 13, 0) end
@@ -732,7 +788,7 @@ end
 function draw_torch_light()
   for a_obj in all(active_objects) do
     if a_obj.flags.light then
-      local px, py, pr = mapx + a_obj.x, mapy + a_obj.y, a_obj.r
+      local px, py, pr = mapx + a_obj.x, mapy + a_obj.y, a_obj.rad
       fillp(32125.5) circfill(px, py, pr + rnd(3) + 10, 14)
       fillp(23130.5) circfill(px, py, pr + rnd(3) + 6, 14)
       fillp(0x0000) circfill(px, py, pr + rnd(3) + 3, 14)
