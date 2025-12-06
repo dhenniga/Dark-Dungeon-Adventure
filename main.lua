@@ -1,6 +1,6 @@
 BTN_L, BTN_R, BTN_U, BTN_D, BTN_X, BTN_O, dungeon, sewer, pit, player_light_enabled, reading, allow_movement, raindrops = 0, 1, 2, 3, 4, 5, "128,7,139,132,5,6,135,4,137,138,9,143,13,14,15", "129,7,131,130,129,131,135,132,137,139,9,4,1,14,5", "0,7,139,132,128,130,135,4,137,138,9,143,129,14,15", false, false, true, false
 
-music_enabled = false
+music_enabled = true
 collision_state = true
 darkrooms = true
 
@@ -64,7 +64,6 @@ function _update60()
   baddie_m.update()
   lanturn_timer = mid(0, lanturn_timer + (player_light_enabled and 0.5 or -0.25), 12)
   l_rad = outelastic(lanturn_timer, 0, 35, 30)
-
   if reading then
     tb_update()
   end
@@ -91,8 +90,9 @@ function _draw()
   draw_inventory()
 
   tb_draw()
+
   if not darkrooms then
-    pb(get_current_room(), mapx + 106, 121, 10)
+    pb(get_current_room(), mapx + 106, mapy + 121, 10)
     pb("px:" .. flr(p.x) .. ", " .. "py:" .. flr(p.y), mapx + 2, mapy + 2, 7)
     pb("mx:" .. mapx .. ", my:" .. mapy, mapx + 2, mapy + 9, 7)
     circ(p.x + 2, p.y, l_rad, 3)

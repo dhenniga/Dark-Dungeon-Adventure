@@ -43,7 +43,6 @@ function baddie_draw(b)
   if b.anim > #b.frames + 0.999 then b.anim = 1 end
   local frame, flip = b.frames[flr(b.anim)], (b.dx < 0)
   spr(frame, bx - 4, by - 4, 2, 2, flip)
-
   -- health bar
   if b.hp < b.start_hp then
     rectfill(bx, by + 10, bx + b.start_hp, by + 10, 0)
@@ -51,11 +50,11 @@ function baddie_draw(b)
   end
 
   --  alert icon
-  if b.state == "stop" then
+  if b.state == "alert" then
     sspr(29, 80, 3, 7, bx + 6, by - 4)
   end
 
-  if b.state == "stop" or b.state == "attack" then
+  if b.state == "alert" or b.state == "attack" then
     if not darkrooms then line(p.x, p.y, bx + 8, by + 4, 5) end
   end
 end
@@ -84,6 +83,16 @@ end
 function baddie_update(b)
   b.ttl -= 1
 
+  if spr_coll(b, p) and player_atk then
+    sfx(48, 2)
+    b.hp -= 1
+  end
+
+  if b.hp == 0 then
+    sfx(49, 2)
+    del(baddie_m.baddies, b)
+  end
+
   if b.stagger > 0 then
     b.stagger -= 1
   end
@@ -101,13 +110,13 @@ function baddie_update(b)
   -- 𝘴𝘦𝘦 / 𝘢𝘭𝘦𝘳𝘵 / 𝘢𝘵𝘵𝘢𝘤𝘬 logic (attack overrides explore)
   if sees(b, l_rad, 0, 1, 1, 0) then
     -- first sight: if coming from explore -> 𝘴𝘵𝘰𝘱/𝘢𝘭𝘦𝘳𝘵
-    if b.state ~= "stop" and b.state ~= "attack" then
-      b.state, b.alert_time, b.dx, b.dy = "stop", b.stop_time, 0, 0
+    if b.state ~= "alert" and b.state ~= "attack" then
+      b.state, b.alert_time, b.dx, b.dy = "alert", b.stop_time, 0, 0
       return
     end
 
     -- still in stop/alert: countdown
-    if b.state == "stop" then
+    if b.state == "alert" then
       b.alert_time -= 1
       if b.alert_time <= 0 then
         b.state = "attack"
@@ -138,7 +147,7 @@ function baddie_update(b)
     end
   else
     -- lost sight: revert to explore if needed
-    if b.state == "attack" or b.state == "stop" then
+    if b.state == "attack" or b.state == "alert" then
       b.state, b.ttl = "explore", 0
     end
 

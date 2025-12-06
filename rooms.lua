@@ -23,7 +23,7 @@ local function convert(v)
   return v
 end
 
-function obj2(str)
+function obj(str)
   local t, out = split(str), {}
 
   out.x = convert(t[2])
@@ -43,8 +43,7 @@ function obj2(str)
   out.speed = convert(t[16])
 
   -- flags from the first entry
-  local flag_name = t[1]
-  out.flags = { [flag_name] = true, solid = out.solid, interactable = out.interactable, locked = out.locked }
+  out.flags = { [t[1]] = true, solid = out.solid, interactable = out.interactable, locked = out.locked }
 
   return out
 end
@@ -69,6 +68,11 @@ function sign_dialog(index)
     {
       "𝘵𝘩𝘦 𝘯𝘦𝘹𝘵 𝘳𝘰𝘰𝘮 𝘩𝘢𝘴 𝘴𝘱𝘪𝘬𝘦𝘴\n𝘵𝘩𝘢𝘵 𝘴𝘩𝘰𝘰𝘵 𝘧𝘳𝘰𝘮 𝘣𝘰𝘵𝘵𝘰𝘮 𝘵𝘰\n𝘵𝘰𝘱. 𝘺𝘰𝘶 𝘩𝘢𝘷𝘦 𝘵𝘰 𝘱𝘳𝘦𝘴𝘴 𝘵𝘩𝘦\n𝘣𝘶𝘵𝘵𝘰𝘯 𝘢𝘵 𝘵𝘩𝘦 𝘵𝘰𝘱 𝘵𝘰 𝘴𝘵𝘰𝘱\n𝘵𝘩𝘦 𝘴𝘱𝘪𝘬𝘦𝘴 𝘢𝘯𝘥 𝘤𝘭𝘰𝘴𝘦...",
       "𝘵𝘩𝘦 𝘱𝘪𝘵𝘴 𝘥𝘰𝘰𝘳𝘴."
+    },
+    {
+      "THIS IS AN EXAMPLE OF JUST\nHOW MUCH TEXT OR\nPLOT CAN BE PLACED INTO\nTHESE TEXTAREAS.",
+      "TURNS OUT I CAN PUT\nQUITE A BIT IN HERE AND\nSPLIT IT UP INTO VARIOUS STRINGS...",
+      "I THINK I'LL PUT IN A\nLOT OF PLOT AS THE TOKEN\nPRICE FOR STRINGS IS ABOUT\n3 PER STRING."
     }
   }
   return alltext[index]
@@ -79,115 +83,115 @@ end
 room(
   0, 0, {
     { name = "𝘤𝘢𝘴𝘵𝘭𝘦 𝘦𝘯𝘵𝘳𝘢𝘯𝘤𝘦", flags = rf { dungeon = true } },
-    obj2("c_rock,64,0,nil,nil,nil,nil,nil,nil,true,nil,nil,nil,nil,nil,nil"),
-    obj2("arch,64,0,true,nil,false,false,nil,nil,nil,nil,nil,nil,nil,nil,nil"),
-    obj2("sign,33,5,nil,nil,nil,nil,nil,true,true,nil,1,nil,nil,nil,nil"),
-    obj2("rock,64,64,nil,nil,nil,nil,nil,nil,true,nil,nil,nil,nil,nil,nil"),
-    obj2("rock,80,64,nil,nil,nil,nil,nil,nil,true,nil,nil,nil,nil,nil,nil"),
-    obj2("flames_back,16,16,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil"),
-    obj2("light,24,20,nil,20,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil"),
-    obj2("flames_back,96,16,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil"),
-    obj2("light,104,20,nil,20,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil"),
-    obj2("arch,64,120,true,nil,true,true,nil,nil,nil,nil,nil,nil,nil,nil,nil"),
-    obj2("door,64,112,nil,nil,false,true,nil,true,true,true,nil,nil,nil,nil,nil"),
-    obj2("light,56,120,nil,12,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil"),
-    obj2("light,87,120,nil,12,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil"),
-    obj2("vase,16,80,nil,nil,nil,nil,nil,nil,true,nil,nil,nil,nil,nil,nil"),
-    obj2("vase,16,96,nil,nil,nil,nil,nil,nil,true,nil,nil,nil,nil,nil,nil"),
-    obj2("vase,32,96,nil,nil,nil,nil,nil,nil,true,nil,nil,nil,nil,nil,nil"),
-    obj2("s_shoot_v,96,108,nil,nil,nil,nil,false,nil,nil,nil,nil,true,1,60,1"),
-    obj2("s_shoot_h,16,36,nil,nil,nil,nil,false,nil,nil,nil,nil,true,1,60,1"),
-    obj2("s_shoot_v,50,16,nil,nil,nil,nil,true,nil,nil,nil,nil,true,1,60,1"),
-    obj2("s_shoot_h,112,48,nil,nil,nil,nil,true,nil,nil,nil,nil,true,1,60,1")
+    obj "c_rock,64,0,nil,nil,nil,nil,nil,nil,true,nil,nil,nil,nil,nil,nil",
+    obj "arch,64,0,true,nil,false,false,nil,nil,nil,nil,nil,nil,nil,nil,nil",
+    obj "sign,33,5,nil,nil,nil,nil,nil,true,true,nil,6,nil,nil,nil,nil",
+    obj "rock,64,64,nil,nil,nil,nil,nil,nil,true,nil,nil,nil,nil,nil,nil",
+    obj "rock,80,64,nil,nil,nil,nil,nil,nil,true,nil,nil,nil,nil,nil,nil",
+    obj "flames_back,16,16,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil",
+    obj "light,24,20,nil,20,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil",
+    obj "flames_back,96,16,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil",
+    obj "light,104,20,nil,20,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil",
+    obj "arch,64,120,true,nil,true,true,nil,nil,nil,nil,nil,nil,nil,nil,nil",
+    obj "door,64,112,nil,nil,false,true,nil,true,true,true,nil,nil,nil,nil,nil",
+    obj "light,56,120,nil,12,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil",
+    obj "light,87,120,nil,12,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil",
+    obj "vase,16,80,nil,nil,nil,nil,nil,nil,true,nil,nil,nil,nil,nil,nil",
+    obj "vase,16,96,nil,nil,nil,nil,nil,nil,true,nil,nil,nil,nil,nil,nil",
+    obj "vase,32,96,nil,nil,nil,nil,nil,nil,true,nil,nil,nil,nil,nil,nil",
+    obj "s_shoot_v,96,108,nil,nil,nil,nil,false,nil,nil,nil,nil,true,1,60,1",
+    obj "s_shoot_h,16,36,nil,nil,nil,nil,false,nil,nil,nil,nil,true,1,60,1",
+    obj "s_shoot_v,50,16,nil,nil,nil,nil,true,nil,nil,nil,nil,true,1,60,1",
+    obj "s_shoot_h,112,48,nil,nil,nil,nil,true,nil,nil,nil,nil,true,1,60,1"
   }
 )
 room(
   0, 1, {
     { name = "𝘤𝘢𝘴𝘵𝘭𝘦 𝘨𝘢𝘳𝘥𝘦𝘯 𝘴𝘵𝘰𝘳𝘢𝘨𝘦", flags = rf { sewer = true, rain = true } },
-    obj2("door,64,0,nil,nil,false,false,nil,true,true,true,nil,nil,nil,nil,nil"),
-    obj2("arch,64,0,true,nil,false,false,nil,nil,nil,nil,nil,nil,nil,nil,nil"),
-    obj2("light,56,8,nil,12,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil"),
-    obj2("light,87,8,nil,12,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil"),
-    obj2("vase,112,96,nil,nil,nil,nil,nil,nil,true,nil,nil,nil,nil,nil,nil"),
-    obj2("vase,112,80,nil,nil,nil,nil,nil,nil,true,nil,nil,nil,nil,nil,nil"),
-    obj2("vase,96,96,nil,nil,nil,nil,nil,nil,true,nil,nil,nil,nil,nil,nil"),
-    obj2("vase,96,80,nil,nil,nil,nil,nil,nil,true,nil,nil,nil,nil,nil,nil"),
-    obj2("bat,20,90,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil"),
-    obj2("rat,100,32,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil"),
-    obj2("vase,32,48,nil,nil,nil,nil,nil,nil,true,nil,nil,nil,nil,nil,nil"),
-    obj2("s_shoot_v,36,114,nil,nil,nil,nil,false,nil,nil,nil,nil,true,1,60,1"),
-    obj2("s_shoot_h,8,36,nil,nil,nil,nil,false,nil,nil,nil,nil,true,1,60,1")
+    obj "door,64,0,nil,nil,false,false,nil,true,true,true,nil,nil,nil,nil,nil",
+    obj "arch,64,0,true,nil,false,false,nil,nil,nil,nil,nil,nil,nil,nil,nil",
+    obj "light,56,8,nil,12,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil",
+    obj "light,87,8,nil,12,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil",
+    obj "vase,112,96,nil,nil,nil,nil,nil,nil,true,nil,nil,nil,nil,nil,nil",
+    obj "vase,112,80,nil,nil,nil,nil,nil,nil,true,nil,nil,nil,nil,nil,nil",
+    obj "vase,96,96,nil,nil,nil,nil,nil,nil,true,nil,nil,nil,nil,nil,nil",
+    obj "vase,96,80,nil,nil,nil,nil,nil,nil,true,nil,nil,nil,nil,nil,nil",
+    obj "bat,20,90,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil",
+    obj "rat,100,32,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil",
+    obj "vase,32,48,nil,nil,nil,nil,nil,nil,true,nil,nil,nil,nil,nil,nil",
+    obj "s_shoot_v,36,114,nil,nil,nil,nil,false,nil,nil,nil,nil,true,1,60,1",
+    obj "s_shoot_h,8,36,nil,nil,nil,nil,false,nil,nil,nil,nil,true,1,60,1"
   }
 )
 room(
   0, 2, {
     { name = "𝘮𝘢𝘪𝘯 𝘣𝘰𝘴𝘴 𝘤𝘩𝘢𝘮𝘣𝘦𝘳", flags = rf { dungeon = true } },
-    obj2("door,64,112,nil,nil,false,true,nil,true,true,true,nil,nil,nil,nil,nil"),
-    obj2("arch,64,120,true,nil,true,true,nil,nil,nil,nil,nil,nil,nil,nil,nil"),
-    obj2("flames_back,16,16,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil"),
-    obj2("light,24,20,nil,20,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil"),
-    obj2("flames_back,96,16,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil"),
-    obj2("light,104,20,nil,20,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil"),
-    obj2("flames_fore,16,96,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil"),
-    obj2("light,24,100,nil,20,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil"),
-    obj2("flames_fore,96,96,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil"),
-    obj2("light,104,100,nil,20,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil")
+    obj "door,64,112,nil,nil,false,true,nil,true,true,true,nil,nil,nil,nil,nil",
+    obj "arch,64,120,true,nil,true,true,nil,nil,nil,nil,nil,nil,nil,nil,nil",
+    obj "flames_back,16,16,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil",
+    obj "light,24,20,nil,20,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil",
+    obj "flames_back,96,16,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil",
+    obj "light,104,20,nil,20,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil",
+    obj "flames_fore,16,96,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil",
+    obj "light,24,100,nil,20,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil",
+    obj "flames_fore,96,96,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil",
+    obj "light,104,100,nil,20,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil"
   }
 )
 room(
   0, 3, {
     { name = "𝘱𝘢𝘴𝘴𝘢𝘨𝘦 𝘦𝘯𝘥", flags = rf { dungeon = true } },
-    obj2("door,64,0,nil,nil,false,false,nil,true,true,true,nil,nil,nil,nil,nil"),
-    obj2("arch,64,0,true,nil,false,false,nil,nil,nil,nil,nil,nil,nil,nil,nil"),
-    obj2("light,56,8,nil,12,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil"),
-    obj2("light,87,8,nil,12,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil"),
-    obj2("flames_fore,32,16,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil"),
-    obj2("light,40,20,nil,20,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil"),
-    obj2("flames_fore,80,16,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil"),
-    obj2("light,88,20,nil,20,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil"),
-    obj2("sign,18,70,nil,nil,nil,nil,nil,true,true,nil,2,nil,nil,nil,nil")
+    obj "door,64,0,nil,nil,false,false,nil,true,true,true,nil,nil,nil,nil,nil",
+    obj "arch,64,0,true,nil,false,false,nil,nil,nil,nil,nil,nil,nil,nil,nil",
+    obj "light,56,8,nil,12,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil",
+    obj "light,87,8,nil,12,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil",
+    obj "flames_fore,32,16,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil",
+    obj "light,40,20,nil,20,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil",
+    obj "flames_fore,80,16,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil",
+    obj "light,88,20,nil,20,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil",
+    obj "sign,18,70,nil,nil,nil,nil,nil,true,true,nil,2,nil,nil,nil,nil"
   }
 )
 room(
   1, 0, {
     { name = "𝘦𝘯𝘵𝘳𝘢𝘯𝘤𝘦 𝘭𝘰𝘣𝘣𝘺 𝘪𝘯𝘯𝘦𝘳", flags = rf { dungeon = true } },
-    obj2("door,112,32,nil,nil,true,false,nil,true,true,true,nil,nil,nil,nil,nil"),
-    obj2("arch,120,32,false,nil,true,false,nil,nil,nil,nil,nil,nil,nil,nil,nil"),
-    obj2("light,118,22,nil,12,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil"),
-    obj2("light,118,52,nil,12,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil"),
-    obj2("rock,32,96,nil,nil,nil,nil,nil,nil,true,nil,nil,nil,nil,nil,nil"),
-    obj2("rock,96,96,nil,nil,nil,nil,nil,nil,true,nil,nil,nil,nil,nil,nil"),
-    obj2("rat,96,40,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil"),
-    obj2("rat,94,80,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil")
+    obj "door,112,32,nil,nil,true,false,nil,true,true,true,nil,nil,nil,nil,nil",
+    obj "arch,120,32,false,nil,true,false,nil,nil,nil,nil,nil,nil,nil,nil,nil",
+    obj "light,118,22,nil,12,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil",
+    obj "light,118,52,nil,12,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil",
+    obj "rock,32,96,nil,nil,nil,nil,nil,nil,true,nil,nil,nil,nil,nil,nil",
+    obj "rock,96,96,nil,nil,nil,nil,nil,nil,true,nil,nil,nil,nil,nil,nil",
+    obj "rat,96,40,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil",
+    obj "rat,94,80,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil"
   }
 )
 room(
   1, 1, {
     { name = "𝘤𝘢𝘴𝘵𝘭𝘦 𝘨𝘢𝘳𝘥𝘦𝘯 𝘴𝘵𝘰𝘳𝘢𝘨𝘦", flags = rf { sewer = true, rain = true } },
-    obj2("door,112,32,nil,nil,true,false,nil,true,true,true,nil,nil,nil,nil,nil"),
-    obj2("arch,120,32,false,nil,true,false,nil,nil,nil,nil,nil,nil,nil,nil,nil"),
-    obj2("light,118,22,nil,12,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil"),
-    obj2("light,118,52,nil,12,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil"),
-    obj2("vase,16,96,nil,nil,nil,nil,nil,nil,true,nil,nil,nil,nil,nil,nil"),
-    obj2("vase,16,80,nil,nil,nil,nil,nil,nil,true,nil,nil,nil,nil,nil,nil"),
-    obj2("vase,32,80,nil,nil,nil,nil,nil,nil,true,nil,nil,nil,nil,nil,nil"),
-    obj2("vase,0,80,nil,nil,nil,nil,nil,nil,true,nil,nil,nil,nil,nil,nil"),
-    obj2("vase,0,96,nil,nil,nil,nil,nil,nil,true,nil,nil,nil,nil,nil,nil"),
-    obj2("vase,96,16,nil,nil,nil,nil,nil,nil,true,nil,nil,nil,nil,nil,nil"),
-    obj2("vase,96,48,nil,nil,nil,nil,nil,nil,true,nil,nil,nil,nil,nil,nil"),
-    obj2("vase,16,16,nil,nil,nil,nil,nil,nil,true,nil,nil,nil,nil,nil,nil"),
-    obj2("vase,32,16,nil,nil,nil,nil,nil,nil,true,nil,nil,nil,nil,nil,nil")
+    obj "door,112,32,nil,nil,true,false,nil,true,true,true,nil,nil,nil,nil,nil",
+    obj "arch,120,32,false,nil,true,false,nil,nil,nil,nil,nil,nil,nil,nil,nil",
+    obj "light,118,22,nil,12,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil",
+    obj "light,118,52,nil,12,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil",
+    obj "vase,16,96,nil,nil,nil,nil,nil,nil,true,nil,nil,nil,nil,nil,nil",
+    obj "vase,16,80,nil,nil,nil,nil,nil,nil,true,nil,nil,nil,nil,nil,nil",
+    obj "vase,32,80,nil,nil,nil,nil,nil,nil,true,nil,nil,nil,nil,nil,nil",
+    obj "vase,0,80,nil,nil,nil,nil,nil,nil,true,nil,nil,nil,nil,nil,nil",
+    obj "vase,0,96,nil,nil,nil,nil,nil,nil,true,nil,nil,nil,nil,nil,nil",
+    obj "vase,96,16,nil,nil,nil,nil,nil,nil,true,nil,nil,nil,nil,nil,nil",
+    obj "vase,96,48,nil,nil,nil,nil,nil,nil,true,nil,nil,nil,nil,nil,nil",
+    obj "vase,16,16,nil,nil,nil,nil,nil,nil,true,nil,nil,nil,nil,nil,nil",
+    obj "vase,32,16,nil,nil,nil,nil,nil,nil,true,nil,nil,nil,nil,nil,nil"
   }
 )
 room(
   1, 2, {
     { name = "NEEDS A NAME", flags = rf { pit = true } },
-    obj2("stairs_down,16,16,nil,nil,nil,nil,nil,nil,true,nil,nil,nil,nil,nil,nil"),
-    obj2("spike,16,64,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil"),
-    obj2("spike,32,96,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil"),
-    obj2("spike,48,64,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil"),
-    obj2("sign,48,5,nil,nil,nil,nil,nil,true,true,nil,3,nil,nil,nil,nil"),
-    obj2("w_button,100,73,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil")
+    obj "stairs_down,16,16,nil,nil,nil,nil,nil,nil,true,nil,nil,nil,nil,nil,nil",
+    obj "spike,16,64,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil",
+    obj "spike,32,96,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil",
+    obj "spike,48,64,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil",
+    obj "sign,48,5,nil,nil,nil,nil,nil,true,true,nil,3,nil,nil,nil,nil",
+    obj "w_button,100,73,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil"
   }
 )
 room(
@@ -198,30 +202,30 @@ room(
 room(
   2, 0, {
     { name = "𝘵𝘩𝘦 𝘣𝘰𝘵𝘵𝘰𝘮𝘭𝘦𝘴𝘴 𝘱𝘢𝘵𝘩𝘴 - 𝘸𝘦𝘴𝘵", flags = rf { dungeon = true } },
-    obj2("door,0,32,nil,nil,true,true,nil,true,true,true,nil,nil,nil,nil,nil"),
-    obj2("arch,0,32,false,nil,false,false,nil,nil,nil,nil,nil,nil,nil,nil,nil"),
-    obj2("light,8,22,nil,12,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil"),
-    obj2("light,8,52,nil,12,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil"),
-    obj2("arch,48,120,true,nil,true,true,nil,nil,nil,nil,nil,nil,nil,nil,nil"),
-    obj2("key,18,100,nil,nil,nil,nil,nil,true,nil,nil,nil,nil,nil,nil,nil"),
-    obj2("bat,80,80,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil"),
-    obj2("bat,60,20,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil")
+    obj "door,0,32,nil,nil,true,true,nil,true,true,true,nil,nil,nil,nil,nil",
+    obj "arch,0,32,false,nil,false,false,nil,nil,nil,nil,nil,nil,nil,nil,nil",
+    obj "light,8,22,nil,12,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil",
+    obj "light,8,52,nil,12,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil",
+    obj "arch,48,120,true,nil,true,true,nil,nil,nil,nil,nil,nil,nil,nil,nil",
+    obj "key,18,100,nil,nil,nil,nil,nil,true,nil,nil,nil,nil,nil,nil,nil",
+    obj "bat,80,80,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil",
+    obj "bat,60,20,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil"
   }
 )
 room(
   2, 1, {
     { name = "𝘸𝘢𝘵𝘤𝘩 𝘵𝘩𝘦 𝘥𝘳𝘰𝘱", flags = rf { dungeon = true } },
-    obj2("door,0,32,nil,nil,true,true,nil,true,true,true,nil,nil,nil,nil,nil"),
-    obj2("arch,0,32,false,nil,false,false,nil,nil,nil,nil,nil,nil,nil,nil,nil"),
-    obj2("light,8,22,nil,12,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil"),
-    obj2("light,8,52,nil,12,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil"),
-    obj2("arch,48,0,true,nil,false,false,nil,nil,nil,nil,nil,nil,nil,nil,nil")
+    obj "door,0,32,nil,nil,true,true,nil,true,true,true,nil,nil,nil,nil,nil",
+    obj "arch,0,32,false,nil,false,false,nil,nil,nil,nil,nil,nil,nil,nil,nil",
+    obj "light,8,22,nil,12,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil",
+    obj "light,8,52,nil,12,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil",
+    obj "arch,48,0,true,nil,false,false,nil,nil,nil,nil,nil,nil,nil,nil,nil"
   }
 )
 room(
   2, 2, {
     { name = "𝘵𝘩𝘦 𝘱𝘪𝘵 𝘮𝘢𝘻𝘦", flags = rf { pit = true } },
-    obj2("w_button,20,41,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil")
+    obj "w_button,20,41,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil"
   }
 )
 room(
@@ -232,15 +236,15 @@ room(
 room(
   3, 0, {
     { name = "𝘵𝘩𝘦 𝘣𝘰𝘵𝘵𝘰𝘮𝘭𝘦𝘴𝘴 𝘱𝘢𝘵𝘩𝘴 - 𝘦𝘢𝘴𝘵", flags = rf { dungeon = true } },
-    obj2("bat,80,80,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil"),
-    obj2("bat,60,20,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil"),
-    obj2("bat,10,90,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil")
+    obj "bat,80,80,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil",
+    obj "bat,60,20,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil",
+    obj "bat,10,90,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil"
   }
 )
 room(
   3, 1, {
     { name = "𝘵𝘩𝘦 𝘣𝘰𝘵𝘵𝘰𝘮𝘭𝘦𝘴𝘴 𝘱𝘢𝘵𝘩𝘴 - 𝘴𝘰𝘶𝘵𝘩", flags = rf { dungeon = true } },
-    obj2("chest,70,40,nil,nil,nil,nil,nil,true,true,nil,nil,nil,nil,nil,nil")
+    obj "chest,70,40,nil,nil,nil,nil,nil,true,true,nil,nil,nil,nil,nil,nil"
   }
 )
 room(
@@ -256,50 +260,51 @@ room(
 room(
   4, 0, {
     { name = "𝘳𝘦𝘴𝘵𝘪𝘯𝘨 𝘱𝘰𝘪𝘯𝘵", flags = rf { dungeon = true } },
-    obj2("arch,64,120,true,nil,true,true,nil,nil,nil,nil,nil,nil,nil,nil,nil"),
-    obj2("door,64,112,nil,nil,false,true,nil,true,true,true,nil,nil,nil,nil,nil"),
-    obj2("light,56,120,nil,12,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil"),
-    obj2("light,87,120,nil,12,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil"),
-    obj2("flames_back,80,32,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil"),
-    obj2("light,88,36,nil,30,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil"),
-    obj2("vase,80,8,nil,nil,nil,nil,nil,nil,true,nil,nil,nil,nil,nil,nil"),
-    obj2("vase,16,96,nil,nil,nil,nil,nil,nil,true,nil,nil,nil,nil,nil,nil"),
-    obj2("vase,32,96,nil,nil,nil,nil,nil,nil,true,nil,nil,nil,nil,nil,nil"),
-    obj2("vase,16,80,nil,nil,nil,nil,nil,nil,true,nil,nil,nil,nil,nil,nil")
+    obj "arch,64,120,true,nil,true,true,nil,nil,nil,nil,nil,nil,nil,nil,nil",
+    obj "door,64,112,nil,nil,false,true,nil,true,true,true,nil,nil,nil,nil,nil",
+    obj "light,56,120,nil,12,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil",
+    obj "light,87,120,nil,12,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil",
+    obj "flames_back,80,32,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil",
+    obj "light,88,36,nil,30,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil",
+    obj "vase,80,8,nil,nil,nil,nil,nil,nil,true,nil,nil,nil,nil,nil,nil",
+    obj "vase,16,96,nil,nil,nil,nil,nil,nil,true,nil,nil,nil,nil,nil,nil",
+    obj "vase,32,96,nil,nil,nil,nil,nil,nil,true,nil,nil,nil,nil,nil,nil",
+    obj "vase,16,80,nil,nil,nil,nil,nil,nil,true,nil,nil,nil,nil,nil,nil"
   }
 )
 room(
   4, 1, {
     { name = "𝘮𝘺𝘴𝘵𝘦𝘳𝘺 𝘬𝘦𝘺 𝘳𝘰𝘰𝘮", flags = rf { dungeon = true } },
-    obj2("door,64,0,nil,nil,false,false,nil,true,true,true,nil,nil,nil,nil,nil"),
-    obj2("arch,64,0,true,nil,false,false,nil,nil,nil,nil,nil,nil,nil,nil,nil"),
-    obj2("light,56,8,nil,12,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil"),
-    obj2("light,87,8,nil,12,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil"),
-    obj2("sign,34,6,nil,nil,nil,nil,nil,true,true,nil,4,nil,nil,nil,nil"),
-    obj2("key,56,64,nil,nil,nil,nil,nil,true,true,nil,1,nil,nil,nil,nil")
+    obj "door,64,0,nil,nil,false,false,nil,true,true,true,nil,nil,nil,nil,nil",
+    obj "arch,64,0,true,nil,false,false,nil,nil,nil,nil,nil,nil,nil,nil,nil",
+    obj "light,56,8,nil,12,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil",
+    obj "light,87,8,nil,12,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil",
+    obj "sign,34,6,nil,nil,nil,nil,nil,true,true,nil,4,nil,nil,nil,nil",
+    obj "key,56,64,nil,nil,nil,nil,nil,true,true,nil,1,nil,nil,nil,nil"
   }
 )
 room(
   4, 2, {
     { name = "𝘵𝘩𝘦 𝘱𝘪𝘵 𝘮𝘢𝘻𝘦", flags = rf { pit = true } },
-    obj2("w_button,84,9,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil")
+    obj "w_button,84,9,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil"
   }
 )
 room(
   4, 3, {
     { name = "𝘩𝘢𝘭𝘭 𝘰𝘧 𝘴𝘱𝘪𝘬𝘦𝘴", flags = rf { dungeon = true } },
-    obj2("spike,15,95,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil"),
-    obj2("spike,47,79,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil"),
-    obj2("spike,63,79,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil"),
-    obj2("spike,95,95,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil")
+    obj "spike,15,95,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil",
+    obj "spike,47,79,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil",
+    obj "spike,63,79,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil",
+    obj "spike,95,95,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil"
   }
 )
 room(
   5, 0, {
     { name = "𝘰𝘶𝘵𝘦𝘳 𝘸𝘢𝘭𝘭𝘴 𝘷𝘪𝘦𝘸", flags = rf { dungeon = true } },
-    obj2("rock,32,16,nil,nil,nil,nil,nil,nil,true,nil,nil,nil,nil,nil,nil"),
-    obj2("c_rock,48,32,nil,nil,nil,nil,nil,nil,true,nil,nil,nil,nil,nil,nil"),
-    obj2("rock,64,48,nil,nil,nil,nil,nil,nil,true,nil,nil,nil,nil,nil,nil")
+    obj "vase,16,8,nil,nil,nil,nil,nil,nil,true,nil,nil,nil,nil,nil,nil",
+    obj "rock,32,16,nil,nil,nil,nil,nil,nil,true,nil,nil,nil,nil,nil,nil",
+    obj "c_rock,48,32,nil,nil,nil,nil,nil,nil,true,nil,nil,nil,nil,nil,nil",
+    obj "rock,64,48,nil,nil,nil,nil,nil,nil,true,nil,nil,nil,nil,nil,nil"
   }
 )
 room(
@@ -320,69 +325,69 @@ room(
 room(
   6, 0, {
     { name = "𝘰𝘶𝘵𝘦𝘳 𝘤𝘰𝘶𝘳𝘵𝘺𝘢𝘳𝘥", flags = rf { sewer = true, rain = true } },
-    obj2("arch,80,120,true,nil,true,true,nil,nil,nil,nil,nil,nil,nil,nil,nil"),
-    obj2("door,80,112,nil,nil,false,true,nil,true,true,true,nil,nil,nil,nil,nil"),
-    obj2("light,72,120,nil,12,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil"),
-    obj2("light,103,120,nil,12,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil"),
-    obj2("sign,105,53,nil,nil,nil,nil,nil,true,true,nil,5,nil,nil,nil,nil")
+    obj "arch,80,120,true,nil,true,true,nil,nil,nil,nil,nil,nil,nil,nil,nil",
+    obj "door,80,112,nil,nil,false,true,nil,true,true,true,nil,nil,nil,nil,nil",
+    obj "light,72,120,nil,12,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil",
+    obj "light,103,120,nil,12,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil",
+    obj "sign,105,53,nil,nil,nil,nil,nil,true,true,nil,5,nil,nil,nil,nil"
   }
 )
 room(
   6, 1, {
     { name = "𝘤𝘳𝘶𝘮𝘣𝘭𝘪𝘯𝘨 𝘨𝘳𝘰𝘵𝘵𝘰", flags = rf { dungeon = true } },
-    obj2("door,80,0,nil,nil,false,false,nil,true,true,true,nil,nil,nil,nil,nil"),
-    obj2("arch,80,0,true,nil,false,false,nil,nil,nil,nil,nil,nil,nil,nil,nil"),
-    obj2("light,72,8,nil,12,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil"),
-    obj2("light,103,8,nil,12,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil"),
-    obj2("flames_fore,80,80,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil"),
-    obj2("light,88,84,nil,15,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil"),
-    obj2("bat,80,80,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil"),
-    obj2("bat,32,32,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil"),
-    obj2("bat,48,48,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil"),
-    obj2("bat,64,64,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil"),
-    obj2("bat,96,96,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil"),
-    obj2("bat,112,96,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil"),
-    obj2("bat,32,80,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil"),
-    obj2("bat,64,80,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil")
+    obj "door,80,0,nil,nil,false,false,nil,true,true,true,nil,nil,nil,nil,nil",
+    obj "arch,80,0,true,nil,false,false,nil,nil,nil,nil,nil,nil,nil,nil,nil",
+    obj "light,72,8,nil,12,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil",
+    obj "light,103,8,nil,12,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil",
+    obj "flames_fore,80,80,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil",
+    obj "light,88,84,nil,15,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil",
+    obj "bat,80,80,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil",
+    obj "bat,32,32,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil",
+    obj "bat,48,48,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil",
+    obj "bat,64,64,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil",
+    obj "bat,96,96,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil",
+    obj "bat,112,96,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil",
+    obj "bat,32,80,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil",
+    obj "bat,64,80,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil"
   }
 )
 room(
   7, 0, {
     { name = "𝘴𝘱𝘪𝘬𝘦𝘴 𝘰𝘧 𝘥𝘰𝘰𝘮", flags = rf { sewer = true, rain = true } },
-    obj2("w_button,20,9,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil"),
-    obj2("w_button,68,9,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil"),
-    obj2("w_button,116,9,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil"),
-    obj2("s_shoot_v,20,106,nil,nil,nil,nil,false,nil,nil,nil,nil,true,1,60,1"),
-    obj2("s_shoot_v,68,106,nil,nil,nil,nil,false,nil,nil,nil,nil,true,1,60,1"),
-    obj2("s_shoot_v,116,106,nil,nil,nil,nil,false,nil,nil,nil,nil,true,1,60,1")
+    obj "w_button,20,9,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil",
+    obj "w_button,68,9,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil",
+    obj "w_button,116,9,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil",
+    obj "s_shoot_v,20,106,nil,nil,nil,nil,false,nil,nil,nil,nil,true,1,60,1",
+    obj "s_shoot_v,68,106,nil,nil,nil,nil,false,nil,nil,nil,nil,true,1,60,1",
+    obj "s_shoot_v,116,106,nil,nil,nil,nil,false,nil,nil,nil,nil,true,1,60,1"
   }
 )
 room(
   7, 1, {
     { name = "𝘮𝘰𝘳𝘦 𝘤𝘳𝘶𝘮𝘣𝘭𝘪𝘯𝘨 𝘨𝘳𝘰𝘵𝘵𝘰", flags = rf { dungeon = true } },
-    obj2("bat,40,80,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil"),
-    obj2("bat,90,50,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil"),
-    obj2("bat,64,64,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil")
+    obj "bat,40,80,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil",
+    obj "bat,90,50,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil",
+    obj "bat,64,64,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil"
   }
 )
 room(
   8, 0, {
     { name = "𝘮𝘰𝘳𝘦 𝘤𝘳𝘶𝘮𝘣𝘭𝘪𝘯𝘨 𝘨𝘳𝘰𝘵𝘵𝘰", flags = rf { sewer = true, rain = true } },
-    obj2("door,112,64,nil,nil,true,false,nil,true,true,true,nil,nil,nil,nil,nil"),
-    obj2("arch,120,64,false,nil,true,false,nil,nil,nil,nil,nil,nil,nil,nil,nil"),
-    obj2("light,118,54,nil,12,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil"),
-    obj2("light,118,84,nil,12,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil"),
-    obj2("chest,96,16,nil,nil,nil,nil,nil,true,true,nil,nil,nil,nil,nil,nil"),
-    obj2("w_button,36,9,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil"),
-    obj2("s_shoot_v,36,106,nil,nil,nil,nil,false,nil,nil,nil,nil,true,1,60,1")
+    obj "door,112,64,nil,nil,true,false,nil,true,true,true,nil,nil,nil,nil,nil",
+    obj "arch,120,64,false,nil,true,false,nil,nil,nil,nil,nil,nil,nil,nil,nil",
+    obj "light,118,54,nil,12,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil",
+    obj "light,118,84,nil,12,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil",
+    obj "chest,96,16,nil,nil,nil,nil,nil,true,true,nil,nil,nil,nil,nil,nil",
+    obj "w_button,36,9,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil",
+    obj "s_shoot_v,36,106,nil,nil,nil,nil,false,nil,nil,nil,nil,true,1,60,1"
   }
 )
 room(
   8, 1, {
     { name = "𝘳𝘦𝘢𝘭𝘭𝘺 𝘤𝘳𝘶𝘮𝘣𝘭𝘪𝘯𝘨 𝘨𝘳𝘰𝘵𝘵𝘰", flags = rf { dungeon = true } },
-    obj2("bat,40,80,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil"),
-    obj2("bat,90,50,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil"),
-    obj2("bat,64,64,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil")
+    obj "bat,40,80,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil",
+    obj "bat,90,50,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil",
+    obj "bat,64,64,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil"
   }
 )
 room(
@@ -394,50 +399,50 @@ room(
 room(
   9, 0, {
     { name = "𝘵𝘩𝘦 𝘭𝘪𝘨𝘩𝘵𝘭𝘦𝘴𝘴 𝘱𝘪𝘵", flags = rf { pit = true } },
-    obj2("door,0,64,nil,nil,true,true,nil,true,true,true,nil,nil,nil,nil,nil"),
-    obj2("arch,0,64,false,nil,false,false,nil,nil,nil,nil,nil,nil,nil,nil,nil"),
-    obj2("light,8,54,nil,12,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil"),
-    obj2("light,8,84,nil,12,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil"),
-    obj2("light,88,100,nil,20,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil"),
-    obj2("light,54,20,nil,20,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil"),
-    obj2("flames_fore,80,94,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil"),
-    obj2("flames_fore,48,16,nil,20,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil"),
-    obj2("rat,112,32,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil"),
-    obj2("rat,112,48,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil"),
-    obj2("rat,112,64,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil"),
-    obj2("rat,112,80,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil"),
-    obj2("rat,112,96,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil"),
-    obj2("rat,80,32,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil"),
-    obj2("rat,80,48,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil")
+    obj "door,0,64,nil,nil,true,true,nil,true,true,true,nil,nil,nil,nil,nil",
+    obj "arch,0,64,false,nil,false,false,nil,nil,nil,nil,nil,nil,nil,nil,nil",
+    obj "light,8,54,nil,12,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil",
+    obj "light,8,84,nil,12,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil",
+    obj "light,88,100,nil,20,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil",
+    obj "light,54,20,nil,20,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil",
+    obj "flames_fore,80,94,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil",
+    obj "flames_fore,48,16,nil,20,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil",
+    obj "rat,112,32,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil",
+    obj "rat,112,48,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil",
+    obj "rat,112,64,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil",
+    obj "rat,112,80,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil",
+    obj "rat,112,96,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil",
+    obj "rat,80,32,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil",
+    obj "rat,80,48,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil"
   }
 )
 
 room(
   9, 1, {
     { name = "𝘤𝘳𝘶𝘮𝘣𝘭𝘦𝘥 𝘨𝘳𝘰𝘵𝘵𝘰", flags = rf { dungeon = true } },
-    obj2("bat,40,80,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil"),
-    obj2("bat,90,50,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil"),
-    obj2("bat,64,64,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil"),
-    obj2("key,100,6,nil,nil,nil,nil,nil,true,true,nil,1,nil,nil,nil,nil")
+    obj "bat,40,80,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil",
+    obj "bat,90,50,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil",
+    obj "bat,64,64,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil",
+    obj "key,100,6,nil,nil,nil,nil,nil,true,true,nil,1,nil,nil,nil,nil"
   }
 )
 
 room(
   10, 0, {
     { name = "𝘵𝘩𝘦 𝘭𝘪𝘨𝘩𝘵𝘭𝘦𝘴𝘴 𝘱𝘪𝘵", flags = rf { pit = true } },
-    obj2("flames_fore,48,96,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil"),
-    obj2("light,56,100,nil,20,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil"),
-    obj2("flames_back,64,32,nil,20,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil"),
-    obj2("light,72,36,nil,20,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil")
+    obj "flames_fore,48,96,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil",
+    obj "light,56,100,nil,20,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil",
+    obj "flames_back,64,32,nil,20,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil",
+    obj "light,72,36,nil,20,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil"
   }
 )
 
 room(
   10, 1, {
     { name = "𝘤𝘳𝘶𝘮𝘣𝘭𝘦𝘥 𝘨𝘳𝘰𝘵𝘵𝘰", flags = rf { dungeon = true } },
-    obj2("bat,40,80,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil"),
-    obj2("bat,90,50,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil"),
-    obj2("bat,64,64,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil")
+    obj "bat,40,80,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil",
+    obj "bat,90,50,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil",
+    obj "bat,64,64,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil"
   }
 )
 
@@ -467,9 +472,11 @@ function door_lights(x, y, flx, fly, flp)
   local a, i = flp and split("240, 241, 241, 240") or split("224, 225, 225, 224"), flr(time() * (4 * t_increment) % 4) + 1
   local flip = i > 2
   if flp then
-    spr(a[i], x + 4, y - 12, 1, 1, flx, flip) spr(a[i], x + 4, y + 20, 1, 1, flx, flip)
+    spr(a[i], x + 4, y - 12, 1, 1, flx, flip)
+    spr(a[i], x + 4, y + 20, 1, 1, flx, flip)
   else
-    spr(a[i], x - 12, y + 4, 1, 1, flip, fly) spr(a[i], x + 20, y + 4, 1, 1, flip, fly)
+    spr(a[i], x - 12, y + 4, 1, 1, flip, fly)
+    spr(a[i], x + 20, y + 4, 1, 1, flip, fly)
   end
 end
 
@@ -494,13 +501,14 @@ function draw_player_interact_icon()
       local len = abs(ox - p.x) + abs(oy - p.y + 6)
       if len > 0 and len < 22 then
         engaged_now = true
-        if flag.sign and not reading and val == 0 and btn(𝘣𝘵𝘯_𝘰) then
-          t_increment = 0.05 tb_init(15, sign_dialog(o.text))
+        if flag.sign and not reading and val == 0 and btn(BTN_O) then
+          t_increment = 0.05
+          tb_init(15, sign_dialog(o.text))
         end
         if flag.sign then sspr(24, 80, 5, 7, p.x + 8, p.y - 8) end
         if flag.key then
           sspr(29, 80, 3, 7, p.x + 8, p.y - 8)
-          if btnp(𝘣𝘵𝘯_𝘰) then
+          if btnp(BTN_O) then
             p.keys = (p.keys or 0) + 1
             del(active_objects, o)
             sfx(18, 3)
@@ -509,7 +517,7 @@ function draw_player_interact_icon()
         if flag.chest then sspr(29, 80, 3, 7, p.x + 8, p.y - 8) end
         if flag.door and flag.solid then
           if p.keys > 0 then sspr(113, 96, 5, 8, p.x + 8, p.y - 8) end
-          if btnp(𝘣𝘵𝘯_𝘰) then
+          if btnp(BTN_O) then
             if o.locked and p.keys > 0 then
               p.keys = p.keys - 1 unlock_door(o)
             elseif o.locked then
@@ -737,7 +745,7 @@ function update_cannons()
   if mapx == cur_room_x and mapy == cur_room_y then
     for cannon in all(cannons) do
       if cannon.active then
-        cannon.delay -= t_increment
+        cannon.delay = cannon.delay - t_increment
         if cannon.delay <= 0 then
           spawn_cannonball(cannon)
           cannon.delay = cannon.timing
@@ -750,8 +758,8 @@ end
 function update_cannonballs()
   for cannonball in all(cannonballs) do
     -- move the cannonball
-    cannonball.x += cannonball.dx * t_increment
-    cannonball.y += cannonball.dy * t_increment
+    cannonball.x = cannonball.x + cannonball.dx * t_increment
+    cannonball.y = cannonball.y + cannonball.dy * t_increment
 
     if solid(cannonball.x, cannonball.y) then
       del(cannonballs, cannonball)
@@ -759,7 +767,7 @@ function update_cannonballs()
 
     -- collision with player
     if spr_coll(p, cannonball) then
-      p.remaining_hearts -= 1
+      player_hit()
       del(cannonballs, cannonball)
     end
 
@@ -771,9 +779,9 @@ function update_cannonballs()
 end
 
 local adraw = {
-  { 1, 6 }, -- 𝘥𝘰𝘸𝘯 to 𝘶𝘱 -- 𝘥𝘰𝘯𝘦
+  { 1, 6 }, -- 𝘥𝘰𝘸𝘯 to 𝘶𝘱
   { 1, -6 }, -- 𝘶𝘱 to 𝘥𝘰𝘸𝘯
-  { -6, 1 }, -- 𝘭𝘦𝘧𝘵 to 𝘳𝘪𝘨𝘩𝘵 -- 𝘥𝘰𝘯𝘦
+  { -6, 1 }, -- 𝘭𝘦𝘧𝘵 to 𝘳𝘪𝘨𝘩𝘵
   { 6, 1 } -- 𝘳𝘪𝘨𝘩𝘵 to 𝘭𝘦𝘧𝘵
 }
 

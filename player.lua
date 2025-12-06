@@ -30,7 +30,8 @@ function draw_player()
 
 	-- diag movement speed
 	if pdx * pdy != 0 then
-		pdx *= 0.55 pdy *= 0.55
+		pdx *= 0.55
+		pdy *= 0.55
 	end
 
 	-- idle animation
@@ -66,10 +67,16 @@ function draw_player()
 			if p.fall_dir == "up" then p.y += 6 end
 			if p.fall_dir == "down" then p.y -= 14 end
 			p.fall_dir = nil
-			p.remaining_hearts -= 1
+			player_hit()
 			tp = 19
 		end
 	end
+end
+
+--
+
+function player_hit()
+	p.remaining_hearts -= 1
 end
 
 --
@@ -103,6 +110,7 @@ end
 
 function update_player()
 	if p.fall_dir or not allow_movement then return end
+
 	if btn(BTN_L) then
 		p.dx -= p.acc p.direction = true
 	end
@@ -111,7 +119,10 @@ function update_player()
 	end
 	if btn(BTN_U) then p.dy -= p.acc end
 	if btn(BTN_D) then p.dy += p.acc end
+
+	-- Limits the max speed
 	p.dx, p.dy = mid(-1, p.dx, 1), mid(-1, p.dy, 1)
+
 	if player_can_move(p) then
 		p.x += p.dx p.y += p.dy
 	else
