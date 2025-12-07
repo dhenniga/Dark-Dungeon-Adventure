@@ -24,7 +24,10 @@ __lua__
 --
 -- for some reason, the enemies
 -- can't attack me when i'm
--- against the wall.
+-- against the wall
+--
+-- explosion when baddies die
+
 
 #include main.lua
 #include map.lua

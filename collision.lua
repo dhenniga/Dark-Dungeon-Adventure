@@ -7,14 +7,12 @@ function spr_coll(enemy, player)
     if d < 1 then d = 1 end
     dx /= d dy /= d
 
-    -- recoil
     enemy.stagger = 10
-    enemy.dx += dx * 3
-    enemy.dy += dy * 3
+    enemy.dx += dx * 2
+    enemy.dy += dy * 2
 
-    player.recoil = 10 -- frames (~0.16s)
-    player.dx -= dx * 4
-    player.dy -= dy * 4
+    player.dx -= dx * 2
+    player.dy -= dy * 2
 
     sfx(16, 3)
     return true

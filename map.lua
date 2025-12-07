@@ -86,6 +86,7 @@ function darkroom()
   else
     fillp(rnd(split("23130.5, 32125.5, -2560.5"))) -- fillp(rnd({ ▒, ░, … }))
   end
+  -- shimmering effect
   rectfill(mapx, mapy, mapx + 128, mapy + 128, 0)
   draw_torch_light()
   draw_character_light()

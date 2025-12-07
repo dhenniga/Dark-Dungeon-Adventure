@@ -1,5 +1,5 @@
 --rooms
-room_objects, door_states, active_objects, cannonballs, cannons = {}, {}, {}, {}, {}
+room_objects, door_states, active_objects, shooters, arrows = {}, {}, {}, {}, {}
 room = function(x, y, t) room_objects[x .. "_" .. y] = t end
 
 --
@@ -567,34 +567,11 @@ function draw_background_sprites()
     if flag.spike then animate_spikes(a_obj) end
     if flag.w_button then spr(95, mapx + ax, mapy + ay, 1, 1) end
     if flag.flames_back then flames(mapx + ax, mapy + ay) end
-
     if flag.s_shoot_v or flag.s_shoot_h then
       local v = flag.s_shoot_v
-
-      local ox, oy
-      if v then
-        ox = 0
-        oy = a_obj.flp and -8 or 8
-      else
-        ox = a_obj.flp and 8 or -8
-        oy = 0
-      end
-
-      sspr(
-        112,
-        v and 56 or 48,
-        v and 8 or 5,
-        v and 5 or 8,
-        mapx + ax + ox,
-        mapy + ay + oy,
-        v and 8 or 5,
-        v and 5 or 8,
-        v and false or a_obj.flp,
-        v and a_obj.flp or false
-      )
-
+      sspr(112, v and 56 or 48, v and 8 or 5, v and 5 or 8, mapx + a_obj.x, mapy + a_obj.y, v and 8 or 5, v and 5 or 8, v and false or a_obj.flp, v and a_obj.flp or false)
       if not a_obj.added then
-        add(cannons, a_obj) a_obj.added = true
+        add(shooters, a_obj) a_obj.added = true
       end
     end
   end
@@ -718,21 +695,21 @@ end
 
 --
 
-function spawn_cannonball(cannon)
-  local direction, dx, dy
-  if cannon.flags.s_shoot_v then
-    direction = cannon.flp and 1 or 0
+function spawn_arrow(shooter)
+  local direction, vx, vy
+  if shooter.flags.s_shoot_v then
+    direction = shooter.flp and 1 or 0
     dx = 0
-    dy = cannon.speed * (direction == 1 and 1 or -1)
+    dy = shooter.speed * (direction == 1 and 1 or -1)
   else
-    direction = cannon.flp and 3 or 2
+    direction = shooter.flp and 3 or 2
     dy = 0
-    dx = cannon.speed * (direction == 2 and 1 or -1)
+    dx = shooter.speed * (direction == 2 and 1 or -1)
   end
   add(
-    cannonballs, {
-      x = mapx + cannon.x,
-      y = mapy + cannon.y,
+    arrows, {
+      x = mapx + shooter.x,
+      y = mapy + shooter.y,
       dx = dx,
       dy = dy,
       d = direction
@@ -741,53 +718,56 @@ function spawn_cannonball(cannon)
   sfx(19, 3)
 end
 
-function update_cannons()
+function update_shooters()
   if mapx == cur_room_x and mapy == cur_room_y then
-    for cannon in all(cannons) do
-      if cannon.active then
-        cannon.delay = cannon.delay - t_increment
-        if cannon.delay <= 0 then
-          spawn_cannonball(cannon)
-          cannon.delay = cannon.timing
+    for shooter in all(shooters) do
+      if shooter.active then
+        shooter.delay -= t_increment
+        if shooter.delay <= 0 then
+          spawn_arrow(shooter)
+          shooter.delay = shooter.timing
         end
       end
     end
   end
 end
 
-function update_cannonballs()
-  for cannonball in all(cannonballs) do
-    -- move the cannonball
-    cannonball.x = cannonball.x + cannonball.dx * t_increment
-    cannonball.y = cannonball.y + cannonball.dy * t_increment
+function update_arrows()
+  for arrow in all(arrows) do
+    -- move the arrow
+    arrow.x += arrow.dx * t_increment
+    arrow.y += arrow.dy * t_increment
 
-    if solid(cannonball.x, cannonball.y) then
-      del(cannonballs, cannonball)
+    if solid(arrow.x, arrow.y) then
+      del(arrows, arrow)
     end
 
     -- collision with player
-    if spr_coll(p, cannonball) then
+    if spr_coll(p, arrow) then
+      arrow.stagger = 10
       player_hit()
-      del(cannonballs, cannonball)
+      del(arrows, arrow)
     end
 
-    -- cannonball leaves the screen
-    if cannonball.x < mapx or cannonball.x > mapx + 127 or cannonball.y < mapy or cannonball.y > mapy + 127 then
-      del(cannonballs, cannonball)
+    -- arrow leaves the screen
+    if arrow.x < mapx or arrow.x > mapx + 127 or arrow.y < mapy or arrow.y > mapy + 127 then
+      del(arrows, arrow)
     end
   end
 end
 
 local adraw = {
-  { 1, 6 }, -- 𝘥𝘰𝘸𝘯 to 𝘶𝘱
-  { 1, -6 }, -- 𝘶𝘱 to 𝘥𝘰𝘸𝘯
-  { -6, 1 }, -- 𝘭𝘦𝘧𝘵 to 𝘳𝘪𝘨𝘩𝘵
-  { 6, 1 } -- 𝘳𝘪𝘨𝘩𝘵 to 𝘭𝘦𝘧𝘵
+  { 117, 48, 3, 8, false, false, 2, -4 }, -- 𝘥𝘰𝘸𝘯 to 𝘶𝘱 -- 𝘥𝘰𝘯𝘦
+  { 117, 48, 3, 8, false, true, 3, 2 }, -- 𝘶𝘱 to 𝘥𝘰𝘸𝘯
+  { 112, 61, 8, 3, false, false, 2, 2 }, -- 𝘭𝘦𝘧𝘵 to 𝘳𝘪𝘨𝘩𝘵 -- 𝘥𝘰𝘯𝘦
+  { 112, 61, 8, 3, true, false, -4, 2 } -- 𝘳𝘪𝘨𝘩𝘵 to 𝘭𝘦𝘧𝘵
 }
 
-function draw_cannonballs()
-  for cannonball in all(cannonballs) do
-    local d = adraw[cannonball.d + 1]
-    sspr(112, 104, 7, 7, mapx + cannonball.x + d[1], mapy + cannonball.y + d[2], 7, 7)
+function draw_arrows()
+  for arrow in all(arrows) do
+    local d = adraw[arrow.d + 1]
+    sspr(
+      d[1], d[2], d[3], d[4], mapx + arrow.x + d[7], mapy + arrow.y + d[8], d[3], d[4], d[5], d[6]
+    )
   end
 end

@@ -57,8 +57,8 @@ function _update60()
   update_map()
   check_room_change()
   update_player()
-  update_cannons()
-  update_cannonballs()
+  update_shooters()
+  update_arrows()
 
   mapx, mapy = band(p.x, 0xFFFFFF80), band(p.y, 0xFFFFFF80)
   baddie_m.update()
@@ -77,7 +77,7 @@ function _draw()
   draw_background_sprites()
   baddie_m.draw()
   player_attack()
-  draw_cannonballs()
+  draw_arrows()
   draw_player()
   draw_foreground_sprites()
   if darkrooms then
@@ -90,6 +90,12 @@ function _draw()
   draw_inventory()
 
   tb_draw()
+
+  -- pb("moving:" .. tostr(p.moving), mapx, mapy + 20, 7)
+  -- pb("dx:" .. tostr(p.dx), mapx, mapy + 28, 7)
+  -- pb("dy:" .. tostr(p.dy), mapx, mapy + 36, 7)
+  -- pb("curr_speed:" .. tostr(p.curr_speed), mapx, mapy + 44, 7)
+  -- pb("fall_dir:" .. tostr(p.fall_dir), mapx, mapy + 52, 7)
 
   if not darkrooms then
     pb(get_current_room(), mapx + 106, mapy + 121, 10)

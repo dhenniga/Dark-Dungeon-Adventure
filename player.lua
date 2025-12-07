@@ -5,18 +5,15 @@ p = {
 	dx = 0,
 	dy = 0,
 	curr_speed = 0,
-	acc = 0.4,
-	drg = 0.9,
-	cooldown = 0,
 	total_hearts = 5,
 	remaining_hearts = 3,
 	fall_dir = nil,
 	keys = 1,
 	engaged = false,
-	moving = false,
-	recoil = 0
+	moving = false
 }
-
+local acc = 0.4
+local drg = 0.9
 local idle = 1
 local running = 1
 local player_atk = false
@@ -29,10 +26,10 @@ function draw_player()
 	p.curr_speed = max(abs(pdx), abs(pdy)) / 4.5
 
 	-- diag movement speed
-	if pdx * pdy != 0 then
-		pdx *= 0.55
-		pdy *= 0.55
-	end
+	-- if p.dx * p.dy != 0 then
+	-- 	p.dx *= 0.55
+	-- 	p.dy *= 0.55
+	-- end
 
 	-- idle animation
 	idle = (idle < 3.8) and idle + 0.09 * t_increment or 1
@@ -86,7 +83,7 @@ function player_attack()
 	local sword_frames = split("72, 74, 106, 108")
 
 	-- start attack on button press if not already attacking
-	if btnp(𝘣𝘵𝘯_𝘰) and not p.engaged and not player_atk then
+	if btnp(BTN_O) and not p.engaged and not player_atk then
 		player_atk = true
 		p.atk_t = time() -- start timestamp
 		sfx(14, 3)
@@ -112,13 +109,13 @@ function update_player()
 	if p.fall_dir or not allow_movement then return end
 
 	if btn(BTN_L) then
-		p.dx -= p.acc p.direction = true
+		p.dx -= acc p.direction = true
 	end
 	if btn(BTN_R) then
-		p.dx += p.acc p.direction = false
+		p.dx += acc p.direction = false
 	end
-	if btn(BTN_U) then p.dy -= p.acc end
-	if btn(BTN_D) then p.dy += p.acc end
+	if btn(BTN_U) then p.dy -= acc end
+	if btn(BTN_D) then p.dy += acc end
 
 	-- Limits the max speed
 	p.dx, p.dy = mid(-1, p.dx, 1), mid(-1, p.dy, 1)
@@ -128,8 +125,8 @@ function update_player()
 	else
 		p.dx, p.dy = 0, 0
 	end
-	p.dx = abs(p.dx) > 0 and p.dx * p.drg or 0
-	p.dy = abs(p.dy) > 0 and p.dy * p.drg or 0
+	p.dx = abs(p.dx) > 0 and p.dx * drg or 0
+	p.dy = abs(p.dy) > 0 and p.dy * drg or 0
 	if abs(p.dx) < 0.02 then p.dx = 0 end
 	if abs(p.dy) < 0.02 then p.dy = 0 end
 end
