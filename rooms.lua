@@ -1,5 +1,5 @@
 --rooms
-room_objects, door_states, active_objects, shooters, arrows = {}, {}, {}, {}, {}
+room_objects, door_states, active_objects, arrows, events = {}, {}, {}, {}, {}
 room = function(x, y, t) room_objects[x .. "_" .. y] = t end
 
 --
@@ -85,7 +85,7 @@ room(
     { name = "𝘤𝘢𝘴𝘵𝘭𝘦 𝘦𝘯𝘵𝘳𝘢𝘯𝘤𝘦", flags = rf { dungeon = true } },
     obj "c_rock,64,0,nil,nil,nil,nil,nil,nil,true,nil,nil,nil,nil,nil,nil",
     obj "arch,64,0,true,nil,false,false,nil,nil,nil,nil,nil,nil,nil,nil,nil",
-    obj "sign,33,5,nil,nil,nil,nil,nil,true,true,nil,6,nil,nil,nil,nil",
+    -- obj "sign,33,5,nil,nil,nil,nil,nil,true,true,nil,6,nil,nil,nil,nil",
     obj "rock,64,64,nil,nil,nil,nil,nil,nil,true,nil,nil,nil,nil,nil,nil",
     obj "rock,80,64,nil,nil,nil,nil,nil,nil,true,nil,nil,nil,nil,nil,nil",
     obj "flames_back,16,16,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil",
@@ -99,10 +99,14 @@ room(
     obj "vase,16,80,nil,nil,nil,nil,nil,nil,true,nil,nil,nil,nil,nil,nil",
     obj "vase,16,96,nil,nil,nil,nil,nil,nil,true,nil,nil,nil,nil,nil,nil",
     obj "vase,32,96,nil,nil,nil,nil,nil,nil,true,nil,nil,nil,nil,nil,nil",
-    obj "s_shoot_v,96,108,nil,nil,nil,nil,false,nil,nil,nil,nil,true,1,60,1",
-    obj "s_shoot_h,16,36,nil,nil,nil,nil,false,nil,nil,nil,nil,true,1,60,1",
-    obj "s_shoot_v,50,16,nil,nil,nil,nil,true,nil,nil,nil,nil,true,1,60,1",
-    obj "s_shoot_h,112,48,nil,nil,nil,nil,true,nil,nil,nil,nil,true,1,60,1"
+
+    obj "button,51,7,nil,nil,nil,nil,nil,true,false,nil,trigger_room_event,nil,nil,nil,nil",
+    obj "chest,70,40,nil,nil,nil,nil,nil,true,true,nil,nil,nil,nil,nil,nil"
+
+    -- obj "s_shoot_v,96,112,nil,nil,nil,nil,false,nil,nil,nil,nil,true,1,60,1",
+    -- obj "s_shoot_h,16,36,nil,nil,nil,nil,false,nil,nil,nil,nil,true,1,60,1",
+    -- obj "s_shoot_v,50,16,nil,nil,nil,nil,true,nil,nil,nil,nil,true,1,60,1",
+    -- obj "s_shoot_h,112,48,nil,nil,nil,nil,true,nil,nil,nil,nil,true,1,60,1"
   }
 )
 room(
@@ -118,9 +122,7 @@ room(
     obj "vase,96,80,nil,nil,nil,nil,nil,nil,true,nil,nil,nil,nil,nil,nil",
     obj "bat,20,90,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil",
     obj "rat,100,32,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil",
-    obj "vase,32,48,nil,nil,nil,nil,nil,nil,true,nil,nil,nil,nil,nil,nil",
-    obj "s_shoot_v,36,114,nil,nil,nil,nil,false,nil,nil,nil,nil,true,1,60,1",
-    obj "s_shoot_h,8,36,nil,nil,nil,nil,false,nil,nil,nil,nil,true,1,60,1"
+    obj "vase,32,48,nil,nil,nil,nil,nil,nil,true,nil,nil,nil,nil,nil,nil"
   }
 )
 room(
@@ -191,7 +193,7 @@ room(
     obj "spike,32,96,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil",
     obj "spike,48,64,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil",
     obj "sign,48,5,nil,nil,nil,nil,nil,true,true,nil,3,nil,nil,nil,nil",
-    obj "w_button,100,73,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil"
+    obj "button,100,73,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil"
   }
 )
 room(
@@ -225,7 +227,7 @@ room(
 room(
   2, 2, {
     { name = "𝘵𝘩𝘦 𝘱𝘪𝘵 𝘮𝘢𝘻𝘦", flags = rf { pit = true } },
-    obj "w_button,20,41,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil"
+    obj "button,20,41,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil"
   }
 )
 room(
@@ -286,7 +288,7 @@ room(
 room(
   4, 2, {
     { name = "𝘵𝘩𝘦 𝘱𝘪𝘵 𝘮𝘢𝘻𝘦", flags = rf { pit = true } },
-    obj "w_button,84,9,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil"
+    obj "button,84,9,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil"
   }
 )
 room(
@@ -354,12 +356,14 @@ room(
 room(
   7, 0, {
     { name = "𝘴𝘱𝘪𝘬𝘦𝘴 𝘰𝘧 𝘥𝘰𝘰𝘮", flags = rf { sewer = true, rain = true } },
-    obj "w_button,20,9,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil",
-    obj "w_button,68,9,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil",
-    obj "w_button,116,9,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil",
-    obj "s_shoot_v,20,106,nil,nil,nil,nil,false,nil,nil,nil,nil,true,1,60,1",
-    obj "s_shoot_v,68,106,nil,nil,nil,nil,false,nil,nil,nil,nil,true,1,60,1",
-    obj "s_shoot_v,116,106,nil,nil,nil,nil,false,nil,nil,nil,nil,true,1,60,1"
+    obj "button,20,9,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil",
+    obj "button,68,9,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil",
+    obj "button,116,9,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil",
+    obj "s_shoot_v,20,114,nil,nil,nil,nil,false,nil,nil,nil,nil,true,1,90,2.5",
+    obj "s_shoot_v,68,114,nil,nil,nil,nil,false,nil,nil,nil,nil,true,1,95,2.5",
+    obj "s_shoot_v,116,114,nil,nil,nil,nil,false,nil,nil,nil,nil,true,1,85,2.5",
+    obj "floor_tile,48,72,nil,nil,nil,nil,nil,true,true,nil,nil,false,nil,nil,nil",
+    obj "floor_tile,96,72,nil,nil,nil,nil,nil,true,true,nil,nil,false,nil,nil,nil"
   }
 )
 room(
@@ -378,8 +382,8 @@ room(
     obj "light,118,54,nil,12,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil",
     obj "light,118,84,nil,12,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil",
     obj "chest,96,16,nil,nil,nil,nil,nil,true,true,nil,nil,nil,nil,nil,nil",
-    obj "w_button,36,9,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil",
-    obj "s_shoot_v,36,106,nil,nil,nil,nil,false,nil,nil,nil,nil,true,1,60,1"
+    obj "button,36,9,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil",
+    obj "s_shoot_v,36,106,nil,nil,nil,nil,false,nil,nil,nil,nil,true,1,90,2.5"
   }
 )
 room(
@@ -565,13 +569,19 @@ function draw_background_sprites()
     if flag.stairs_up then spr(132, mapx + ax, mapy + ay, 2, 2) end
     if flag.c_rock then spr(136, mapx + ax, mapy + ay, 2, 2) end
     if flag.spike then animate_spikes(a_obj) end
-    if flag.w_button then spr(95, mapx + ax, mapy + ay, 1, 1) end
+    if flag.button then spr(95, mapx + ax, mapy + ay, 1, 1) end
     if flag.flames_back then flames(mapx + ax, mapy + ay) end
     if flag.s_shoot_v or flag.s_shoot_h then
       local v = flag.s_shoot_v
       sspr(112, v and 56 or 48, v and 8 or 5, v and 5 or 8, mapx + a_obj.x, mapy + a_obj.y, v and 8 or 5, v and 5 or 8, v and false or a_obj.flp, v and a_obj.flp or false)
       if not a_obj.added then
-        add(shooters, a_obj) a_obj.added = true
+        add(get_room_shooters(cur_room_x, cur_room_y), a_obj) a_obj.added = true
+      end
+    end
+    if flag.floor_tile then
+      if not a_obj.active then
+        spr(43, mapx + ax - 16, mapy + ay, 2, 2)
+        spr(43, mapx + ax, mapy + ay, 2, 2)
       end
     end
   end
@@ -695,6 +705,14 @@ end
 
 --
 
+room_shooters = {}
+
+function get_room_shooters(x, y)
+  local key = x .. "_" .. y
+  if not room_shooters[key] then room_shooters[key] = {} end
+  return room_shooters[key]
+end
+
 function spawn_arrow(shooter)
   local direction, vx, vy
   if shooter.flags.s_shoot_v then
@@ -719,14 +737,14 @@ function spawn_arrow(shooter)
 end
 
 function update_shooters()
-  if mapx == cur_room_x and mapy == cur_room_y then
-    for shooter in all(shooters) do
-      if shooter.active then
-        shooter.delay -= t_increment
-        if shooter.delay <= 0 then
-          spawn_arrow(shooter)
-          shooter.delay = shooter.timing
-        end
+  local shooters = get_room_shooters(cur_room_x, cur_room_y)
+
+  for s in all(shooters) do
+    if s.active then
+      s.delay -= t_increment
+      if s.delay <= 0 then
+        spawn_arrow(s)
+        s.delay = s.timing
       end
     end
   end
@@ -767,7 +785,7 @@ function draw_arrows()
   for arrow in all(arrows) do
     local d = adraw[arrow.d + 1]
     sspr(
-      d[1], d[2], d[3], d[4], mapx + arrow.x + d[7], mapy + arrow.y + d[8], d[3], d[4], d[5], d[6]
+      d[1], d[2], d[3], d[4], arrow.x + d[7], arrow.y + d[8], d[3], d[4], d[5], d[6]
     )
   end
 end

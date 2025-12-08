@@ -8,11 +8,11 @@ function spr_coll(enemy, player)
     dx /= d dy /= d
 
     enemy.stagger = 10
-    enemy.dx += dx * 2
-    enemy.dy += dy * 2
+    enemy.dx += dx * 3
+    enemy.dy += dy * 3
 
-    player.dx -= dx * 2
-    player.dy -= dy * 2
+    player.dx -= dx * 3
+    player.dy -= dy * 3
 
     sfx(16, 3)
     return true

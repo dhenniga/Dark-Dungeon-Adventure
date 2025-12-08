@@ -1,8 +1,8 @@
 BTN_L, BTN_R, BTN_U, BTN_D, BTN_X, BTN_O, dungeon, sewer, pit, player_light_enabled, reading, allow_movement, raindrops = 0, 1, 2, 3, 4, 5, "128,7,139,132,5,6,135,4,137,138,9,143,13,14,15", "129,7,131,130,129,131,135,132,137,139,9,4,1,14,5", "0,7,139,132,128,130,135,4,137,138,9,143,129,14,15", false, false, true, false
 
-music_enabled = true
+music_enabled = false
 collision_state = true
-darkrooms = true
+darkrooms = false
 
 function palette(s)
   for i, v in ipairs(split(s, ",")) do
@@ -13,6 +13,7 @@ end
 function _init()
   cartdata("davidhennigan_dark_dungeon_1")
   p.x, p.y, p.remaining_hearts, p.keys = 67, 16, 5, 5
+  -- p.x, p.y, p.remaining_hearts, p.keys = 907, 67, 5, 5
   t_increment = 1
   cls()
   decode_tiles()
@@ -91,18 +92,19 @@ function _draw()
 
   tb_draw()
 
-  -- pb("moving:" .. tostr(p.moving), mapx, mapy + 20, 7)
-  -- pb("dx:" .. tostr(p.dx), mapx, mapy + 28, 7)
-  -- pb("dy:" .. tostr(p.dy), mapx, mapy + 36, 7)
-  -- pb("curr_speed:" .. tostr(p.curr_speed), mapx, mapy + 44, 7)
-  -- pb("fall_dir:" .. tostr(p.fall_dir), mapx, mapy + 52, 7)
-
   if not darkrooms then
     pb(get_current_room(), mapx + 106, mapy + 121, 10)
+    -- pb("cx:" .. cur_room_x, mapx + 106, mapy + 106, 10)
+    -- pb("cy:" .. cur_room_y, mapx + 106, mapy + 114, 10)
     pb("px:" .. flr(p.x) .. ", " .. "py:" .. flr(p.y), mapx + 2, mapy + 2, 7)
     pb("mx:" .. mapx .. ", my:" .. mapy, mapx + 2, mapy + 9, 7)
     circ(p.x + 2, p.y, l_rad, 3)
-    pb("cpu:" .. stat(1), mapx + 97, mapy + 2, 7)
-    pb("mem:" .. stat(0), mapx + 85, mapy + 8, 7)
+    -- pb("cpu:" .. stat(1), mapx + 97, mapy + 2, 7)
+    -- pb("mem:" .. stat(0), mapx + 85, mapy + 8, 7)
+    -- pb("moving:" .. tostr(p.moving), mapx, mapy + 74, 9)
+    -- pb("dx:" .. tostr(p.dx), mapx, mapy + 82, 9)
+    -- pb("dy:" .. tostr(p.dy), mapx, mapy + 90, 9)
+    -- pb("curr_speed:" .. tostr(p.curr_speed), mapx, mapy + 98, 9)
+    -- pb("fall_dir:" .. tostr(p.fall_dir), mapx, mapy + 106, 9)
   end
 end
