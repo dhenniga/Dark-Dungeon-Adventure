@@ -1,7 +1,7 @@
 BTN_L, BTN_R, BTN_U, BTN_D, BTN_X, BTN_O, dungeon, sewer, pit, player_light_enabled, reading, allow_movement, raindrops = 0, 1, 2, 3, 4, 5, "128,7,139,132,5,6,135,4,137,138,9,143,13,14,15", "129,7,131,130,129,131,135,132,137,139,9,4,1,14,5", "0,7,139,132,128,130,135,4,137,138,9,143,129,14,15", false, false, true, false
 
 music_enabled = false
-collision_state = true
+collision_state = false
 darkrooms = false
 
 function palette(s)
@@ -61,6 +61,9 @@ function _update60()
   update_shooters()
   update_arrows()
 
+  update_buttons()
+  update_chests()
+
   mapx, mapy = band(p.x, 0xFFFFFF80), band(p.y, 0xFFFFFF80)
   baddie_m.update()
   lanturn_timer = mid(0, lanturn_timer + (player_light_enabled and 0.5 or -0.25), 12)
@@ -79,6 +82,7 @@ function _draw()
   baddie_m.draw()
   player_attack()
   draw_arrows()
+
   draw_player()
   draw_foreground_sprites()
   if darkrooms then
@@ -88,16 +92,20 @@ function _draw()
     palt(14, true)
   end
   draw_player_interact_icon()
+
   draw_inventory()
 
   tb_draw()
+
+  -- circfill(mapx+64, mapy+64,outelastic(time(),0,40,rnd(50)), 0)
 
   if not darkrooms then
     pb(get_current_room(), mapx + 106, mapy + 121, 10)
     -- pb("cx:" .. cur_room_x, mapx + 106, mapy + 106, 10)
     -- pb("cy:" .. cur_room_y, mapx + 106, mapy + 114, 10)
     pb("px:" .. flr(p.x) .. ", " .. "py:" .. flr(p.y), mapx + 2, mapy + 2, 7)
-    pb("mx:" .. mapx .. ", my:" .. mapy, mapx + 2, mapy + 9, 7)
+    pb("mx:" .. mapx / 128 .. ", my:" .. mapy / 128, mapx + 2, mapy + 9, 7)
+    pb("cx:" .. cur_room_x .. ", cy:" .. cur_room_y, mapx + 2, mapy + 16, 7)
     circ(p.x + 2, p.y, l_rad, 3)
     -- pb("cpu:" .. stat(1), mapx + 97, mapy + 2, 7)
     -- pb("mem:" .. stat(0), mapx + 85, mapy + 8, 7)

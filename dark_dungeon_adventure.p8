@@ -33,6 +33,7 @@ __lua__
 #include map.lua
 #include player.lua
 #include rooms.lua
+#include buttons.lua
 #include enemies.lua
 #include collision.lua
 #include inventory.lua

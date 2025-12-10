@@ -19,6 +19,12 @@ function spr_coll(enemy, player)
   end
 end
 
+function obj_collision(o)
+  if o.x < p.x + 8 and o.x + 8 > p.x and o.y < p.y + 8 and o.y + 8 > p.y then
+    return true
+  end
+end
+
 function sees(b, max_dist)
   local dx, dy = p.x - b.x, p.y - b.y
   local dsq = dx * dx + dy * dy

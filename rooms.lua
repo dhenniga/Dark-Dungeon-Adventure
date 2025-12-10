@@ -42,7 +42,7 @@ function obj(str)
   out.timing = convert(t[15])
   out.speed = convert(t[16])
 
-  -- flags from the first entry
+  -- flags from the first entry - needs to be last
   out.flags = { [t[1]] = true, solid = out.solid, interactable = out.interactable, locked = out.locked }
 
   return out
@@ -100,8 +100,8 @@ room(
     obj "vase,16,96,nil,nil,nil,nil,nil,nil,true,nil,nil,nil,nil,nil,nil",
     obj "vase,32,96,nil,nil,nil,nil,nil,nil,true,nil,nil,nil,nil,nil,nil",
 
-    obj "button,51,7,nil,nil,nil,nil,nil,true,false,nil,trigger_room_event,nil,nil,nil,nil",
-    obj "chest,70,40,nil,nil,nil,nil,nil,true,true,nil,nil,nil,nil,nil,nil"
+    obj "button,51,7,nil,nil,nil,nil,nil,true,false,nil,show_chest,nil,nil,nil,nil",
+    obj "chest,70,40,nil,nil,nil,nil,nil,true,false,nil,show_chest,false,nil,nil,nil"
 
     -- obj "s_shoot_v,96,112,nil,nil,nil,nil,false,nil,nil,nil,nil,true,1,60,1",
     -- obj "s_shoot_h,16,36,nil,nil,nil,nil,false,nil,nil,nil,nil,true,1,60,1",
@@ -164,7 +164,9 @@ room(
     obj "rock,32,96,nil,nil,nil,nil,nil,nil,true,nil,nil,nil,nil,nil,nil",
     obj "rock,96,96,nil,nil,nil,nil,nil,nil,true,nil,nil,nil,nil,nil,nil",
     obj "rat,96,40,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil",
-    obj "rat,94,80,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil"
+    obj "rat,94,80,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil",
+
+    obj "button,96,7,nil,nil,nil,nil,nil,true,false,nil,show_chest,nil,nil,nil,nil"
   }
 )
 room(
@@ -246,7 +248,7 @@ room(
 room(
   3, 1, {
     { name = "𝘵𝘩𝘦 𝘣𝘰𝘵𝘵𝘰𝘮𝘭𝘦𝘴𝘴 𝘱𝘢𝘵𝘩𝘴 - 𝘴𝘰𝘶𝘵𝘩", flags = rf { dungeon = true } },
-    obj "chest,70,40,nil,nil,nil,nil,nil,true,true,nil,nil,nil,nil,nil,nil"
+    obj "chest,70,40,nil,nil,nil,nil,nil,true,true,nil,nil,true,nil,nil,nil"
   }
 )
 room(
@@ -455,7 +457,7 @@ room(
 function unlock_door(o)
   local ax, ay = mapx + o.x, mapy + o.y
   door_states[ax .. "_" .. ay] = true
-  o.locked, o.flags.solid = false, false
+  o.locked, o.flags.solid, o.flags.interactable = false, false, false
   local dl, dr, dt, db = o.x, 128 - o.x, o.y, 128 - o.y
   if dl <= dr and dl <= dt and dl <= db then
     ax = ax - 16
@@ -496,13 +498,30 @@ end
 
 --
 
+function load_room_objects(room_id)
+  active_objects = room_objects[room_id]
+  normalize_obj_list(active_objects)
+  for o in all(active_objects) do
+    if o.flags.door then
+      o.id = (mapx * 128 + o.x) .. "_" .. (mapy * 128 + o.y)
+      if door_states[o.id] then
+        o.locked, o.flags.solid, o.flags.interactable = false, false, false
+      else
+        o.locked = true
+      end
+    end
+  end
+end
+
+--
+
 function draw_player_interact_icon()
   local engaged_now = false
   for o in all(active_objects) do
     local flag = o.flags
     if flag.interactable then
       local ox, oy = mapx + o.x, mapy + o.y
-      local len = abs(ox - p.x) + abs(oy - p.y + 6)
+      local len = abs(ox - p.x) + abs(oy - p.y + 4)
       if len > 0 and len < 22 then
         engaged_now = true
         if flag.sign and not reading and val == 0 and btn(BTN_O) then
@@ -510,6 +529,7 @@ function draw_player_interact_icon()
           tb_init(15, sign_dialog(o.text))
         end
         if flag.sign then sspr(24, 80, 5, 7, p.x + 8, p.y - 8) end
+        if flag.button then sspr(29, 80, 3, 7, p.x + 8, p.y - 8) end
         if flag.key then
           sspr(29, 80, 3, 7, p.x + 8, p.y - 8)
           if btnp(BTN_O) then
@@ -518,7 +538,7 @@ function draw_player_interact_icon()
             sfx(18, 3)
           end
         end
-        if flag.chest then sspr(29, 80, 3, 7, p.x + 8, p.y - 8) end
+        -- if flag.chest then sspr(29, 80, 3, 7, p.x + 8, p.y - 8) end
         if flag.door and flag.solid then
           if p.keys > 0 then sspr(113, 96, 5, 8, p.x + 8, p.y - 8) end
           if btnp(BTN_O) then
@@ -563,13 +583,24 @@ function draw_background_sprites()
       end
       door_lights(mapx + ax, mapy + ay, afx, afy, a_obj.flp)
     end
-    if flag.chest then spr(13, mapx + ax, mapy + ay, 2, 2) end
+    if flag.chest then
+      if a_obj.active then
+        spr(13, mapx + ax, mapy + ay, 2, 2)
+        pb(tostr(a_obj.active), mapx + ax, mapy + ay, 7)
+      end
+    end
     if flag.rock then spr(134, mapx + ax, mapy + ay, 2, 2) end
     if flag.stairs_down then spr(130, mapx + ax, mapy + ay, 2, 2) end
     if flag.stairs_up then spr(132, mapx + ax, mapy + ay, 2, 2) end
     if flag.c_rock then spr(136, mapx + ax, mapy + ay, 2, 2) end
     if flag.spike then animate_spikes(a_obj) end
-    if flag.button then spr(95, mapx + ax, mapy + ay, 1, 1) end
+    if flag.button then
+      if a_obj.pressed then
+        spr(111, mapx + ax, mapy + ay, 1, 1)
+      else
+        spr(95, mapx + ax, mapy + ay, 1, 1)
+      end
+    end
     if flag.flames_back then flames(mapx + ax, mapy + ay) end
     if flag.s_shoot_v or flag.s_shoot_h then
       local v = flag.s_shoot_v
@@ -650,30 +681,13 @@ function get_current_room() return flr(p.x / 128) .. "_" .. flr(p.y / 128) end
 
 --
 
-function load_room_objects(room_id)
-  active_objects = room_objects[room_id] or {}
-  normalize_obj_list(active_objects)
-  for o in all(active_objects) do
-    if o.flags and o.flags.door then
-      o.id = (mapx * 128 + o.x) .. "_" .. (mapy * 128 + o.y)
-      if door_states[o.id] then
-        o.locked = false o.flags.solid = false
-      else
-        o.locked = (o.locked == nil) and true or o.locked
-      end
-    end
-  end
-end
-
---
-
-local current_room = ""
+current_room = ""
 function check_room_change()
   local new_room = get_current_room()
   if new_room ~= current_room then
     current_room = new_room
 
-    active_objects = {}
+    active_objects = {} -- clears the room objects IMPORTANT
     load_room_objects(current_room)
 
     -- set palette based on room flags
@@ -687,6 +701,12 @@ function check_room_change()
 
     dset(0, flr(p.x))
     dset(1, flr(p.y))
+
+    for o in all(active_objects) do
+      if o.flags.button then
+        add(buttons, o)
+      end
+    end
   end
 end
 
