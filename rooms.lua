@@ -100,8 +100,8 @@ room(
     obj "vase,16,96,nil,nil,nil,nil,nil,nil,true,nil,nil,nil,nil,nil,nil",
     obj "vase,32,96,nil,nil,nil,nil,nil,nil,true,nil,nil,nil,nil,nil,nil",
 
-    obj "button,51,7,nil,nil,nil,nil,nil,true,false,nil,show_chest,nil,nil,nil,nil",
-    obj "chest,70,40,nil,nil,nil,nil,nil,true,false,nil,show_chest,false,nil,nil,nil"
+    obj "button,51,7,nil,nil,nil,nil,nil,true,nil,nil,show_chest_0_0,nil,nil,nil,nil",
+    obj "chest,70,40,nil,nil,nil,nil,nil,true,false,nil,show_chest_0_0,false,nil,nil,nil",
 
     -- obj "s_shoot_v,96,112,nil,nil,nil,nil,false,nil,nil,nil,nil,true,1,60,1",
     -- obj "s_shoot_h,16,36,nil,nil,nil,nil,false,nil,nil,nil,nil,true,1,60,1",
@@ -358,12 +358,12 @@ room(
 room(
   7, 0, {
     { name = "𝘴𝘱𝘪𝘬𝘦𝘴 𝘰𝘧 𝘥𝘰𝘰𝘮", flags = rf { sewer = true, rain = true } },
-    obj "button,20,9,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil",
-    obj "button,68,9,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil",
-    obj "button,116,9,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil",
-    obj "s_shoot_v,20,114,nil,nil,nil,nil,false,nil,nil,nil,nil,true,1,90,2.5",
-    obj "s_shoot_v,68,114,nil,nil,nil,nil,false,nil,nil,nil,nil,true,1,95,2.5",
-    obj "s_shoot_v,116,114,nil,nil,nil,nil,false,nil,nil,nil,nil,true,1,85,2.5",
+    obj "button,20,9,nil,nil,nil,nil,nil,nil,nil,nil,stop_shooter_1_7_0,nil,nil,nil,nil",
+    obj "button,68,9,nil,nil,nil,nil,nil,nil,nil,nil,stop_shooter_2_7_0,nil,nil,nil,nil",
+    obj "button,116,9,nil,nil,nil,nil,nil,nil,nil,nil,stop_shooter_3_7_0,nil,nil,nil,nil",
+    obj "s_shoot_v,20,114,nil,nil,nil,nil,false,nil,nil,nil,stop_shooter_1_7_0,true,1,90,2.5",
+    obj "s_shoot_v,68,114,nil,nil,nil,nil,false,nil,nil,nil,stop_shooter_2_7_0,true,1,95,2.5",
+    obj "s_shoot_v,116,114,nil,nil,nil,nil,false,nil,nil,nil,stop_shooter_3_7_0,true,1,85,2.5",
     obj "floor_tile,48,72,nil,nil,nil,nil,nil,true,true,nil,nil,false,nil,nil,nil",
     obj "floor_tile,96,72,nil,nil,nil,nil,nil,true,true,nil,nil,false,nil,nil,nil"
   }
@@ -529,7 +529,6 @@ function draw_player_interact_icon()
           tb_init(15, sign_dialog(o.text))
         end
         if flag.sign then sspr(24, 80, 5, 7, p.x + 8, p.y - 8) end
-        if flag.button then sspr(29, 80, 3, 7, p.x + 8, p.y - 8) end
         if flag.key then
           sspr(29, 80, 3, 7, p.x + 8, p.y - 8)
           if btnp(BTN_O) then
@@ -584,10 +583,7 @@ function draw_background_sprites()
       door_lights(mapx + ax, mapy + ay, afx, afy, a_obj.flp)
     end
     if flag.chest then
-      if a_obj.active then
-        spr(13, mapx + ax, mapy + ay, 2, 2)
-        pb(tostr(a_obj.active), mapx + ax, mapy + ay, 7)
-      end
+      if a_obj.active then spr(13, mapx + ax, mapy + ay, 2, 2) end
     end
     if flag.rock then spr(134, mapx + ax, mapy + ay, 2, 2) end
     if flag.stairs_down then spr(130, mapx + ax, mapy + ay, 2, 2) end

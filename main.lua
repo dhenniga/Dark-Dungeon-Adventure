@@ -1,8 +1,8 @@
 BTN_L, BTN_R, BTN_U, BTN_D, BTN_X, BTN_O, dungeon, sewer, pit, player_light_enabled, reading, allow_movement, raindrops = 0, 1, 2, 3, 4, 5, "128,7,139,132,5,6,135,4,137,138,9,143,13,14,15", "129,7,131,130,129,131,135,132,137,139,9,4,1,14,5", "0,7,139,132,128,130,135,4,137,138,9,143,129,14,15", false, false, true, false
 
-music_enabled = false
-collision_state = false
-darkrooms = false
+music_enabled = true
+collision_state = true
+darkrooms = true
 
 function palette(s)
   for i, v in ipairs(split(s, ",")) do
@@ -12,8 +12,8 @@ end
 
 function _init()
   cartdata("davidhennigan_dark_dungeon_1")
-  p.x, p.y, p.remaining_hearts, p.keys = 67, 16, 5, 5
-  -- p.x, p.y, p.remaining_hearts, p.keys = 907, 67, 5, 5
+  p.x, p.y, p.remaining_hearts, p.keys = 67, 18, 5, 5
+  -- p.x, p.y, p.remaining_hearts, p.keys = 880, 81, 5, 5
   t_increment = 1
   cls()
   decode_tiles()
@@ -64,6 +64,8 @@ function _update60()
   update_buttons()
   update_chests()
 
+  update_smoke()
+
   mapx, mapy = band(p.x, 0xFFFFFF80), band(p.y, 0xFFFFFF80)
   baddie_m.update()
   lanturn_timer = mid(0, lanturn_timer + (player_light_enabled and 0.5 or -0.25), 12)
@@ -85,6 +87,8 @@ function _draw()
 
   draw_player()
   draw_foreground_sprites()
+  drawparticles()
+  
   if darkrooms then
     darkroom()
   else

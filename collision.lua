@@ -20,8 +20,12 @@ function spr_coll(enemy, player)
 end
 
 function obj_collision(o)
-  if o.x < p.x + 8 and o.x + 8 > p.x and o.y < p.y + 8 and o.y + 8 > p.y then
-    return true
+  if not o.flags.active then
+    local ox, oy, px, py = mapx + o.x, mapy + o.y, p.x, p.y
+    if ox < px + 8 and ox + 8 > px and oy < py + 8 and oy + 8 > py then
+      -- sfx(46, 1)
+      return true
+    end
   end
 end
 
