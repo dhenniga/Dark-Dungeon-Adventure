@@ -12,8 +12,8 @@ end
 
 function _init()
   cartdata("davidhennigan_dark_dungeon_1")
-  p.x, p.y, p.remaining_hearts, p.keys = 67, 18, 5, 5
-  -- p.x, p.y, p.remaining_hearts, p.keys = 880, 81, 5, 5
+  -- p.x, p.y, p.remaining_hearts, p.keys = 67, 18, 5, 5
+  p.x, p.y, p.remaining_hearts, p.keys = 1116, 72, 5, 5
   t_increment = 1
   cls()
   decode_tiles()

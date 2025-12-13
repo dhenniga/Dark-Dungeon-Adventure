@@ -383,7 +383,7 @@ room(
     obj "arch,120,64,false,nil,true,false,nil,nil,nil,nil,nil,nil,nil,nil,nil",
     obj "light,118,54,nil,12,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil",
     obj "light,118,84,nil,12,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil",
-    obj "chest,96,16,nil,nil,nil,nil,nil,true,true,nil,nil,nil,nil,nil,nil",
+    obj "chest,96,16,nil,nil,nil,nil,nil,true,true,true,show_chest_8_0,true,nil,nil,nil",
     obj "button,36,9,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil",
     obj "s_shoot_v,36,106,nil,nil,nil,nil,false,nil,nil,nil,nil,true,1,90,2.5"
   }
@@ -538,8 +538,12 @@ function draw_player_interact_icon()
           end
         end
         if flag.chest then
-          if o.active then
+          if o.active and o.locked then
             sspr(29, 80, 3, 7, p.x + 8, p.y - 8)
+            if btnp(BTN_O) and o.locked then
+              sfx(50, 3)
+              o.locked = false
+            end
           end
         end
         if flag.door and flag.solid then
@@ -592,10 +596,6 @@ function draw_background_sprites()
           spr(13, mapx + ax, mapy + ay, 2, 2)
         else
           spr(45, mapx + ax, mapy + ay, 2, 2)
-        end
-        if btnp(BTN_O) and a_obj.locked then
-          sfx(50, 3)
-          a_obj.locked = false
         end
       end
     end
