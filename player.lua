@@ -81,7 +81,6 @@ end
 function player_attack()
 	-- sword frames
 	local sword_frames = split("72, 74, 106, 108")
-
 	-- start attack on button press if not already attacking
 	if btnp(BTN_O) and not p.engaged and not player_atk then
 		player_atk = true

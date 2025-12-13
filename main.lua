@@ -1,8 +1,8 @@
 BTN_L, BTN_R, BTN_U, BTN_D, BTN_X, BTN_O, dungeon, sewer, pit, player_light_enabled, reading, allow_movement, raindrops = 0, 1, 2, 3, 4, 5, "128,7,139,132,5,6,135,4,137,138,9,143,13,14,15", "129,7,131,130,129,131,135,132,137,139,9,4,1,14,5", "0,7,139,132,128,130,135,4,137,138,9,143,129,14,15", false, false, true, false
 
-music_enabled = true
+music_enabled = false
 collision_state = true
-darkrooms = true
+darkrooms = false
 
 function palette(s)
   for i, v in ipairs(split(s, ",")) do
@@ -60,10 +60,8 @@ function _update60()
   update_player()
   update_shooters()
   update_arrows()
-
   update_buttons()
   update_chests()
-
   update_smoke()
 
   mapx, mapy = band(p.x, 0xFFFFFF80), band(p.y, 0xFFFFFF80)
@@ -82,13 +80,12 @@ function _draw()
   draw_background()
   draw_background_sprites()
   baddie_m.draw()
+  draw_smoke()
   player_attack()
   draw_arrows()
-
   draw_player()
   draw_foreground_sprites()
-  drawparticles()
-  
+
   if darkrooms then
     darkroom()
   else
@@ -100,8 +97,6 @@ function _draw()
   draw_inventory()
 
   tb_draw()
-
-  -- circfill(mapx+64, mapy+64,outelastic(time(),0,40,rnd(50)), 0)
 
   if not darkrooms then
     pb(get_current_room(), mapx + 106, mapy + 121, 10)

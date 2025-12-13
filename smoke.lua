@@ -1,68 +1,59 @@
--- smoke
+-- -- smoke
 particles = {}
 
-function smoke_particle(_x, _y, _c, _r, _life, _age)
-  local new = {
-    x = _x,
-    y = _y,
-    dx = -0.2 + rnd(0.4),
-    dy = -rnd(0.7),
-    r = _r,
-    age = _age,
-    maxage = _life,
-    col = _c
-  }
-
-  add(particles, new)
+function smoke_particle(x, y, r, a, col1, col2, g)
+  add(
+    particles, {
+      x = x, y = y,
+      dx = rnd(.4) - .2,
+      dy = -rnd(.4),
+      r = r, age = a,
+      maxage = 50,
+      col1 = col1, col2 = col2,
+      g = g or .05 -- gravity
+    }
+  )
 end
 
 function update_smoke()
   for p in all(particles) do
-    if p.age >= p.maxage
-        or p.y > 128
-        or p.y < 0
-        or p.x > 128
-        or p.x < 0 then
+    if p.age >= p.maxage then
       del(particles, p)
     else
-      if p.age >= 0 then
-        p.x += p.dx
-        p.y += p.dy
-      end
+      p.dy += p.g
+      p.x += p.dx
+      p.y += p.dy
       p.age += 1
     end
   end
 end
 
-function drawparticles()
+function draw_smoke()
   for p in all(particles) do
-    if p.age >= 0 then
-      drawparticle(p)
-    end
+    drawparticle(p)
   end
 end
 
 function drawparticle(p)
-  local agemult = 1
-  local col
-  agemult = (p.age - 5) / p.maxage
-  agemult = 1 - (agemult * agemult)
-  agemult = mid(0, agemult, 1)
-  col = p.col[mid(#p.col, p.age, 1)]
-  circfill(p.x, p.y, p.r * agemult, col)  
-  circ(p.x, p.y, p.r * agemult, 2)
+  local a = (p.age - 5) / p.maxage
+  a = 1 - a * a
+  a = mid(0, a, 1)
+  local r = p.r * a
+  circfill(p.x, p.y - 2, r, p.col1)
+  circfill(p.x, p.y + 2, r, p.col2)
 end
 
-function boom(_x, _y)
-  local x1, x2, y1, y2, angle
-  for i = 0, 10 do
-    smoke_particle(
-      _x - 8 + rnd(28), --x
-      _y - 8 + rnd(28), --y
-      {3,4,5,6,7,8,9}, -- colour table
-      2 + rnd(7), 
-      50, 
-      i
-    )
+function boom(x, y)
+  for i = 1, 20 do
+    smoke_particle(x + rnd(16), y + rnd(16), rnd(8), i - 20, 13, 5, 0)
+    smoke_particle(x + rnd(16), y + rnd(16), rnd(3), i, 10, 7, .01)
+  end
+end
+
+function sparkles(x, y, a)
+  for i = 1, a do
+    -- smoke_particle(x + 4 + rnd(8), y + 4 + rnd(8), 3, 20 - i, 11, 9, 0.01) -- fire
+    smoke_particle(mapx + rnd(128), mapy + rnd(128), 1, 20 - i, 5, 1, 0.005) -- flies
+    -- smoke_particle(x, y, rnd({ 1, 2, 3 }), i, rnd({ 4, 8 }), rnd({ 4, 8 }), 0.005) -- broken pot
   end
 end

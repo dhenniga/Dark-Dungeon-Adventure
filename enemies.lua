@@ -89,6 +89,7 @@ function baddie_update(b)
   end
 
   if b.hp == 0 then
+    boom(b.x, b.y)
     sfx(49, 2)
     del(baddie_m.baddies, b)
   end

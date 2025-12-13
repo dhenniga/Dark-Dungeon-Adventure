@@ -85,7 +85,7 @@ room(
     { name = "𝘤𝘢𝘴𝘵𝘭𝘦 𝘦𝘯𝘵𝘳𝘢𝘯𝘤𝘦", flags = rf { dungeon = true } },
     obj "c_rock,64,0,nil,nil,nil,nil,nil,nil,true,nil,nil,nil,nil,nil,nil",
     obj "arch,64,0,true,nil,false,false,nil,nil,nil,nil,nil,nil,nil,nil,nil",
-    -- obj "sign,33,5,nil,nil,nil,nil,nil,true,true,nil,6,nil,nil,nil,nil",
+    obj "sign,33,5,nil,nil,nil,nil,nil,true,true,nil,6,nil,nil,nil,nil",
     obj "rock,64,64,nil,nil,nil,nil,nil,nil,true,nil,nil,nil,nil,nil,nil",
     obj "rock,80,64,nil,nil,nil,nil,nil,nil,true,nil,nil,nil,nil,nil,nil",
     obj "flames_back,16,16,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil",
@@ -100,12 +100,12 @@ room(
     obj "vase,16,96,nil,nil,nil,nil,nil,nil,true,nil,nil,nil,nil,nil,nil",
     obj "vase,32,96,nil,nil,nil,nil,nil,nil,true,nil,nil,nil,nil,nil,nil",
 
-    obj "button,51,7,nil,nil,nil,nil,nil,true,nil,nil,show_chest_0_0,nil,nil,nil,nil",
-    obj "chest,70,40,nil,nil,nil,nil,nil,true,false,nil,show_chest_0_0,false,nil,nil,nil",
+    obj "button,85,7,nil,nil,nil,nil,nil,true,nil,nil,show_chest_0_0,nil,nil,nil,nil",
+    obj "chest,48,64,nil,nil,nil,nil,nil,true,false,true,show_chest_0_0,false,nil,nil,nil"
 
-    -- obj "s_shoot_v,96,112,nil,nil,nil,nil,false,nil,nil,nil,nil,true,1,60,1",
-    -- obj "s_shoot_h,16,36,nil,nil,nil,nil,false,nil,nil,nil,nil,true,1,60,1",
-    -- obj "s_shoot_v,50,16,nil,nil,nil,nil,true,nil,nil,nil,nil,true,1,60,1",
+    -- obj "s_shoot_v,96,112,nil,nil,nil,nil,false,nil,nil,nil,nil,true,1,60,1"
+    -- obj "s_shoot_h,15,36,nil,nil,nil,nil,false,nil,nil,nil,nil,true,1,60,1",
+    -- obj "s_shoot_v,50,16,nil,nil,nil,nil,true,nil,nil,nil,nil,true,1,60,1"
     -- obj "s_shoot_h,112,48,nil,nil,nil,nil,true,nil,nil,nil,nil,true,1,60,1"
   }
 )
@@ -248,7 +248,7 @@ room(
 room(
   3, 1, {
     { name = "𝘵𝘩𝘦 𝘣𝘰𝘵𝘵𝘰𝘮𝘭𝘦𝘴𝘴 𝘱𝘢𝘵𝘩𝘴 - 𝘴𝘰𝘶𝘵𝘩", flags = rf { dungeon = true } },
-    obj "chest,70,40,nil,nil,nil,nil,nil,true,true,nil,nil,true,nil,nil,nil"
+    obj "chest,70,40,nil,nil,nil,nil,nil,true,true,true,show_chest_3_1,true,nil,nil,nil"
   }
 )
 room(
@@ -537,7 +537,11 @@ function draw_player_interact_icon()
             sfx(18, 3)
           end
         end
-        -- if flag.chest then sspr(29, 80, 3, 7, p.x + 8, p.y - 8) end
+        if flag.chest then
+          if o.active then
+            sspr(29, 80, 3, 7, p.x + 8, p.y - 8)
+          end
+        end
         if flag.door and flag.solid then
           if p.keys > 0 then sspr(113, 96, 5, 8, p.x + 8, p.y - 8) end
           if btnp(BTN_O) then
@@ -583,7 +587,17 @@ function draw_background_sprites()
       door_lights(mapx + ax, mapy + ay, afx, afy, a_obj.flp)
     end
     if flag.chest then
-      if a_obj.active then spr(13, mapx + ax, mapy + ay, 2, 2) end
+      if a_obj.active then
+        if a_obj.locked then
+          spr(13, mapx + ax, mapy + ay, 2, 2)
+        else
+          spr(45, mapx + ax, mapy + ay, 2, 2)
+        end
+        if btnp(BTN_O) and a_obj.locked then
+          sfx(50, 3)
+          a_obj.locked = false
+        end
+      end
     end
     if flag.rock then spr(134, mapx + ax, mapy + ay, 2, 2) end
     if flag.stairs_down then spr(130, mapx + ax, mapy + ay, 2, 2) end
@@ -792,7 +806,7 @@ end
 
 local adraw = {
   { 117, 48, 3, 8, false, false, 2, -4 }, -- 𝘥𝘰𝘸𝘯 to 𝘶𝘱 -- 𝘥𝘰𝘯𝘦
-  { 117, 48, 3, 8, false, true, 3, 2 }, -- 𝘶𝘱 to 𝘥𝘰𝘸𝘯
+  { 117, 48, 3, 8, false, true, 2, -6 }, -- 𝘶𝘱 to 𝘥𝘰𝘸𝘯
   { 112, 61, 8, 3, false, false, 2, 2 }, -- 𝘭𝘦𝘧𝘵 to 𝘳𝘪𝘨𝘩𝘵 -- 𝘥𝘰𝘯𝘦
   { 112, 61, 8, 3, true, false, -4, 2 } -- 𝘳𝘪𝘨𝘩𝘵 to 𝘭𝘦𝘧𝘵
 }
