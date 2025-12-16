@@ -390,9 +390,9 @@ room(
     obj "arch,120,64,false,nil,true,false,nil,nil,nil,nil,nil,nil,nil,nil,nil",
     obj "light,118,54,nil,12,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil",
     obj "light,118,84,nil,12,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil",
-    obj "chest,96,16,nil,nil,nil,nil,nil,true,true,true,show_chest_8_0,true,nil,nil,nil",
-    obj "button,36,9,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil",
-    obj "s_shoot_v,36,106,nil,nil,nil,nil,false,nil,nil,nil,nil,true,1,90,2.5"
+    obj "chest,96,16,nil,nil,nil,nil,nil,true,true,true,nil,true,nil,nil,nil",
+    obj "button,36,9,nil,nil,nil,nil,nil,nil,nil,nil,stop_shooter_1_8_0,nil,nil,nil,nil",
+    obj "s_shoot_v,36,106,nil,nil,nil,nil,false,nil,nil,nil,stop_shooter_1_8_0,true,1,90,2.5"
   }
 )
 room(
