@@ -21,10 +21,11 @@ function enemy(room_id, fr, x, y, fly, speed, att_speed, acc, drg, stop_time, pa
     slow_radius = slow_radius,
     state = "explore",
     ttl = 0,
-    hp = 10,
-    start_hp = 10,
+    hp = 3,
+    start_hp = 3,
     alert_time = 0,
-    stagger = 0
+    stagger = 0,
+    flash = 0
   }
 end
 
@@ -38,11 +39,14 @@ function blob(x, y) return enemy(get_current_room(), { 226 }, x, y, false, 0.8, 
 -- drawing (safe anim advance)
 function baddie_draw(b)
   local bx, by = b.x, b.y
+  -- poison_flames(b.x, b.y)
+
   -- animation
   b.anim += 0.2 * t_increment
   if b.anim > #b.frames + 0.999 then b.anim = 1 end
   local frame, flip = b.frames[flr(b.anim)], (b.dx < 0)
   spr(frame, bx - 4, by - 4, 2, 2, flip)
+
   -- health bar
   if b.hp < b.start_hp then
     rectfill(bx, by + 10, bx + b.start_hp, by + 10, 0)
@@ -83,13 +87,17 @@ end
 function baddie_update(b)
   b.ttl -= 1
 
+  if collision(b) then
+    b.flash = 50
+  end
+
   if spr_coll(b, p) and player_atk then
     sfx(48, 2)
     b.hp -= 1
   end
 
   if b.hp == 0 then
-    boom(b.x, b.y)
+    boom(b.x, b.y, 8, 4, 9, 11)
     sfx(49, 2)
     del(baddie_m.baddies, b)
   end

@@ -101,7 +101,10 @@ room(
     obj "vase,32,96,nil,nil,nil,nil,nil,nil,true,nil,nil,nil,nil,nil,nil",
 
     obj "button,85,7,nil,nil,nil,nil,nil,true,nil,nil,show_chest_0_0,nil,nil,nil,nil",
-    obj "chest,48,64,nil,nil,nil,nil,nil,true,false,true,show_chest_0_0,false,nil,nil,nil"
+    obj "chest,48,64,nil,nil,nil,nil,nil,false,false,true,show_chest_0_0,false,nil,nil,nil",
+    obj "coin,30,70,nil,nil,nil,nil,nil,nil,nil,nil,nil,false,nil,nil,nil",
+    obj "coin,96,68,nil,nil,nil,nil,nil,nil,nil,nil,nil,false,nil,nil,nil",
+    obj "coin,30,66,nil,nil,nil,nil,nil,nil,nil,nil,nil,false,nil,nil,nil"
 
     -- obj "s_shoot_v,96,112,nil,nil,nil,nil,false,nil,nil,nil,nil,true,1,60,1"
     -- obj "s_shoot_h,15,36,nil,nil,nil,nil,false,nil,nil,nil,nil,true,1,60,1",
@@ -318,7 +321,11 @@ room(
 )
 room(
   5, 2, {
-    { name = "𝘯𝘦𝘦𝘥 𝘯𝘢𝘮𝘦 𝘩𝘦𝘳𝘦", flags = rf { dungeon = true } }
+    { name = "𝘯𝘦𝘦𝘥 𝘯𝘢𝘮𝘦 𝘩𝘦𝘳𝘦", flags = rf { dungeon = true } },
+    obj "s_shoot_h,47,36,nil,nil,nil,nil,false,nil,nil,nil,nil,true,1,60,1",
+    obj "s_shoot_h,80,52,nil,nil,nil,nil,true,nil,nil,nil,nil,true,1,90,1",
+    obj "s_shoot_h,47,84,nil,nil,nil,nil,false,nil,nil,nil,nil,true,1,90,1",
+    obj "s_shoot_h,80,100,nil,nil,nil,nil,true,nil,nil,nil,nil,true,1,60,1"
   }
 )
 room(
@@ -541,7 +548,8 @@ function draw_player_interact_icon()
           if o.active and o.locked then
             sspr(29, 80, 3, 7, p.x + 8, p.y - 8)
             if btnp(BTN_O) and o.locked then
-              sfx(50, 3)
+              sfx(51, 3)
+              -- add(active_objects, obj "key, 32, 32, nil, nil, nil, nil, true, nil, nil, nil, nil, nil, nil, nil") -- interesting
               o.locked = false
             end
           end
@@ -590,12 +598,17 @@ function draw_background_sprites()
       end
       door_lights(mapx + ax, mapy + ay, afx, afy, a_obj.flp)
     end
+    if flag.coin then
+      sspr(112, 104, 8, 6, mapx + ax, mapy + ay)
+    end
     if flag.chest then
       if a_obj.active then
+        a_obj.flags.interactable = true
         if a_obj.locked then
           spr(13, mapx + ax, mapy + ay, 2, 2)
         else
           spr(45, mapx + ax, mapy + ay, 2, 2)
+          a_obj.flags.interactable = false
         end
       end
     end

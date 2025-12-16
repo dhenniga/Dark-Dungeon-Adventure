@@ -73,6 +73,7 @@ end
 --
 
 function player_hit()
+	sfx(53, 3)
 	p.remaining_hearts -= 1
 end
 

@@ -1,6 +1,10 @@
 -- collision
+
+function collision(o)
+  return (abs(o.x - p.x) + abs(o.y - p.y)) <= 8
+end
 function spr_coll(enemy, player)
-  if enemy.x < player.x + 8 and enemy.x + 8 > player.x and enemy.y < player.y + 8 and enemy.y + 8 > player.y then
+  if collision(enemy) then
     local dx = enemy.x - player.x
     local dy = enemy.y - player.y
     local d = sqrt(dx * dx + dy * dy)
@@ -16,16 +20,6 @@ function spr_coll(enemy, player)
 
     sfx(16, 3)
     return true
-  end
-end
-
-function obj_collision(o)
-  if not o.flags.active then
-    local ox, oy, px, py = mapx + o.x, mapy + o.y, p.x, p.y
-    if ox < px + 8 and ox + 8 > px and oy < py + 8 and oy + 8 > py then
-      -- sfx(46, 1)
-      return true
-    end
   end
 end
 
