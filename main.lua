@@ -1,8 +1,8 @@
 BTN_L, BTN_R, BTN_U, BTN_D, BTN_X, BTN_O, dungeon, sewer, pit, player_light_enabled, reading, allow_movement, raindrops = 0, 1, 2, 3, 4, 5, "128,7,139,132,5,6,135,4,137,138,9,143,13,14,15", "129,7,131,130,129,131,135,132,137,139,9,4,1,14,5", "0,7,139,132,128,130,135,4,137,138,9,143,129,14,15", false, false, true, false
 
-music_enabled = true
-collision_state = true
-darkrooms = true
+music_enabled = false
+collision_state = false
+darkrooms = false
 
 function palette(s)
   for i, v in ipairs(split(s, ",")) do
@@ -12,13 +12,13 @@ end
 
 function _init()
   cartdata("davidhennigan_dark_dungeon_1")
-  p.x, p.y, p.remaining_hearts, p.keys = 67, 24, 5, 5
-  -- p.x, p.y, p.remaining_hearts, p.keys = 1112, 79, 5, 5
+  -- p.x, p.y, p.remaining_hearts, p.keys = 67, 24, 5, 5
+  p.x, p.y, p.remaining_hearts, p.keys = 548, 326, 5, 5
   t_increment = 1
   cls()
   decode_tiles()
   init_rain()
-  poke(0x5f2e, 1)
+  poke(0x5f2e, 1) -- keeps the palette after quit.  Can be removed later.
 
   if music_enabled then
     music(0)
@@ -116,4 +116,5 @@ function _draw()
     -- pb("curr_speed:" .. tostr(p.curr_speed), mapx, mapy + 98, 9)
     -- pb("fall_dir:" .. tostr(p.fall_dir), mapx, mapy + 106, 9)
   end
+
 end

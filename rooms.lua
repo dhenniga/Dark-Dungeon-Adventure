@@ -23,30 +23,57 @@ local function convert(v)
   return v
 end
 
-function obj(str)
-  local t, out = split(str), {}
+--   x = 2
+--   y = 3
+--   vori = 4
+--   rad = 5
+--   flx = 6
+--   fly = 7
+--   flp = 8
+--   interactable = 9
+--   solid = 10
+--   locked = 11
+--   text = 12
+--   active = 13
+--   delay = 14
+--   timing = 15
+--   speed = 16
 
-  out.x = convert(t[2])
-  out.y = convert(t[3])
-  out.vori = convert(t[4])
-  out.rad = convert(t[5])
-  out.flx = convert(t[6])
-  out.fly = convert(t[7])
-  out.flp = convert(t[8])
-  out.interactable = convert(t[9])
-  out.solid = convert(t[10])
-  out.locked = convert(t[11])
-  out.text = convert(t[12])
-  out.active = convert(t[13])
-  out.delay = convert(t[14])
-  out.timing = convert(t[15])
-  out.speed = convert(t[16])
-
-  -- flags from the first entry - needs to be last
-  out.flags = { [t[1]] = true, solid = out.solid, interactable = out.interactable, locked = out.locked }
-
-  return out
+function obj(s)
+  local t, o = split(s), {}
+  local c = convert
+  for i, k in ipairs { "x", "y", "vori", "rad", "flx", "fly", "flp", "interactable", "solid", "locked", "text", "active", "delay", "timing", "speed" } do
+    local v = c(t[i + 1])
+    if v ~= nil then o[k] = v end
+  end
+  o.flags = { [t[1]] = true, solid = o.solid, interactable = o.interactable, locked = o.locked }
+  return o
 end
+
+-- function obj(str)
+--   local t, out = split(str), {}
+
+--   out.x = convert(t[2])
+--   out.y = convert(t[3])
+--   out.vori = convert(t[4])
+--   out.rad = convert(t[5])
+--   out.flx = convert(t[6])
+--   out.fly = convert(t[7])
+--   out.flp = convert(t[8])
+--   out.interactable = convert(t[9])
+--   out.solid = convert(t[10])
+--   out.locked = convert(t[11])
+--   out.text = convert(t[12])
+--   out.active = convert(t[13])
+--   out.delay = convert(t[14])
+--   out.timing = convert(t[15])
+--   out.speed = convert(t[16])
+
+--   -- flags from the first entry - needs to be last
+--   out.flags = { [t[1]] = true, solid = out.solid, interactable = out.interactable, locked = out.locked }
+
+--   return out
+-- end
 
 function sign_dialog(index)
   local alltext = {
@@ -192,13 +219,13 @@ room(
 )
 room(
   1, 2, {
-    { name = "NEEDS A NAME", flags = rf { pit = true } },
+    { name = "BASEMENT OF THE FLIES", flags = rf { pit = true } },
     obj "stairs_down,16,16,nil,nil,nil,nil,nil,nil,true,nil,nil,nil,nil,nil,nil",
     obj "spike,16,64,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil",
     obj "spike,32,96,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil",
     obj "spike,48,64,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil",
     obj "sign,48,5,nil,nil,nil,nil,nil,true,true,nil,3,nil,nil,nil,nil",
-    obj "button,100,73,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil"
+    obj "button,100,73,nil,nil,nil,nil,nil,nil,nil,nil,three_buttons_1,nil,nil,nil,nil"
   }
 )
 room(
@@ -231,8 +258,8 @@ room(
 )
 room(
   2, 2, {
-    { name = "𝘵𝘩𝘦 𝘱𝘪𝘵 𝘮𝘢𝘻𝘦", flags = rf { pit = true } },
-    obj "button,20,41,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil"
+    { name = "BASEMENT OF THE FLIES", flags = rf { pit = true } },
+    obj "button,20,41,nil,nil,nil,nil,nil,nil,nil,nil,three_buttons_2,nil,nil,nil,nil"
   }
 )
 room(
@@ -256,7 +283,7 @@ room(
 )
 room(
   3, 2, {
-    { name = "𝘵𝘩𝘦 𝘱𝘪𝘵 𝘮𝘢𝘻𝘦", flags = rf { pit = true } }
+    { name = "BASEMENT OF THE FLIES", flags = rf { pit = true } }
   }
 )
 room(
@@ -292,8 +319,9 @@ room(
 )
 room(
   4, 2, {
-    { name = "𝘵𝘩𝘦 𝘱𝘪𝘵 𝘮𝘢𝘻𝘦", flags = rf { pit = true } },
-    obj "button,84,9,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil"
+    { name = "BASEMENT OF THE FLIES", flags = rf { pit = true } },
+    obj "button,84,9,nil,nil,nil,nil,nil,nil,nil,nil,three_button_stairs_4_2,nil,nil,nil,nil",
+    obj "stairs_up,96,96,nil,nil,nil,nil,true,nil,nil,nil,three_button_stairs_4_2,false,nil,nil,nil"
   }
 )
 room(
@@ -614,7 +642,11 @@ function draw_background_sprites()
     end
     if flag.rock then spr(134, mapx + ax, mapy + ay, 2, 2) end
     if flag.stairs_down then spr(130, mapx + ax, mapy + ay, 2, 2) end
-    if flag.stairs_up then spr(132, mapx + ax, mapy + ay, 2, 2) end
+    if flag.stairs_up then
+      if a_obj.active then
+        spr(132, mapx + ax, mapy + ay, 2, 2, a_obj.flp, false)
+      end
+    end
     if flag.c_rock then spr(136, mapx + ax, mapy + ay, 2, 2) end
     if flag.spike then animate_spikes(a_obj) end
     if flag.button then

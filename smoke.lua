@@ -43,9 +43,9 @@ function drawparticle(p)
   circfill(p.x, p.y + 2, r, p.col2)
 end
 
-function boom(x, y, c1, c2, c3, c4)
+function boom(x, y, c1, c2, c3, c4, scale)
   for i = 1, 20 do
-    smoke_particle(x + rnd(16), y + rnd(16), rnd(8), i - 20, c1, c2, 0)
+    smoke_particle(x + rnd(16), y + rnd(16), rnd(scale), i - 20, c1, c2, 0)
     smoke_particle(x + rnd(16), y + rnd(16), rnd(3), i, c3, c4, .01)
   end
 end

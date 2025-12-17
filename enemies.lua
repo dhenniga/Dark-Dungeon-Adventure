@@ -39,7 +39,7 @@ function blob(x, y) return enemy(get_current_room(), { 226 }, x, y, false, 0.8, 
 -- drawing (safe anim advance)
 function baddie_draw(b)
   local bx, by = b.x, b.y
-  -- poison_flames(b.x, b.y)
+  poison_flames(b.x, b.y)
 
   -- animation
   b.anim += 0.2 * t_increment
@@ -67,7 +67,9 @@ end
 
 function baddie_m.update()
   for b in all(baddie_m.baddies) do
-    if b and b.x >= mapx and b.x <= mapx + 127 and b.y >= mapy and b.y <= mapy + 127 then baddie_update(b) end
+    if b and b.x >= mapx and b.x <= mapx + 127 and b.y >= mapy and b.y <= mapy + 127 then
+      baddie_update(b)
+    end
   end
 end
 
@@ -87,8 +89,15 @@ end
 function baddie_update(b)
   b.ttl -= 1
 
-  if collision(b) then
-    b.flash = 50
+  if spr_coll(b, p) then
+    b.flash = 10
+  end
+
+  if b.flash >= 0 then
+    b.flash -= 1
+    poke(0x5f5f, 0x10)
+
+    -- memset(0x5f70,0xff,16)
   end
 
   if spr_coll(b, p) and player_atk then
@@ -97,7 +106,7 @@ function baddie_update(b)
   end
 
   if b.hp == 0 then
-    boom(b.x, b.y, 8, 4, 9, 11)
+    boom(b.x, b.y, 8, 4, 9, 11, 3)
     sfx(49, 2)
     del(baddie_m.baddies, b)
   end
