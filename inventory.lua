@@ -19,7 +19,7 @@ function draw_inventory()
   end
 
   -- open inventory with 𝘹 button
-  if btn(𝘣𝘵𝘯_𝘹) and not reading then
+  if btn(𝘣𝘵𝘯_𝘹) and not reading and not circle_transitioning then
     t_increment = .05
     if i_transition < 50 then i_transition += 1 end
     if i_transition == 1 then sfx(10, 3) end
@@ -27,19 +27,17 @@ function draw_inventory()
     allow_movement = false
     show_inventory()
   else
-    t_increment, i_transition, allow_movement = 1, 0, true
+    t_increment, i_transition = 1, 0
     text_anim = 0
   end
 end
 
--- ユかせほ 𝘱retty border text print helper
 function pb(s, x, y, c, o)
   color(o)
   ?'\-f' .. s .. '\^g\-h' .. s .. '\^g\|f' .. s .. '\^g\|h' .. s, x, y
   ?s, x, y, c
 end
 
--- ユか❎えヤま◆ 𝘧ull inventory display overlay
 function show_inventory()
   -- show item name banner
   for o in all(active_objects) do

@@ -24,15 +24,20 @@ function update_buttons()
   end
 end
 
-function update_chests()
+function update_events()
   for o in all(active_objects) do
     if o.flags.chest and on(o.text) and o.active == false then
       o.flags.solid = true
       o.active = true
-      boom(o.x, o.y, 13, 5, 10, 7, 8)
+      boom(mapx + o.x, mapy + o.y, 13, 5, 10, 7, 8)
     end
     if o.flags.s_shoot_v and on(o.text) then
       o.active = false
+    end
+
+    if o.flags.stairs_up and on(o.text) and o.active == false then
+      boom(mapx + o.x, mapy + o.y, 13, 5, 10, 7, 8)
+      o.active = true
     end
   end
 end

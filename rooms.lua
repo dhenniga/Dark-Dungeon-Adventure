@@ -23,6 +23,7 @@ local function convert(v)
   return v
 end
 
+--   level name and type  = 1
 --   x = 2
 --   y = 3
 --   vori = 4
@@ -49,31 +50,6 @@ function obj(s)
   o.flags = { [t[1]] = true, solid = o.solid, interactable = o.interactable, locked = o.locked }
   return o
 end
-
--- function obj(str)
---   local t, out = split(str), {}
-
---   out.x = convert(t[2])
---   out.y = convert(t[3])
---   out.vori = convert(t[4])
---   out.rad = convert(t[5])
---   out.flx = convert(t[6])
---   out.fly = convert(t[7])
---   out.flp = convert(t[8])
---   out.interactable = convert(t[9])
---   out.solid = convert(t[10])
---   out.locked = convert(t[11])
---   out.text = convert(t[12])
---   out.active = convert(t[13])
---   out.delay = convert(t[14])
---   out.timing = convert(t[15])
---   out.speed = convert(t[16])
-
---   -- flags from the first entry - needs to be last
---   out.flags = { [t[1]] = true, solid = out.solid, interactable = out.interactable, locked = out.locked }
-
---   return out
--- end
 
 function sign_dialog(index)
   local alltext = {
@@ -113,8 +89,8 @@ room(
     obj "c_rock,64,0,nil,nil,nil,nil,nil,nil,true,nil,nil,nil,nil,nil,nil",
     obj "arch,64,0,true,nil,false,false,nil,nil,nil,nil,nil,nil,nil,nil,nil",
     obj "sign,33,5,nil,nil,nil,nil,nil,true,true,nil,6,nil,nil,nil,nil",
-    obj "rock,64,64,nil,nil,nil,nil,nil,nil,true,nil,nil,nil,nil,nil,nil",
-    obj "rock,80,64,nil,nil,nil,nil,nil,nil,true,nil,nil,nil,nil,nil,nil",
+    -- obj "rock,64,64,nil,nil,nil,nil,nil,nil,true,nil,nil,nil,nil,nil,nil",
+    -- obj "rock,80,64,nil,nil,nil,nil,nil,nil,true,nil,nil,nil,nil,nil,nil",
     obj "flames_back,16,16,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil",
     obj "light,24,20,nil,20,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil",
     obj "flames_back,96,16,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil",
@@ -131,12 +107,15 @@ room(
     obj "chest,48,64,nil,nil,nil,nil,nil,false,false,true,show_chest_0_0,false,nil,nil,nil",
     obj "coin,30,70,nil,nil,nil,nil,nil,nil,nil,nil,nil,false,nil,nil,nil",
     obj "coin,96,68,nil,nil,nil,nil,nil,nil,nil,nil,nil,false,nil,nil,nil",
-    obj "coin,30,66,nil,nil,nil,nil,nil,nil,nil,nil,nil,false,nil,nil,nil"
+    obj "coin,30,66,nil,nil,nil,nil,nil,nil,nil,nil,nil,false,nil,nil,nil",
 
     -- obj "s_shoot_v,96,112,nil,nil,nil,nil,false,nil,nil,nil,nil,true,1,60,1"
     -- obj "s_shoot_h,15,36,nil,nil,nil,nil,false,nil,nil,nil,nil,true,1,60,1",
     -- obj "s_shoot_v,50,16,nil,nil,nil,nil,true,nil,nil,nil,nil,true,1,60,1"
     -- obj "s_shoot_h,112,48,nil,nil,nil,nil,true,nil,nil,nil,nil,true,1,60,1"
+
+    obj "stairs_up,64,64,nil,0,148,295,true,nil,true,nil,nil,true,nil,nil,nil"
+    -- obj "rock,112,80,nil,nil,nil,nil,nil,nil,true,nil,nil,nil,nil,nil,nil"
   }
 )
 room(
@@ -208,24 +187,25 @@ room(
     obj "light,118,52,nil,12,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil",
     obj "vase,16,96,nil,nil,nil,nil,nil,nil,true,nil,nil,nil,nil,nil,nil",
     obj "vase,16,80,nil,nil,nil,nil,nil,nil,true,nil,nil,nil,nil,nil,nil",
-    obj "vase,32,80,nil,nil,nil,nil,nil,nil,true,nil,nil,nil,nil,nil,nil",
     obj "vase,0,80,nil,nil,nil,nil,nil,nil,true,nil,nil,nil,nil,nil,nil",
     obj "vase,0,96,nil,nil,nil,nil,nil,nil,true,nil,nil,nil,nil,nil,nil",
     obj "vase,96,16,nil,nil,nil,nil,nil,nil,true,nil,nil,nil,nil,nil,nil",
     obj "vase,96,48,nil,nil,nil,nil,nil,nil,true,nil,nil,nil,nil,nil,nil",
     obj "vase,16,16,nil,nil,nil,nil,nil,nil,true,nil,nil,nil,nil,nil,nil",
-    obj "vase,32,16,nil,nil,nil,nil,nil,nil,true,nil,nil,nil,nil,nil,nil"
+    obj "vase,32,16,nil,nil,nil,nil,nil,nil,true,nil,nil,nil,nil,nil,nil",
+    obj "stairs_down,32,96,3,8,102,102,nil,nil,true,nil,nil,nil,nil,nil,nil"
   }
 )
 room(
   1, 2, {
     { name = "BASEMENT OF THE FLIES", flags = rf { pit = true } },
-    obj "stairs_down,16,16,nil,nil,nil,nil,nil,nil,true,nil,nil,nil,nil,nil,nil",
+    obj "stairs_down,16,16,nil,0,102,102,nil,nil,true,nil,nil,nil,nil,nil,nil",
     obj "spike,16,64,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil",
     obj "spike,32,96,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil",
     obj "spike,48,64,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil",
-    obj "sign,48,5,nil,nil,nil,nil,nil,true,true,nil,3,nil,nil,nil,nil",
-    obj "button,100,73,nil,nil,nil,nil,nil,nil,nil,nil,three_buttons_1,nil,nil,nil,nil"
+    obj "sign,48,21,nil,nil,nil,nil,nil,true,true,nil,3,nil,nil,nil,nil",
+    obj "button,100,73,nil,nil,nil,nil,nil,nil,nil,nil,three_buttons_1,nil,nil,nil,nil",
+    obj "rat,94,50,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil"
   }
 )
 room(
@@ -321,7 +301,7 @@ room(
   4, 2, {
     { name = "BASEMENT OF THE FLIES", flags = rf { pit = true } },
     obj "button,84,9,nil,nil,nil,nil,nil,nil,nil,nil,three_button_stairs_4_2,nil,nil,nil,nil",
-    obj "stairs_up,96,96,nil,nil,nil,nil,true,nil,nil,nil,three_button_stairs_4_2,false,nil,nil,nil"
+    obj "stairs_up,96,96,3,8,148,295,true,nil,nil,nil,three_button_stairs_4_2,false,nil,nil,nil"
   }
 )
 room(
@@ -641,10 +621,18 @@ function draw_background_sprites()
       end
     end
     if flag.rock then spr(134, mapx + ax, mapy + ay, 2, 2) end
-    if flag.stairs_down then spr(130, mapx + ax, mapy + ay, 2, 2) end
+    if flag.stairs_down then
+      spr(130, mapx + ax, mapy + ay, 2, 2)
+      if stairs_trigger(a_obj) then
+        use_transition(a_obj)
+      end
+    end
     if flag.stairs_up then
       if a_obj.active then
         spr(132, mapx + ax, mapy + ay, 2, 2, a_obj.flp, false)
+        if stairs_trigger(a_obj) then
+          use_transition(a_obj)
+        end
       end
     end
     if flag.c_rock then spr(136, mapx + ax, mapy + ay, 2, 2) end

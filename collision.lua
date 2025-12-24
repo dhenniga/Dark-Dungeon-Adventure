@@ -8,19 +8,21 @@ function spr_coll(enemy, player)
     dx /= d dy /= d
 
     enemy.stagger = 10
-    enemy.dx += dx * 3
-    enemy.dy += dy * 3
+    enemy.dx += dx * 2
+    enemy.dy += dy * 2
 
-    player.dx -= dx * 3
-    player.dy -= dy * 3
+    player.dx -= dx * 2
+    player.dy -= dy * 2
 
     sfx(16, 3)
     return true
   end
 end
 
-function collision(o)
-  return (abs(mapx + o.x - p.x) + abs(mapy + o.y - p.y)) <= 8
+function collision(o, offset_x, offset_y)
+  offset_x = offset_x or 0
+  offset_y = offset_y or 0
+  return (abs(mapx + o.x - p.x + offset_x) + abs(mapy + o.y - p.y + offset_y)) <= 8
 end
 
 function sees(b, max_dist)
@@ -67,6 +69,23 @@ function player_can_move(a)
   end
   return true
 end
+
+-- function player_can_move(a)
+--   local xl, xr, yt, yb = a.x + a.dx, a.x + a.dx + 8, a.y + a.dy, a.y + a.dy + 8
+--   for i = 1, 4 do
+--     local x = (i < 3 and xl or xr)
+--     local y = (i % 2 == 1 and yt or yb)
+
+--     if is_fall_tile(x, y) then
+--       sfx(11, 3)
+--       determine_fall_direction(p)
+--       return false
+--     end
+
+--     if solid(x, y) then return false end
+--   end
+--   return true
+-- end
 
 function determine_fall_direction(a)
   a.curr_speed = 3

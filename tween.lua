@@ -25,3 +25,18 @@ function outcubic(t, b, c, d)
   t = t / d - 1
   return c * (t * t * t + 1) + b
 end
+
+function inCubic(t, b, c, d)
+  return c * (t / d) ^ 3 + b
+end
+
+function inOutCubic(t, b, c, d)
+  t = t / d * 2
+  if (t < 1) return c / 2 * t * t * t + b
+  t = t - 2
+  return c / 2 * (t * t * t + 2) + b
+end
+
+function linear(t, b, c, d)
+  return c * t / d + b
+end

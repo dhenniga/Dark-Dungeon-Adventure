@@ -21,9 +21,8 @@ lanturn_timer = 0
 tp = 19
 
 function draw_player()
-	local px, py, pdx, pdy = p.x, p.y, p.dx, p.dy
-	p.moving = pdx ~= 0 or pdy ~= 0
-	p.curr_speed = max(abs(pdx), abs(pdy)) / 4.5
+	p.moving = p.dx ~= 0 or p.dy ~= 0
+	p.curr_speed = max(abs(p.dx), abs(p.dy)) / 4.5
 
 	-- diag movement speed
 	-- if p.dx * p.dy != 0 then
@@ -39,10 +38,12 @@ function draw_player()
 
 	-- footstep sounds for specific frames
 	if not p.fall_dir and p.moving and ((running > 1.2 and running < 1.5) or (running > 3.2 and running < 3.4)) then
-		if not stat(53) then sfx(13, 3) end
+		-- if not stat(53) then
+		sfx(13, 3)
+		-- end
 	end
 
-	if not player_atk then
+	if not player_atk or allow_movement then
 		if p.moving then
 			if not p.fall_dir then spr(split("198, 200, 202, 204")[flr(running)], p.x - 4, p.y - 8, 2, 2, p.direction) end
 		else
@@ -125,6 +126,7 @@ function update_player()
 	else
 		p.dx, p.dy = 0, 0
 	end
+
 	p.dx = abs(p.dx) > 0 and p.dx * drg or 0
 	p.dy = abs(p.dy) > 0 and p.dy * drg or 0
 	if abs(p.dx) < 0.02 then p.dx = 0 end

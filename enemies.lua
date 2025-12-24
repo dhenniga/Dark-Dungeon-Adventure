@@ -1,7 +1,7 @@
 -- enemies.lua
 baddie_m = { baddies = {} }
 
-function enemy(room_id, fr, x, y, fly, speed, att_speed, acc, drg, stop_time, pause_between, weight, slow_radius)
+function enemy(room_id, fr, x, y, fly, speed, att_speed, acc, drg, stop_time, pause_between, weight, slow_radius, flash_frame)
   return {
     room_id = room_id,
     frames = fr,
@@ -25,27 +25,34 @@ function enemy(room_id, fr, x, y, fly, speed, att_speed, acc, drg, stop_time, pa
     start_hp = 3,
     alert_time = 0,
     stagger = 0,
-    flash = 0
+    flash = 0,
+    flash_frame = flash_frame
   }
 end
 
 -- presets
-function bat(x, y) return enemy(get_current_room(), split("232, 234, 236, 234"), x, y, true, 1.2, 1.6, 10, 0.95, 40, 40, 0.1, 60) end
-function rat(x, y) return enemy(get_current_room(), split("228, 230"), x, y, false, 1.5, 0.8, 0.64, 0.92, 35, 90, 0.1, 10) end -- happy with the rats
-function blob(x, y) return enemy(get_current_room(), { 226 }, x, y, false, 0.8, 1.0, 0.12, 0.92, 20, 80, 0.2, 20) end
+function bat(x, y) return enemy(get_current_room(), split("232, 234, 236, 234"), x, y, true, 1.2, 1.6, 10, 0.90, 40, 40, 0.1, 60, 68) end
+function rat(x, y) return enemy(get_current_room(), split("228, 230"), x, y, false, 1.5, 0.8, 0.64, 0.92, 35, 90, 0.1, 10, 70) end -- happy with the rats
+function blob(x, y) return enemy(get_current_room(), { 226 }, x, y, false, 0.8, 1.0, 0.12, 0.92, 20, 80, 0.2, 20, 58) end
 
 --
 
 -- drawing (safe anim advance)
 function baddie_draw(b)
   local bx, by = b.x, b.y
-  poison_flames(b.x, b.y)
+  -- poison_flames(b.x, b.y)
+  -- fire_flames(b.x, b.y)
 
   -- animation
   b.anim += 0.2 * t_increment
   if b.anim > #b.frames + 0.999 then b.anim = 1 end
   local frame, flip = b.frames[flr(b.anim)], (b.dx < 0)
-  spr(frame, bx - 4, by - 4, 2, 2, flip)
+
+  if b.flash > 0 then
+    spr(b.flash_frame, bx - 4, by - 4, 2, 2, flip)
+  else
+    spr(frame, bx - 4, by - 4, 2, 2, flip)
+  end
 
   -- health bar
   if b.hp < b.start_hp then
@@ -89,25 +96,19 @@ end
 function baddie_update(b)
   b.ttl -= 1
 
-  if spr_coll(b, p) then
-    b.flash = 10
-  end
-
   if b.flash >= 0 then
     b.flash -= 1
-    poke(0x5f5f, 0x10)
-
-    -- memset(0x5f70,0xff,16)
   end
 
   if spr_coll(b, p) and player_atk then
-    sfx(48, 2)
+    b.flash = 8
+    sfx(48, 3)
     b.hp -= 1
   end
 
   if b.hp == 0 then
     boom(b.x, b.y, 8, 4, 9, 11, 3)
-    sfx(49, 2)
+    sfx(49, 3)
     del(baddie_m.baddies, b)
   end
 
@@ -189,7 +190,8 @@ function baddie_update(b)
   if not sb(b.x, ny) then b.y = ny else b.dy = 0 end
   b.x = mapx + max(0, min(b.x - mapx, 112))
   b.y = mapy + max(0, min(b.y - mapy, 112))
-  spr_coll(b, p)
+
+  -- spr_coll(b, p)
 
   for o in all(baddie_m.baddies) do
     if o ~= b and o.room_id == b.room_id then
