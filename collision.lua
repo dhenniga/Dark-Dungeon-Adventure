@@ -70,23 +70,6 @@ function player_can_move(a)
   return true
 end
 
--- function player_can_move(a)
---   local xl, xr, yt, yb = a.x + a.dx, a.x + a.dx + 8, a.y + a.dy, a.y + a.dy + 8
---   for i = 1, 4 do
---     local x = (i < 3 and xl or xr)
---     local y = (i % 2 == 1 and yt or yb)
-
---     if is_fall_tile(x, y) then
---       sfx(11, 3)
---       determine_fall_direction(p)
---       return false
---     end
-
---     if solid(x, y) then return false end
---   end
---   return true
--- end
-
 function determine_fall_direction(a)
   a.curr_speed = 3
   -- allow_movement=false

@@ -2,7 +2,7 @@
 
 i_transition = 0 -- inventory transition timer
 item_selected = 1 -- which slot is currently active
-player_light_enabled = true
+player_light_enabled = false
 local text_anim = 0
 
 -- ユかたま 𝘥raw hearts and handle inventory toggle
@@ -19,16 +19,15 @@ function draw_inventory()
   end
 
   -- open inventory with 𝘹 button
-  if btn(𝘣𝘵𝘯_𝘹) and not reading and not circle_transitioning then
+  if btn(BTN_X) and not reading and not circle_transitioning then
     t_increment = .05
     if i_transition < 50 then i_transition += 1 end
     if i_transition == 1 then sfx(10, 3) end
-    p.dx, p.dy = 0, 0
     allow_movement = false
+    p.dx, p.dy = 0, 0
     show_inventory()
-  else
-    t_increment, i_transition = 1, 0
-    text_anim = 0
+  elseif not circle_transitioning then
+    t_increment, i_transition, allow_movement, text_anim = 1, 0, true, 0
   end
 end
 

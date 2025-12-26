@@ -89,8 +89,8 @@ room(
     obj "c_rock,64,0,nil,nil,nil,nil,nil,nil,true,nil,nil,nil,nil,nil,nil",
     obj "arch,64,0,true,nil,false,false,nil,nil,nil,nil,nil,nil,nil,nil,nil",
     obj "sign,33,5,nil,nil,nil,nil,nil,true,true,nil,6,nil,nil,nil,nil",
-    -- obj "rock,64,64,nil,nil,nil,nil,nil,nil,true,nil,nil,nil,nil,nil,nil",
-    -- obj "rock,80,64,nil,nil,nil,nil,nil,nil,true,nil,nil,nil,nil,nil,nil",
+    obj "rock,64,64,nil,nil,nil,nil,nil,nil,true,nil,nil,nil,nil,nil,nil",
+    obj "rock,80,64,nil,nil,nil,nil,nil,nil,true,nil,nil,nil,nil,nil,nil",
     obj "flames_back,16,16,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil",
     obj "light,24,20,nil,20,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil",
     obj "flames_back,96,16,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil",
@@ -114,8 +114,8 @@ room(
     -- obj "s_shoot_v,50,16,nil,nil,nil,nil,true,nil,nil,nil,nil,true,1,60,1"
     -- obj "s_shoot_h,112,48,nil,nil,nil,nil,true,nil,nil,nil,nil,true,1,60,1"
 
-    obj "stairs_up,64,64,nil,0,148,295,true,nil,true,nil,nil,true,nil,nil,nil"
-    -- obj "rock,112,80,nil,nil,nil,nil,nil,nil,true,nil,nil,nil,nil,nil,nil"
+    obj "stairs_up,112,96,nil,nil,148,295,true,nil,true,nil,nil,true,nil,nil,nil",
+    obj "rock,112,80,nil,nil,nil,nil,nil,nil,true,nil,nil,nil,nil,nil,nil"
   }
 )
 room(
@@ -193,13 +193,13 @@ room(
     obj "vase,96,48,nil,nil,nil,nil,nil,nil,true,nil,nil,nil,nil,nil,nil",
     obj "vase,16,16,nil,nil,nil,nil,nil,nil,true,nil,nil,nil,nil,nil,nil",
     obj "vase,32,16,nil,nil,nil,nil,nil,nil,true,nil,nil,nil,nil,nil,nil",
-    obj "stairs_down,32,96,3,8,102,102,nil,nil,true,nil,nil,nil,nil,nil,nil"
+    obj "stairs_down,32,96,nil,nil,102,102,nil,nil,true,nil,nil,nil,nil,nil,nil"
   }
 )
 room(
   1, 2, {
     { name = "BASEMENT OF THE FLIES", flags = rf { pit = true } },
-    obj "stairs_down,16,16,nil,0,102,102,nil,nil,true,nil,nil,nil,nil,nil,nil",
+    obj "stairs_down,16,16,nil,nil,102,102,nil,nil,true,nil,nil,nil,nil,nil,nil",
     obj "spike,16,64,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil",
     obj "spike,32,96,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil",
     obj "spike,48,64,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil",
