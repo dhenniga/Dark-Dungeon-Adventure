@@ -1,7 +1,6 @@
 -- inventory.lua
-
-i_transition = 0 -- inventory transition timer
-item_selected = 1 -- which slot is currently active
+i_transition = 0
+item_selected = 1 -- 1: light, 2: sword, 3: bow, 4: bomb
 player_light_enabled = false
 local text_anim = 0
 
@@ -49,13 +48,12 @@ function show_inventory()
   if p.keys > 0 then
     for i = 1, min(p.keys, 10) do
       local x = mapx + 121 - (i - 1) * 13
-      fillp(█)
       circfill(x, outcubic(text_anim, mapy, 6, 12), 6, 129)
       spr(206, x - 3, outcubic(text_anim, mapy, 3, 12))
     end
   end
 
-  local dirs = { 𝘣𝘵𝘯_𝘶, 𝘣𝘵𝘯_𝘥, 𝘣𝘵𝘯_𝘭, 𝘣𝘵𝘯_𝘳 }
+  local dirs = { BTN_U, BTN_D, BTN_L, BTN_R }
   for i = 1, 4 do
     if btnp(dirs[i]) then
       if i == 1 then

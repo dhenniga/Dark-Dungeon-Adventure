@@ -34,6 +34,7 @@ __lua__
 #include player.lua
 #include rooms.lua
 #include buttons.lua
+#include stairs.lua
 #include smoke.lua
 #include enemies.lua
 #include collision.lua

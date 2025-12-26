@@ -1,28 +1,26 @@
 -- collision
-function spr_coll(enemy, player)
-  if enemy.x < player.x + 8 and enemy.x + 8 > player.x and enemy.y < player.y + 8 and enemy.y + 8 > player.y then
-    local dx = enemy.x - player.x
-    local dy = enemy.y - player.y
+function spr_coll(e)
+  if e.x < p.x + 8 and e.x + 8 > p.x and e.y < p.y + 8 and e.y + 8 > p.y then
+    local dx = e.x - p.x
+    local dy = e.y - p.y
     local d = sqrt(dx * dx + dy * dy)
     if d < 1 then d = 1 end
     dx /= d dy /= d
 
-    enemy.stagger = 10
-    enemy.dx += dx * 2
-    enemy.dy += dy * 2
+    e.stagger = 10
+    e.dx += dx * 2
+    e.dy += dy * 2
 
-    player.dx -= dx * 2
-    player.dy -= dy * 2
+    p.dx -= dx * 2
+    p.dy -= dy * 2
 
     sfx(16, 3)
     return true
   end
 end
 
-function collision(o, offset_x, offset_y)
-  offset_x = offset_x or 0
-  offset_y = offset_y or 0
-  return (abs(mapx + o.x - p.x + offset_x) + abs(mapy + o.y - p.y + offset_y)) <= 8
+function collision(o)
+  return (abs(mapx + o.x - p.x) + abs(mapy + o.y - p.y)) <= 8
 end
 
 function sees(b, max_dist)

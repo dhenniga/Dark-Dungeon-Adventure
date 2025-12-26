@@ -824,7 +824,7 @@ function update_arrows()
     end
 
     -- collision with player
-    if spr_coll(p, arrow) then
+    if spr_coll(arrow) then
       arrow.stagger = 10
       player_hit()
       del(arrows, arrow)

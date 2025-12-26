@@ -100,7 +100,7 @@ function baddie_update(b)
     b.flash -= 1
   end
 
-  if spr_coll(b, p) and player_atk then
+  if spr_coll(b) and player_atk then
     b.flash = 8
     sfx(48, 3)
     b.hp -= 1
@@ -190,8 +190,6 @@ function baddie_update(b)
   if not sb(b.x, ny) then b.y = ny else b.dy = 0 end
   b.x = mapx + max(0, min(b.x - mapx, 112))
   b.y = mapy + max(0, min(b.y - mapy, 112))
-
-  -- spr_coll(b, p)
 
   for o in all(baddie_m.baddies) do
     if o ~= b and o.room_id == b.room_id then

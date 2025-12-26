@@ -4,58 +4,10 @@ music_enabled = true
 collision_state = true
 darkrooms = true
 
-circle_t = 0
-circle_dir = 1
-circle_active = true
-circle_transitioning = false
-
 function palette(s)
   for i, v in ipairs(split(s, ",")) do
     pal(i, v + 0, 1)
   end
-end
-
-function start_level_reveal()
-  circle_t = 0
-  circle_dir = 1
-  circle_active = true
-  sfx(55, 3)
-end
-
-function start_level_hide()
-  circle_t = 1
-  circle_dir = -1
-  circle_active = true
-  sfx(54, 3)
-end
-
-function on_circle_hidden()
-  if next_px then
-    p.x = next_px
-    p.y = next_py
-  end
-
-  next_px = nil
-  next_py = nil
-  circle_transitioning = false
-  -- allow_movement = false
-  start_level_reveal()
-end
-
-function use_transition(o)
-  if circle_transitioning then return end
-  circle_transitioning = true
-  -- prevent movement during transition
-  allow_movement = false
-  next_px = o.flx
-  next_py = o.fly
-  p.dx, p.dy = 0, 0
-  start_level_hide()
-end
-
-function stairs_trigger(o)
-  local ox, oy, px, py = mapx + o.x, mapy + o.y, p.x, p.y
-  return px + 8 > ox and px < ox + 16 and py + 8 > oy and py < oy + 16
 end
 
 function _init()
@@ -90,21 +42,6 @@ function _init()
   )
   -- start_level_reveal()
   -- sfx(46, 3)
-end
-
-function update_circle()
-  if not circle_active then return end
-
-  circle_t += 0.015 * circle_dir
-
-  if circle_t >= 1 then
-    circle_t = 1
-    circle_active = false
-  elseif circle_t <= 0 then
-    circle_t = 0
-    circle_active = false
-    on_circle_hidden()
-  end
 end
 
 function _update60()
@@ -173,22 +110,17 @@ function _draw()
 
   tb_draw()
 
-  -- if not darkrooms then
-  --   pb(get_current_room(), mapx + 106, mapy + 121, 10)
-  --   -- pb("cx:" .. cur_room_x, mapx + 106, mapy + 106, 10)
-  --   -- pb("cy:" .. cur_room_y, mapx + 106, mapy + 114, 10)
-  --   pb("px:" .. flr(p.x) .. ", " .. "py:" .. flr(p.y), mapx + 2, mapy + 2, 7)
-  --   pb("mx:" .. mapx / 128 .. ", my:" .. mapy / 128, mapx + 2, mapy + 9, 7)
-  --   pb("cx:" .. cur_room_x .. ", cy:" .. cur_room_y, mapx + 2, mapy + 16, 7)
-  --   circ(p.x + 2, p.y, l_rad, 3)
-  --   -- pb("cpu:" .. stat(1), mapx + 97, mapy + 2, 7)
-  --   -- pb("mem:" .. stat(0), mapx + 85, mapy + 8, 7)
-  --   -- pb("moving:" .. tostr(p.moving), mapx, mapy + 74, 9)
-  --   -- pb("dx:" .. tostr(p.dx), mapx, mapy + 82, 9)
-  --   -- pb("dy:" .. tostr(p.dy), mapx, mapy + 90, 9)
-  --   -- pb("curr_speed:" .. tostr(p.curr_speed), mapx, mapy + 98, 9)
-  --   -- pb("fall_dir:" .. tostr(p.fall_dir), mapx, mapy + 106, 9)
-  -- end
+  if not darkrooms then
+    pb(get_current_room(), mapx + 106, mapy + 121, 10)
+    -- pb("cx:" .. cur_room_x, mapx + 106, mapy + 106, 10)
+    -- pb("cy:" .. cur_room_y, mapx + 106, mapy + 114, 10)
+    pb("px:" .. flr(p.x) .. ", " .. "py:" .. flr(p.y), mapx + 2, mapy + 2, 7)
+    pb("mx:" .. mapx / 128 .. ", my:" .. mapy / 128, mapx + 2, mapy + 9, 7)
+    pb("cx:" .. cur_room_x .. ", cy:" .. cur_room_y, mapx + 2, mapy + 16, 7)
+    circ(p.x + 2, p.y, l_rad, 3)
+    pb("cpu:" .. stat(1), mapx + 97, mapy + 2, 7)
+    pb("mem:" .. stat(0), mapx + 85, mapy + 8, 7)
+  end
 
   circthing = inCubic(circle_t, 0, 175, 1)
   poke(0x5f34, 2)
