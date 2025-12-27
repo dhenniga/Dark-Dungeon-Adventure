@@ -54,9 +54,9 @@ end
 function sign_dialog(index)
   local alltext = {
     {
-      "𝘸𝘦𝘭𝘤𝘰𝘮𝘦 𝘵𝘰 𝘵𝘩𝘦 𝘥𝘢𝘳𝘬 𝘥𝘶𝘯𝘨𝘦𝘰𝘯𝘴\n𝘰𝘧 𝘵𝘩𝘦 𝘴𝘱𝘰𝘰𝘬𝘺 𝘤𝘢𝘴𝘵𝘭𝘦 𝘰𝘧\n𝘯𝘢𝘮𝘦. 𝘤𝘰𝘯𝘵𝘢𝘪𝘯𝘦𝘥 𝘸𝘪𝘵𝘩𝘪𝘯 𝘵𝘩𝘦𝘴𝘦\n𝘥𝘢𝘯𝘬 𝘸𝘢𝘭𝘭𝘴 𝘢𝘳𝘦 𝘴𝘦𝘤𝘳𝘦𝘵𝘴,\n𝘵𝘳𝘪𝘢𝘭𝘴, 𝘮𝘰𝘯𝘴𝘵𝘦𝘳𝘴 𝘢𝘯𝘥...",
-      "...𝘵𝘳𝘦𝘢𝘴𝘶𝘳𝘦𝘴 𝘣𝘦𝘺𝘰𝘯𝘥\n𝘺𝘰𝘶𝘳 𝘸𝘪𝘭𝘥𝘦𝘴𝘵 𝘪𝘮𝘢𝘨𝘪𝘯𝘢𝘵𝘪𝘰𝘯.\n\n𝘢𝘳𝘮𝘦𝘥 𝘰𝘯𝘭𝘺 𝘸𝘪𝘵𝘩 𝘢 𝘴𝘸𝘰𝘳𝘥 𝘢𝘯𝘥\n𝘺𝘰𝘶𝘳 𝘦𝘭𝘷𝘦𝘯 𝘱𝘰𝘸𝘦𝘳 𝘰𝘧...",
-      "𝘪𝘭𝘭𝘶𝘮𝘪𝘯𝘢𝘵𝘪𝘰𝘯, 𝘺𝘰𝘶 𝘮𝘶𝘴𝘵\n𝘣𝘳𝘢𝘷𝘦 𝘵𝘩𝘦 𝘵𝘦𝘳𝘳𝘰𝘳𝘴 𝘪𝘯 𝘵𝘩𝘦\n𝘥𝘢𝘳𝘬.\n𝘮𝘢𝘺 𝘨𝘰𝘥 𝘩𝘢𝘷𝘦 𝘮𝘦𝘳𝘤𝘺\n𝘰𝘯 𝘺𝘰𝘶𝘳 𝘴𝘰𝘶𝘭!"
+      "WECOME TO THE DARK DUNGEONS\nOF CASTLE DOOM. CONTAINED\nWITHIN THIS DARK WALLS ARE\nSECRETS, TRIALS, MONSTERS\nAND TREASURES BEYOND...",
+      "YOUR WILDEST IMAGINATION.\nARMED ONLY WITH A SWORD AND\nYOUR ELVEN POWER OF\nILLUMINATION, YOU MUST BRAVE\nTHE TERRORS IN THE DARK.",
+      "MAY GOD HAVE MERCY ON\nYOUR SOUL!"
     },
     {
       "𝘢𝘩𝘦𝘢𝘥 𝘭𝘪𝘦𝘴 𝘺𝘰𝘶𝘳 𝘨𝘳𝘦𝘢𝘵𝘦𝘴𝘵\n𝘤𝘩𝘢𝘭𝘭𝘦𝘯𝘨𝘦 𝘴𝘰 𝘧𝘢𝘳...\n\n...𝘵𝘩𝘦 𝘥𝘳𝘦𝘢𝘥𝘦𝘥 𝘣𝘰𝘴𝘴𝘯𝘢𝘮𝘦",
@@ -71,11 +71,6 @@ function sign_dialog(index)
     {
       "𝘵𝘩𝘦 𝘯𝘦𝘹𝘵 𝘳𝘰𝘰𝘮 𝘩𝘢𝘴 𝘴𝘱𝘪𝘬𝘦𝘴\n𝘵𝘩𝘢𝘵 𝘴𝘩𝘰𝘰𝘵 𝘧𝘳𝘰𝘮 𝘣𝘰𝘵𝘵𝘰𝘮 𝘵𝘰\n𝘵𝘰𝘱. 𝘺𝘰𝘶 𝘩𝘢𝘷𝘦 𝘵𝘰 𝘱𝘳𝘦𝘴𝘴 𝘵𝘩𝘦\n𝘣𝘶𝘵𝘵𝘰𝘯 𝘢𝘵 𝘵𝘩𝘦 𝘵𝘰𝘱 𝘵𝘰 𝘴𝘵𝘰𝘱\n𝘵𝘩𝘦 𝘴𝘱𝘪𝘬𝘦𝘴 𝘢𝘯𝘥 𝘤𝘭𝘰𝘴𝘦...",
       "𝘵𝘩𝘦 𝘱𝘪𝘵𝘴 𝘥𝘰𝘰𝘳𝘴."
-    },
-    {
-      "THIS IS AN EXAMPLE OF JUST\nHOW MUCH TEXT OR\nPLOT CAN BE PLACED INTO\nTHESE TEXTAREAS.",
-      "TURNS OUT I CAN PUT\nQUITE A BIT IN HERE AND\nSPLIT IT UP INTO VARIOUS STRINGS...",
-      "I THINK I'LL PUT IN A\nLOT OF PLOT AS THE TOKEN\nPRICE FOR STRINGS IS ABOUT\n3 PER STRING."
     }
   }
   return alltext[index]
@@ -88,7 +83,7 @@ room(
     { name = "𝘤𝘢𝘴𝘵𝘭𝘦 𝘦𝘯𝘵𝘳𝘢𝘯𝘤𝘦", flags = rf { dungeon = true } },
     obj "c_rock,64,0,nil,nil,nil,nil,nil,nil,true,nil,nil,nil,nil,nil,nil",
     obj "arch,64,0,true,nil,false,false,nil,nil,nil,nil,nil,nil,nil,nil,nil",
-    obj "sign,33,5,nil,nil,nil,nil,nil,true,true,nil,6,nil,nil,nil,nil",
+    obj "sign,33,5,nil,nil,nil,nil,nil,true,true,nil,1,nil,nil,nil,nil",
     obj "rock,64,64,nil,nil,nil,nil,nil,nil,true,nil,nil,nil,nil,nil,nil",
     obj "rock,80,64,nil,nil,nil,nil,nil,nil,true,nil,nil,nil,nil,nil,nil",
     obj "flames_back,16,16,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil",
