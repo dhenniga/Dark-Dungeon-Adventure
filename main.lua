@@ -41,7 +41,7 @@ function _init()
     end
   )
   -- start_level_reveal()
-  -- sfx(46, 3)
+  sfx(46, 3)
 end
 
 function _update60()
@@ -105,10 +105,9 @@ function _draw()
     palt(14, true)
   end
   draw_player_interact_icon()
-
   draw_inventory()
-
-  tb_draw()
+  tb_draw()  
+  draw_circle()
 
   if not darkrooms then
     pb(get_current_room(), mapx + 106, mapy + 121, 10)
@@ -122,7 +121,5 @@ function _draw()
     pb("mem:" .. stat(0), mapx + 85, mapy + 8, 7)
   end
 
-  circthing = inCubic(circle_t, 0, 175, 1)
-  poke(0x5f34, 2)
-  circfill(p.x + 4, p.y, circthing, 0x1800)
+
 end

@@ -20,7 +20,8 @@ function spr_coll(e)
 end
 
 function collision(o)
-  return (abs(mapx + o.x - p.x) + abs(mapy + o.y - p.y)) <= 8
+  local off_x, off_y = o.flx or 0, o.fly or 0
+  return (abs(mapx + o.x - p.x + off_x) + abs(mapy + o.y - p.y + off_y)) <= 8
 end
 
 function sees(b, max_dist)

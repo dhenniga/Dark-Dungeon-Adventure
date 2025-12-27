@@ -1,8 +1,6 @@
 -- stairs
-circle_t = 0
-circle_dir = 1
-circle_active = true
 circle_transitioning = false
+local circle_t, circle_dir, circle_active = 0,1,true
 
 function start_level_reveal()
   circle_t = 0
@@ -39,6 +37,12 @@ function use_transition(o)
   next_py = o.fly
   p.dx, p.dy = 0, 0
   start_level_hide()
+end
+
+function draw_circle() 
+  local circthing = inCubic(circle_t, 0, 175, 1)
+  poke(0x5f34, 2)
+  circfill(p.x + 4, p.y, circthing, 0x1800)
 end
 
 function update_circle()
