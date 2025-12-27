@@ -1,8 +1,9 @@
-BTN_L, BTN_R, BTN_U, BTN_D, BTN_X, BTN_O, dungeon, sewer, pit, player_light_enabled, reading, allow_movement, raindrops = 0, 1, 2, 3, 4, 5, "128,7,139,132,5,6,135,4,137,138,9,143,13,14,15", "129,7,131,130,129,131,135,132,137,139,9,4,1,14,5", "0,7,139,132,128,130,135,4,137,138,9,143,129,14,15", false, false, true, false
+BTN_L, BTN_R, BTN_U, BTN_D, BTN_X, BTN_O, dungeon, sewer, pit, reading, allow_movement, raindrops = 0, 1, 2, 3, 4, 5, "128,7,139,132,5,6,135,4,137,138,9,143,13,14,15", "129,7,131,130,129,131,135,132,137,139,9,4,1,14,5", "0,7,139,132,128,130,135,4,137,138,9,143,129,14,15", false, true, false
 
 music_enabled = true
 collision_state = true
 darkrooms = true
+player_light_enabled = true
 
 function palette(s)
   for i, v in ipairs(split(s, ",")) do
@@ -106,7 +107,7 @@ function _draw()
   end
   draw_player_interact_icon()
   draw_inventory()
-  tb_draw()  
+  tb_draw()
   draw_circle()
 
   if not darkrooms then
@@ -120,6 +121,4 @@ function _draw()
     pb("cpu:" .. stat(1), mapx + 97, mapy + 2, 7)
     pb("mem:" .. stat(0), mapx + 85, mapy + 8, 7)
   end
-
-
 end

@@ -1,7 +1,6 @@
 -- inventory.lua
 i_transition = 0
 item_selected = 1 -- 1: light, 2: sword, 3: bow, 4: bomb
-player_light_enabled = false
 local text_anim = 0
 
 -- ユかたま 𝘥raw hearts and handle inventory toggle

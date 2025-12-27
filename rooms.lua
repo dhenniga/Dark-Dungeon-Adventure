@@ -103,7 +103,7 @@ room(
     obj "vase,16,96,nil,nil,nil,nil,nil,nil,true,nil,nil,nil,nil,nil,nil",
     obj "vase,32,96,nil,nil,nil,nil,nil,nil,true,nil,nil,nil,nil,nil,nil",
 
-    obj "button,85,7,nil,nil,0,4,nil,true,nil,nil,show_chest_0_0,nil,nil,nil,nil",
+    obj "button,85,7,nil,nil,nil,4,nil,true,nil,nil,show_chest_0_0,nil,nil,nil,nil",
     obj "chest,48,64,nil,nil,nil,nil,nil,false,false,true,show_chest_0_0,false,nil,nil,nil",
     obj "coin,30,70,nil,nil,nil,nil,nil,nil,nil,nil,nil,false,nil,nil,nil",
     obj "coin,96,68,nil,nil,nil,nil,nil,nil,nil,nil,nil,false,nil,nil,nil",
@@ -175,7 +175,7 @@ room(
     obj "rat,96,40,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil",
     obj "rat,94,80,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil",
 
-    obj "button,96,7,nil,nil,nil,nil,nil,true,false,nil,show_chest,nil,nil,nil,nil"
+    obj "button,96,7,nil,nil,nil,4,nil,true,false,nil,show_chest,nil,nil,nil,nil"
   }
 )
 room(
@@ -204,7 +204,7 @@ room(
     obj "spike,32,96,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil",
     obj "spike,48,64,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil",
     obj "sign,48,21,nil,nil,nil,nil,nil,true,true,nil,3,nil,nil,nil,nil",
-    obj "button,100,73,nil,nil,nil,nil,nil,nil,nil,nil,three_buttons_1,nil,nil,nil,nil",
+    obj "button,100,73,nil,nil,nil,4,nil,nil,nil,nil,three_buttons_1,nil,nil,nil,nil",
     obj "rat,94,50,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil"
   }
 )
@@ -239,7 +239,7 @@ room(
 room(
   2, 2, {
     { name = "BASEMENT OF THE FLIES", flags = rf { pit = true } },
-    obj "button,20,41,nil,nil,nil,nil,nil,nil,nil,nil,three_buttons_2,nil,nil,nil,nil"
+    obj "button,20,41,nil,nil,nil,4,nil,nil,nil,nil,three_buttons_2,nil,nil,nil,nil"
   }
 )
 room(
@@ -300,7 +300,7 @@ room(
 room(
   4, 2, {
     { name = "BASEMENT OF THE FLIES", flags = rf { pit = true } },
-    obj "button,84,9,nil,nil,nil,nil,nil,nil,nil,nil,three_button_stairs_4_2,nil,nil,nil,nil",
+    obj "button,84,9,nil,nil,nil,4,nil,nil,nil,nil,three_button_stairs_4_2,nil,nil,nil,nil",
     obj "stairs_up,96,96,3,8,148,295,true,nil,nil,nil,three_button_stairs_4_2,false,nil,nil,nil"
   }
 )
@@ -373,9 +373,9 @@ room(
 room(
   7, 0, {
     { name = "𝘴𝘱𝘪𝘬𝘦𝘴 𝘰𝘧 𝘥𝘰𝘰𝘮", flags = rf { sewer = true, rain = true } },
-    obj "button,20,9,nil,nil,nil,nil,nil,nil,nil,nil,stop_shooter_1_7_0,nil,nil,nil,nil",
-    obj "button,68,9,nil,nil,nil,nil,nil,nil,nil,nil,stop_shooter_2_7_0,nil,nil,nil,nil",
-    obj "button,116,9,nil,nil,nil,nil,nil,nil,nil,nil,stop_shooter_3_7_0,nil,nil,nil,nil",
+    obj "button,20,9,nil,nil,nil,4,nil,nil,nil,nil,stop_shooter_1_7_0,nil,nil,nil,nil",
+    obj "button,68,9,nil,nil,nil,4,nil,nil,nil,nil,stop_shooter_2_7_0,nil,nil,nil,nil",
+    obj "button,116,9,nil,nil,nil,4,nil,nil,nil,nil,stop_shooter_3_7_0,nil,nil,nil,nil",
     obj "s_shoot_v,20,114,nil,nil,nil,nil,false,nil,nil,nil,stop_shooter_1_7_0,true,1,90,2.5",
     obj "s_shoot_v,68,114,nil,nil,nil,nil,false,nil,nil,nil,stop_shooter_2_7_0,true,1,95,2.5",
     obj "s_shoot_v,116,114,nil,nil,nil,nil,false,nil,nil,nil,stop_shooter_3_7_0,true,1,85,2.5",
@@ -399,7 +399,7 @@ room(
     obj "light,118,54,nil,12,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil",
     obj "light,118,84,nil,12,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil",
     obj "chest,96,16,nil,nil,nil,nil,nil,true,true,true,nil,true,nil,nil,nil",
-    obj "button,36,9,nil,nil,nil,nil,nil,nil,nil,nil,stop_shooter_1_8_0,nil,nil,nil,nil",
+    obj "button,36,9,nil,nil,nil,4,nil,nil,nil,nil,stop_shooter_1_8_0,nil,nil,nil,nil",
     obj "s_shoot_v,36,106,nil,nil,nil,nil,false,nil,nil,nil,stop_shooter_1_8_0,true,1,90,2.5"
   }
 )
@@ -427,7 +427,7 @@ room(
     obj "light,88,100,nil,20,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil",
     obj "light,54,20,nil,20,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil",
     obj "flames_fore,80,94,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil",
-    obj "flames_fore,48,16,nil,20,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil",
+    obj "flames_back,48,16,nil,20,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil",
     obj "rat,112,32,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil",
     obj "rat,112,48,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil",
     obj "rat,112,64,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil",
