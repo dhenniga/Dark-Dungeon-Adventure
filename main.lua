@@ -1,6 +1,6 @@
 BTN_L, BTN_R, BTN_U, BTN_D, BTN_X, BTN_O, dungeon, sewer, pit, reading, allow_movement, raindrops = 0, 1, 2, 3, 4, 5, "128,7,139,132,5,6,135,4,137,138,9,143,13,14,15", "129,7,131,130,129,131,135,132,137,139,9,4,1,14,5", "0,7,139,132,128,130,135,4,137,138,9,143,129,14,15", false, true, false
 
-music_enabled = true
+music_enabled = false
 collision_state = true
 darkrooms = true
 player_light_enabled = true
@@ -13,7 +13,7 @@ end
 
 function _init()
   cartdata("davidhennigan_dark_dungeon_1")
-  p.x, p.y, p.remaining_hearts, p.keys = 67, 24, 5, 5
+  p.x, p.y, p.remaining_hearts, p.keys = 67, 24, 5, 0
   -- p.x, p.y, p.remaining_hearts, p.keys = 3, 120, 5, 5
   t_increment = 1
   cls()

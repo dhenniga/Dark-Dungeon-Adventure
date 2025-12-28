@@ -99,7 +99,7 @@ room(
     obj "vase,32,96,nil,nil,nil,nil,nil,nil,true,nil,nil,nil,nil,nil,nil",
 
     obj "button,85,7,nil,nil,nil,4,nil,true,nil,nil,show_chest_0_0,nil,nil,nil,nil",
-    obj "chest,48,64,nil,nil,nil,nil,nil,false,false,true,show_chest_0_0,false,nil,nil,nil",
+    obj "chest,48,64,key,nil,nil,nil,nil,false,false,true,show_chest_0_0,false,nil,nil,nil",
     obj "coin,30,70,nil,nil,nil,nil,nil,nil,nil,nil,nil,false,nil,nil,nil",
     obj "coin,96,68,nil,nil,nil,nil,nil,nil,nil,nil,nil,false,nil,nil,nil",
     obj "coin,30,66,nil,nil,nil,nil,nil,nil,nil,nil,nil,false,nil,nil,nil",
@@ -552,7 +552,10 @@ function draw_player_interact_icon()
             sspr(29, 80, 3, 7, p.x + 8, p.y - 8)
             if btnp(BTN_O) and o.locked then
               sfx(51, 3)
-              -- add(active_objects, obj "key, 32, 32, nil, nil, nil, nil, true, nil, nil, nil, nil, nil, nil, nil") -- interesting
+              boom(o.x + mapx, o.y + mapy, 3, 4, 5, 6, 5)
+              add(
+                active_objects, obj("" .. o.vori .. "," .. o.x .. "," .. o.y + 20 .. ", nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil")
+              )
               o.locked = false
             end
           end
