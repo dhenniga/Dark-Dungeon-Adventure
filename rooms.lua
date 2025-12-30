@@ -100,14 +100,14 @@ room(
 
     obj "button,85,7,nil,nil,nil,4,nil,true,nil,nil,show_chest_0_0,nil,nil,nil,nil",
     obj "chest,48,64,key,nil,nil,nil,nil,false,false,true,show_chest_0_0,false,nil,nil,nil",
-    obj "coin,30,70,nil,nil,nil,nil,nil,nil,nil,nil,nil,false,nil,nil,nil",
-    obj "coin,96,68,nil,nil,nil,nil,nil,nil,nil,nil,nil,false,nil,nil,nil",
-    obj "coin,30,66,nil,nil,nil,nil,nil,nil,nil,nil,nil,false,nil,nil,nil",
+    -- obj "coin,30,70,nil,nil,nil,nil,nil,nil,nil,nil,nil,false,nil,nil,nil",
+    -- obj "coin,96,68,nil,nil,nil,nil,nil,nil,nil,nil,nil,false,nil,nil,nil",
+    -- obj "coin,30,66,nil,nil,nil,nil,nil,nil,nil,nil,nil,false,nil,nil,nil",
 
-    -- obj "s_shoot_v,96,112,nil,nil,nil,nil,false,nil,nil,nil,nil,true,1,60,1"
+    -- obj "s_shoot_v,96,112,nil,nil,nil,nil,false,nil,nil,nil,nil,true,1,60,1",
     -- obj "s_shoot_h,15,36,nil,nil,nil,nil,false,nil,nil,nil,nil,true,1,60,1",
-    -- obj "s_shoot_v,50,16,nil,nil,nil,nil,true,nil,nil,nil,nil,true,1,60,1"
-    -- obj "s_shoot_h,112,48,nil,nil,nil,nil,true,nil,nil,nil,nil,true,1,60,1"
+    -- obj "s_shoot_v,50,16,nil,nil,nil,nil,true,nil,nil,nil,nil,true,1,60,1",
+    -- obj "s_shoot_h,112,48,nil,nil,nil,nil,true,nil,nil,nil,nil,true,1,60,1",
 
     obj "stairs_up,112,96,nil,nil,148,295,true,nil,true,nil,nil,true,nil,nil,nil",
     obj "rock,112,80,nil,nil,nil,nil,nil,nil,true,nil,nil,nil,nil,nil,nil"
@@ -253,7 +253,7 @@ room(
 room(
   3, 1, {
     { name = "𝘵𝘩𝘦 𝘣𝘰𝘵𝘵𝘰𝘮𝘭𝘦𝘴𝘴 𝘱𝘢𝘵𝘩𝘴 - 𝘴𝘰𝘶𝘵𝘩", flags = rf { dungeon = true } },
-    obj "chest,70,40,nil,nil,nil,nil,nil,true,true,true,show_chest_3_1,true,nil,nil,nil"
+    obj "chest,70,40,map,nil,nil,nil,nil,true,true,true,show_chest_3_1,true,nil,nil,nil"
   }
 )
 room(
@@ -393,7 +393,7 @@ room(
     obj "arch,120,64,false,nil,true,false,nil,nil,nil,nil,nil,nil,nil,nil,nil",
     obj "light,118,54,nil,12,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil",
     obj "light,118,84,nil,12,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil",
-    obj "chest,96,16,nil,nil,nil,nil,nil,true,true,true,nil,true,nil,nil,nil",
+    obj "chest,96,16,health_potion,nil,nil,nil,nil,true,true,true,nil,true,nil,nil,nil",
     obj "button,36,9,nil,nil,nil,4,nil,nil,nil,nil,stop_shooter_1_8_0,nil,nil,nil,nil",
     obj "s_shoot_v,36,106,nil,nil,nil,nil,false,nil,nil,nil,stop_shooter_1_8_0,true,1,90,2.5"
   }
@@ -539,6 +539,8 @@ function draw_player_interact_icon()
           tb_init(15, sign_dialog(o.text))
         end
         if flag.sign then sspr(24, 80, 5, 7, p.x + 8, p.y - 8) end
+        if flag.health_potion then sspr(24, 80, 5, 7, p.x + 8, p.y - 8) end
+        if flag.map then sspr(24, 80, 5, 7, p.x + 8, p.y - 8) end
         if flag.key then
           sspr(29, 80, 3, 7, p.x + 8, p.y - 8)
           if btnp(BTN_O) then
@@ -552,11 +554,16 @@ function draw_player_interact_icon()
             sspr(29, 80, 3, 7, p.x + 8, p.y - 8)
             if btnp(BTN_O) and o.locked then
               sfx(51, 3)
-              boom(o.x + mapx, o.y + mapy, 3, 4, 5, 6, 5)
+
+              boom(o.x + mapx, o.y + mapy, 9, 8, 7, 12, rnd({ 1, 2, 3 }))
+
+              del(active_objects, o)
+
               add(
-                active_objects, obj("" .. o.vori .. "," .. o.x .. "," .. o.y + 20 .. ", nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil")
+                active_objects, obj("" .. o.vori .. "," .. o.x .. "," .. o.y + 4 .. ", nil, nil, nil, nil, nil, true, false, nil, nil, nil, nil, nil, nil")
               )
-              o.locked = false
+              if btnp(BTN_O) then return end
+              -- o.locked = false
             end
           end
         end
@@ -596,6 +603,8 @@ function draw_background_sprites()
     if flag.vase then spr(172, mapx + ax, mapy + ay, 2, 2) end
     if flag.sign then spr(170, mapx + ax, mapy + ay, 2, 2) end
     if flag.key then spr(254, mapx + ax, mapy + ay, 2, 1) end
+    if flag.map then spr(61, mapx + ax + 4, mapy + ay, 1, 1) end
+    if flag.health_potion then spr(45, mapx + ax + 4, mapy + ay, 1, 1) end
     if flag.door then
       if a_obj.flp then
         if a_obj.locked then spr(168, mapx + ax, mapy + ay, 2, 2, afy, afx) end
@@ -612,9 +621,9 @@ function draw_background_sprites()
         a_obj.flags.interactable = true
         if a_obj.locked then
           spr(13, mapx + ax, mapy + ay, 2, 2)
-        else
-          spr(45, mapx + ax, mapy + ay, 2, 2)
-          a_obj.flags.interactable = false
+          -- else
+          -- spr(45, mapx + ax, mapy + ay, 2, 2)
+          -- a_obj.flags.interactable = false
         end
       end
     end
@@ -705,6 +714,11 @@ function draw_foreground_sprites()
     if flag.flames_fore then
       flames(mapx + ax, mapy + ay)
     end
+
+    -- if flag.chest and not a_obj.locked then
+    --   reading = true
+    --   chest_modal(a_obj.vori)
+    -- end
   end
 end
 

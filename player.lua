@@ -38,9 +38,9 @@ function draw_player()
 
 	-- footstep sounds for specific frames
 	if not p.fall_dir and p.moving and ((running > 1.2 and running < 1.5) or (running > 3.2 and running < 3.4)) then
-		-- if not stat(53) then
-		sfx(13, 3)
-		-- end
+		if not music_enabled then
+			sfx(13, 1)
+		end
 	end
 
 	if not player_atk or allow_movement then

@@ -26,13 +26,13 @@ function draw_text()
 	if btn(❎) then 
 		--text="CONTINUE"
 		--p4bonus(text,34,110,7,0)
-		load("level_1.p8")
+		load("dark_dungeon_adventure.p8")
 	end
 	
 	if (time() > 33) then
 		text="LOADING GAME..."
 		if (time() == 35) then
-		load("level_1.p8")
+		load("dark_dungeon_adventure.p8")
 		end
 	end
 
@@ -84,6 +84,7 @@ function draw_circle()
   local circthing = inCubic(circle_t, 0, 175, 1)
   poke(0x5f34, 2)
   circfill(64, 64, circthing, 0x1800)
+	poke(0x5f34, 0)
 end
 
 function update_circle()
