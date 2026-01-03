@@ -1,14 +1,16 @@
 BTN_L, BTN_R, BTN_U, BTN_D, BTN_X, BTN_O, dungeon, sewer, pit, reading, allow_movement, raindrops = 0, 1, 2, 3, 4, 5, "128,7,139,132,5,6,135,4,137,138,9,143,13,14,15", "129,7,131,130,129,131,135,132,137,139,9,4,1,14,5", "0,7,139,132,128,130,135,4,137,138,9,143,129,14,15", false, true, false
 
-music_enabled = true
-collision_state = true
-darkrooms = true
-player_light_enabled = true
-t = {
+music_enabled = false
+collision_state = false
+darkrooms = false
+player_light_enabled = false
+local t = {
   dungeon = 20,
   sewer = 41,
   pit = 42
 }
+
+local lanturn_timer = 0
 
 function palette(s)
   for i, v in ipairs(split(s, ",")) do
@@ -19,6 +21,7 @@ end
 function _init()
   cartdata("davidhennigan_dark_dungeon_1")
   p.x, p.y, p.remaining_hearts, p.keys = 67, 24, 5, 0
+  -- p.x, p.y, p.remaining_hearts, p.keys = 1336, 165, 5, 0
   t_increment = 1
   cls()
   decode_tiles()
@@ -49,14 +52,15 @@ function _init()
 end
 
 function _update60()
-  if music_enabled then
-    if stat(53) == -1 then
-      sfx(t[current_palette], 3)
-    end
-    if not music_enabled then
-      sfx(t[current_palette], 2)
-    end
-  end
+  -- if music_enabled then
+  --   if stat(53) == -1 then
+  --     sfx(t[current_palette], 3)
+  --   end
+  -- end
+
+  -- if not music_enabled then
+  sfx(t[current_palette], 2)
+  -- end
 
   if music_enabled and not stat(57) then
     music(0)
@@ -113,15 +117,15 @@ function _draw()
   tb_draw()
   draw_circle()
 
-  -- if not darkrooms then
-  --   pb(get_current_room(), mapx + 106, mapy + 121, 10)
-  --   -- pb("cx:" .. cur_room_x, mapx + 106, mapy + 106, 10)
-  --   -- pb("cy:" .. cur_room_y, mapx + 106, mapy + 114, 10)
-  --   pb("px:" .. flr(p.x) .. ", " .. "py:" .. flr(p.y), mapx + 2, mapy + 2, 7)
-  --   pb("mx:" .. mapx / 128 .. ", my:" .. mapy / 128, mapx + 2, mapy + 9, 7)
-  --   pb("cx:" .. cur_room_x .. ", cy:" .. cur_room_y, mapx + 2, mapy + 16, 7)
-  --   circ(p.x + 2, p.y, l_rad, 3)
-  --   pb("cpu:" .. stat(1), mapx + 97, mapy + 2, 7)
-  --   pb("mem:" .. stat(0), mapx + 85, mapy + 8, 7)
-  -- end
+  if not darkrooms then
+    pb(get_current_room(), mapx + 106, mapy + 121, 10)
+    -- pb("cx:" .. cur_room_x, mapx + 106, mapy + 106, 10)
+    -- pb("cy:" .. cur_room_y, mapx + 106, mapy + 114, 10)
+    pb("px:" .. flr(p.x) .. ", " .. "py:" .. flr(p.y), mapx + 2, mapy + 2, 7)
+    pb("mx:" .. mapx .. ", my:" .. mapy, mapx + 2, mapy + 9, 7)
+    circ(p.x + 2, p.y, l_rad, 3)
+    pb("cpu:" .. stat(1), mapx + 97, mapy + 2, 7)
+    pb("mem:" .. stat(0), mapx + 85, mapy + 8, 7)
+    pb("press:" .. removeme, mapx + 2, mapy + 20, 7)
+  end
 end

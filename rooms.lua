@@ -169,8 +169,8 @@ room(
     obj "rock,96,96,nil,nil,nil,nil,nil,nil,true,nil,nil,nil,nil,nil,nil",
     obj "rat,96,40,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil",
     obj "rat,94,80,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil",
-
-    obj "button,96,7,nil,nil,nil,4,nil,true,false,nil,show_chest,nil,nil,nil,nil"
+    obj "button,96,7,nil,nil,nil,4,nil,true,false,nil,show_chest_1_0,nil,nil,nil,nil",
+    obj "chest,32,32,key,nil,nil,nil,nil,false,false,true,show_chest_1_0,false,nil,nil,nil"
   }
 )
 room(
@@ -333,7 +333,11 @@ room(
 )
 room(
   5, 3, {
-    { name = "𝘯𝘦𝘦𝘥 𝘯𝘢𝘮𝘦 𝘩𝘦𝘳𝘦", flags = rf { dungeon = true } }
+    { name = "𝘯𝘦𝘦𝘥 𝘯𝘢𝘮𝘦 𝘩𝘦𝘳𝘦", flags = rf { dungeon = true } },
+    obj "door,112,48,nil,nil,true,false,nil,true,true,true,nil,nil,nil,nil,nil",
+    obj "arch,120,48,false,nil,true,false,nil,nil,nil,nil,nil,nil,nil,nil,nil",
+    obj "light,118,38,nil,12,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil",
+    obj "light,118,68,nil,12,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil"
   }
 )
 room(
@@ -457,7 +461,7 @@ room(
   10, 1, {
     { name = "𝘤𝘳𝘶𝘮𝘣𝘭𝘦𝘥 𝘨𝘳𝘰𝘵𝘵𝘰", flags = rf { dungeon = true } },
     obj "bat,40,80,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil",
-    obj "bat,90,50,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil",
+    obj "bat,80,50,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil",
     obj "bat,64,64,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil"
   }
 )

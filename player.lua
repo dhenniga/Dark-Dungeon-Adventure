@@ -1,9 +1,11 @@
 -- player
 p = {
-	x = 64,
-	y = 40,
+	x = 0,
+	y = 0,
 	dx = 0,
 	dy = 0,
+	acc = 0.2,
+	drg = 0.9,
 	curr_speed = 0,
 	total_hearts = 5,
 	remaining_hearts = 3,
@@ -12,24 +14,14 @@ p = {
 	engaged = false,
 	moving = false
 }
-local acc = 0.4
-local drg = 0.9
 local idle = 1
 local running = 1
-local player_atk = false
-lanturn_timer = 0
-tp = 19
+player_atk = false
+local tp = 19
+
+removeme = 0
 
 function draw_player()
-	p.moving = p.dx ~= 0 or p.dy ~= 0
-	p.curr_speed = max(abs(p.dx), abs(p.dy)) / 4.5
-
-	-- diag movement speed
-	-- if p.dx * p.dy != 0 then
-	-- 	p.dx *= 0.55
-	-- 	p.dy *= 0.55
-	-- end
-
 	-- idle animation
 	idle = (idle < 3.8) and idle + 0.09 * t_increment or 1
 
@@ -108,15 +100,40 @@ end
 
 function update_player()
 	if p.fall_dir or not allow_movement then return end
+	local press = 0
+
+	p.moving = p.dx ~= 0 or p.dy ~= 0
+	p.curr_speed = max(abs(p.dx), abs(p.dy)) / 4.5
+
+	-- diag movement speed
+	if removeme > 0 then
+		if removeme >= 2 then
+			-- if p.dx * p.dy != 0 then
+			p.dx *= 0.85
+			p.dy *= 0.85
+		end
+	end
 
 	if btn(BTN_L) then
-		p.dx -= acc p.direction = true
+		press += 1
+		removeme = press
+		p.dx -= p.acc p.direction = true
 	end
 	if btn(BTN_R) then
-		p.dx += acc p.direction = false
+		press += 1
+		removeme = press
+		p.dx += p.acc p.direction = false
 	end
-	if btn(BTN_U) then p.dy -= acc end
-	if btn(BTN_D) then p.dy += acc end
+	if btn(BTN_U) then
+		press += 1
+		removeme = press
+		p.dy -= p.acc
+	end
+	if btn(BTN_D) then
+		press += 1
+		removeme = press
+		p.dy += p.acc
+	end
 
 	-- Limits the max speed
 	p.dx, p.dy = mid(-1, p.dx, 1), mid(-1, p.dy, 1)
@@ -127,8 +144,8 @@ function update_player()
 		p.dx, p.dy = 0, 0
 	end
 
-	p.dx = abs(p.dx) > 0 and p.dx * drg or 0
-	p.dy = abs(p.dy) > 0 and p.dy * drg or 0
+	p.dx = abs(p.dx) > 0 and p.dx * p.drg or 0
+	p.dy = abs(p.dy) > 0 and p.dy * p.drg or 0
 	if abs(p.dx) < 0.02 then p.dx = 0 end
 	if abs(p.dy) < 0.02 then p.dy = 0 end
 end
