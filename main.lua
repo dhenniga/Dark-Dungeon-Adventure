@@ -1,9 +1,9 @@
 BTN_L, BTN_R, BTN_U, BTN_D, BTN_X, BTN_O, dungeon, sewer, pit, reading, allow_movement, raindrops = 0, 1, 2, 3, 4, 5, "128,7,139,132,5,6,135,4,137,138,9,143,13,14,15", "129,7,131,130,129,131,135,132,137,139,9,4,1,14,5", "0,7,139,132,128,130,135,4,137,138,9,143,129,14,15", false, true, false
 
-music_enabled = false
-collision_state = false
-darkrooms = false
-player_light_enabled = false
+music_enabled = true
+collision_state = true
+darkrooms = true
+player_light_enabled = true
 local t = {
   dungeon = 20,
   sewer = 41,
@@ -20,52 +20,37 @@ end
 
 function _init()
   cartdata("davidhennigan_dark_dungeon_1")
-  p.x, p.y, p.remaining_hearts, p.keys = 67, 24, 5, 0
-  -- p.x, p.y, p.remaining_hearts, p.keys = 1336, 165, 5, 0
+  p.x, p.y, p.remaining_hearts, p.keys = 68, 16, 5, 2
   t_increment = 1
   cls()
   decode_tiles()
   init_rain()
   poke(0x5f2e, 1)
+end
 
-  if music_enabled then
-    music(0)
+last_palette_sfx = nil
+
+function play_palette_sfx()
+  if current_palette == last_palette_sfx then return end
+  last_palette_sfx = current_palette
+
+  if not music_enabled then
+    sfx(t[current_palette], 2)
   end
-  menuitem(
-    1, "TOGGLE MUSIC", function()
-      music_enabled = not music_enabled
-      music(music_enabled and 0 or -1)
-    end
-  )
-  menuitem(
-    2, "TOGGLE COLLISION", function()
-      collision_state = not collision_state
-    end
-  )
-  menuitem(
-    3, "TOGGLE DEVMODE", function()
-      darkrooms = not darkrooms
-    end
-  )
-  -- start_level_reveal()
-  sfx(46, 3)
 end
 
 function _update60()
-  -- if music_enabled then
-  --   if stat(53) == -1 then
-  --     sfx(t[current_palette], 3)
-  --   end
-  -- end
-
-  -- if not music_enabled then
-  sfx(t[current_palette], 2)
-  -- end
-
+  if music_enabled then
+    if stat(53) == -1 then
+      sfx(t[current_palette], 3)
+    end
+  end
+  -- this loops the music
   if music_enabled and not stat(57) then
     music(0)
   end
 
+  play_palette_sfx()
   update_map()
   check_room_change()
   update_player()
@@ -116,16 +101,29 @@ function _draw()
   draw_inventory()
   tb_draw()
   draw_circle()
+  draw_alert()
+end
 
-  if not darkrooms then
-    pb(get_current_room(), mapx + 106, mapy + 121, 10)
-    -- pb("cx:" .. cur_room_x, mapx + 106, mapy + 106, 10)
-    -- pb("cy:" .. cur_room_y, mapx + 106, mapy + 114, 10)
-    pb("px:" .. flr(p.x) .. ", " .. "py:" .. flr(p.y), mapx + 2, mapy + 2, 7)
-    pb("mx:" .. mapx .. ", my:" .. mapy, mapx + 2, mapy + 9, 7)
-    circ(p.x + 2, p.y, l_rad, 3)
-    pb("cpu:" .. stat(1), mapx + 97, mapy + 2, 7)
-    pb("mem:" .. stat(0), mapx + 85, mapy + 8, 7)
-    pb("press:" .. removeme, mapx + 2, mapy + 20, 7)
+alert_txt = nil
+alert_t = 0
+
+function chest_alert(t)
+  alert_txt = t
+  alert_t = 0
+end
+
+function draw_alert()
+  if not alert_txt then return end
+  alert_t += 1
+
+  local y = alert_t < 30 and outcubic(alert_t, -12, 12, 30)
+      or alert_t < 150 and 0
+      or alert_t < 180 and outcubic(alert_t - 150, 0, -12, 30)
+
+  if not y then
+    alert_txt = nil return
   end
+
+  rectfill(mapx, mapy + y, mapx + 127, mapy + y + 11, 1)
+  pb(alert_txt, mapx + 64 - #alert_txt * 2, mapy + y + 4, 9)
 end

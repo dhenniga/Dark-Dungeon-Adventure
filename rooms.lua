@@ -549,6 +549,7 @@ function draw_player_interact_icon()
           sspr(29, 80, 3, 7, p.x + 8, p.y - 8)
           if btnp(BTN_O) then
             p.keys = (p.keys or 0) + 1
+            chest_alert("KEY ADDED")
             del(active_objects, o)
             sfx(18, 3)
           end
@@ -562,6 +563,8 @@ function draw_player_interact_icon()
               boom(o.x + mapx, o.y + mapy, 9, 8, 7, 12, rnd({ 1, 2, 3 }))
 
               del(active_objects, o)
+
+              chest_alert("DISCOVERED A " .. o.vori)
 
               add(
                 active_objects, obj("" .. o.vori .. "," .. o.x .. "," .. o.y + 4 .. ", nil, nil, nil, nil, nil, true, false, nil, nil, nil, nil, nil, nil")
