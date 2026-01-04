@@ -25,7 +25,6 @@ function on_circle_hidden()
   next_px = nil
   next_py = nil
   circle_transitioning = false
-  -- allow_movement = false
   start_level_reveal()
 end
 

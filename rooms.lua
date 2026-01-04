@@ -103,14 +103,8 @@ room(
     -- obj "coin,30,70,nil,nil,nil,nil,nil,nil,nil,nil,nil,false,nil,nil,nil",
     -- obj "coin,96,68,nil,nil,nil,nil,nil,nil,nil,nil,nil,false,nil,nil,nil",
     -- obj "coin,30,66,nil,nil,nil,nil,nil,nil,nil,nil,nil,false,nil,nil,nil",
-
-    -- obj "s_shoot_v,96,112,nil,nil,nil,nil,false,nil,nil,nil,nil,true,1,60,1",
-    -- obj "s_shoot_h,15,36,nil,nil,nil,nil,false,nil,nil,nil,nil,true,1,60,1",
-    -- obj "s_shoot_v,50,16,nil,nil,nil,nil,true,nil,nil,nil,nil,true,1,60,1",
-    -- obj "s_shoot_h,112,48,nil,nil,nil,nil,true,nil,nil,nil,nil,true,1,60,1",
-
-    obj "stairs_up,112,96,nil,nil,148,295,true,nil,true,nil,nil,true,nil,nil,nil",
-    obj "rock,112,80,nil,nil,nil,nil,nil,nil,true,nil,nil,nil,nil,nil,nil"
+    -- obj "stairs_up,112,96,nil,nil,148,295,true,nil,true,nil,nil,true,nil,nil,nil",
+    -- obj "rock,112,80,nil,nil,nil,nil,nil,nil,true,nil,nil,nil,nil,nil,nil"
   }
 )
 room(
@@ -540,7 +534,7 @@ function draw_player_interact_icon()
         engaged_now = true
         if flag.sign and not reading and val == 0 and btn(BTN_O) then
           t_increment = 0.05
-          tb_init(15, sign_dialog(o.text))
+          tb_init(sign_dialog(o.text))
         end
         if flag.sign then sspr(24, 80, 5, 7, p.x + 8, p.y - 8) end
         if flag.health_potion then sspr(24, 80, 5, 7, p.x + 8, p.y - 8) end
@@ -549,7 +543,6 @@ function draw_player_interact_icon()
           sspr(29, 80, 3, 7, p.x + 8, p.y - 8)
           if btnp(BTN_O) then
             p.keys = (p.keys or 0) + 1
-            chest_alert("KEY ADDED")
             del(active_objects, o)
             sfx(18, 3)
           end
@@ -628,9 +621,6 @@ function draw_background_sprites()
         a_obj.flags.interactable = true
         if a_obj.locked then
           spr(13, mapx + ax, mapy + ay, 2, 2)
-          -- else
-          -- spr(45, mapx + ax, mapy + ay, 2, 2)
-          -- a_obj.flags.interactable = false
         end
       end
     end
@@ -721,11 +711,6 @@ function draw_foreground_sprites()
     if flag.flames_fore then
       flames(mapx + ax, mapy + ay)
     end
-
-    -- if flag.chest and not a_obj.locked then
-    --   reading = true
-    --   chest_modal(a_obj.vori)
-    -- end
   end
 end
 

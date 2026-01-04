@@ -1,7 +1,7 @@
 BTN_L, BTN_R, BTN_U, BTN_D, BTN_X, BTN_O, dungeon, sewer, pit, reading, allow_movement, raindrops = 0, 1, 2, 3, 4, 5, "128,7,139,132,5,6,135,4,137,138,9,143,13,14,15", "129,7,131,130,129,131,135,132,137,139,9,4,1,14,5", "0,7,139,132,128,130,135,4,137,138,9,143,129,14,15", false, true, false
 
-music_enabled = true
-collision_state = true
+music_enabled = false
+collision_state = false
 darkrooms = true
 player_light_enabled = true
 local t = {

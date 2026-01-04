@@ -82,9 +82,9 @@ function darkroom()
   memcpy(0x0, 0x6000, 0x2000)
   poke(0x5f55, 0x0)
   if current_palette == "sewer" then
-    fillp(rnd(split("23130.5, 32125.5, -2560.5, 0.5, -2624.5, 3855.5"))) -- fillp(rnd({ ▒, ░, … }))
+    fillp(rnd(split("23130.5, 32125.5, -2560.5, 0.5, -2624.5, 3855.5")))
   else
-    fillp(rnd(split("23130.5, 32125.5, -2560.5"))) -- fillp(rnd({ ▒, ░, … }))
+    fillp(rnd(split("23130.5, 32125.5, -2560.5")))
   end
   -- shimmering effect
   rectfill(mapx, mapy, mapx + 128, mapy + 128, 0)
