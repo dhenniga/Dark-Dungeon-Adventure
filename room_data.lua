@@ -99,7 +99,7 @@ room(
     obj "vase,32,96,nil,nil,nil,nil,nil,nil,true,nil,nil,nil,nil,nil,nil",
 
     obj "button,85,7,nil,nil,nil,4,nil,true,nil,nil,show_chest_0_0,nil,nil,nil,nil",
-    obj "chest,48,64,key,nil,nil,nil,nil,false,false,true,show_chest_0_0,false,nil,nil,nil"
+    obj "chest,48,64,GOLDEN_KEY,nil,nil,nil,nil,false,false,true,show_chest_0_0,false,nil,nil,nil"
     -- obj "coin,30,70,nil,nil,nil,nil,nil,nil,nil,nil,nil,false,nil,nil,nil",
     -- obj "coin,96,68,nil,nil,nil,nil,nil,nil,nil,nil,nil,false,nil,nil,nil",
     -- obj "coin,30,66,nil,nil,nil,nil,nil,nil,nil,nil,nil,false,nil,nil,nil",
@@ -164,7 +164,7 @@ room(
     obj "rat,96,40,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil",
     obj "rat,94,80,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil",
     obj "button,96,7,nil,nil,nil,4,nil,true,false,nil,show_chest_1_0,nil,nil,nil,nil",
-    obj "chest,32,32,key,nil,nil,nil,nil,false,false,true,show_chest_1_0,false,nil,nil,nil"
+    obj "chest,32,32,GOLDEN_KEY,nil,nil,nil,nil,false,false,true,show_chest_1_0,false,nil,nil,nil"
   }
 )
 room(
@@ -182,13 +182,13 @@ room(
     obj "vase,96,48,nil,nil,nil,nil,nil,nil,true,nil,nil,nil,nil,nil,nil",
     obj "vase,16,16,nil,nil,nil,nil,nil,nil,true,nil,nil,nil,nil,nil,nil",
     obj "vase,32,16,nil,nil,nil,nil,nil,nil,true,nil,nil,nil,nil,nil,nil",
-    obj "stairs_down,32,96,nil,nil,102,102,nil,nil,true,nil,nil,nil,nil,nil,nil"
+    obj "stairs_down,32,96,nil,nil,148,295,nil,nil,true,nil,nil,nil,nil,nil,nil"
   }
 )
 room(
   1, 2, {
     { name = "BASEMENT OF THE FLIES", flags = rf { pit = true } },
-    obj "stairs_down,16,16,nil,nil,102,102,nil,nil,true,nil,nil,nil,nil,nil,nil",
+    obj "stairs_down,16,16,nil,nil,150,228,nil,nil,true,nil,nil,nil,nil,nil,nil",
     obj "spike,16,64,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil",
     obj "spike,32,96,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil",
     obj "spike,48,64,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil",
@@ -210,7 +210,7 @@ room(
     obj "light,8,22,nil,12,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil",
     obj "light,8,52,nil,12,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil",
     obj "arch,48,120,true,nil,true,true,nil,nil,nil,nil,nil,nil,nil,nil,nil",
-    obj "key,18,100,nil,nil,nil,nil,nil,true,nil,nil,nil,nil,nil,nil,nil",
+    obj "GOLDEN_KEY,18,100,nil,nil,nil,nil,nil,true,nil,nil,nil,nil,nil,nil,nil",
     obj "bat,80,80,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil",
     obj "bat,60,20,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil"
   }
@@ -283,7 +283,7 @@ room(
     obj "light,56,8,nil,12,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil",
     obj "light,87,8,nil,12,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil",
     obj "sign,34,6,nil,nil,nil,nil,nil,true,true,nil,4,nil,nil,nil,nil",
-    obj "key,56,64,nil,nil,nil,nil,nil,true,true,nil,1,nil,nil,nil,nil"
+    obj "GOLDEN_KEY,56,64,nil,nil,nil,nil,nil,true,true,nil,1,nil,nil,nil,nil"
   }
 )
 room(
@@ -437,7 +437,7 @@ room(
     obj "bat,40,80,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil",
     obj "bat,90,50,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil",
     obj "bat,64,64,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil",
-    obj "key,100,6,nil,nil,nil,nil,nil,true,true,nil,1,nil,nil,nil,nil"
+    obj "GOLDEN_KEY,100,6,nil,nil,nil,nil,nil,true,true,nil,1,nil,nil,nil,nil"
   }
 )
 
