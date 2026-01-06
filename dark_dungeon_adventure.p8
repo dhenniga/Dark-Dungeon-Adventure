@@ -27,7 +27,9 @@ __lua__
 #include main.lua
 #include map.lua
 #include player.lua
-#include rooms.lua
+#include room_data.lua
+#include room_functions.lua
+#include arrows.lua
 #include buttons.lua
 #include stairs.lua
 #include smoke.lua
