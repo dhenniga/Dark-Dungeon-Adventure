@@ -89,7 +89,7 @@ function draw_player_interact_icon()
             sspr(29, 80, 3, 7, p.x + 8, p.y - 8)
             if btnp(BTN_O) and o.locked then
               sfx(51, 3)
-              boom(o.x + mapx, o.y + mapy, 9, 8, 7, 12, rnd({ 1, 2, 3 }))
+              boom(ox, oy, 9, 8, 7, 12, rnd({ 1, 2, 3 }))
               del(active_objects, o)
               local v = split(o.vori, "_")
               chest_alert("YOU DISCOVERED A " .. v[1] .. " " .. (v[2] or ""))
