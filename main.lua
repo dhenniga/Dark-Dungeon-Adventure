@@ -1,7 +1,7 @@
 BTN_L, BTN_R, BTN_U, BTN_D, BTN_X, BTN_O, dungeon, sewer, pit, reading, allow_movement, raindrops = 0, 1, 2, 3, 4, 5, "128,7,139,132,5,6,135,4,137,138,9,143,13,14,15", "129,7,131,130,129,131,135,132,137,139,9,4,1,14,5", "0,7,139,132,128,130,135,4,137,138,9,143,129,14,15", false, true, false
 
-music_enabled = true
-collision_state = true
+music_enabled = false
+collision_state = false
 darkrooms = true
 player_light_enabled = true
 local t = {
@@ -123,14 +123,18 @@ function draw_alert()
   if not alert_txt then return end
   alert_t += 1
 
-  local y = alert_t < 30 and outcubic(alert_t, -12, 12, 30)
+  local y = alert_t < 30 and outcubic(alert_t, -18, 18, 30)
       or alert_t < 150 and 0
-      or alert_t < 180 and outcubic(alert_t - 150, 0, -12, 30)
+      or alert_t < 180 and outcubic(alert_t - 150, 0, -18, 30)
 
   if not y then
     alert_txt = nil return
   end
 
-  rectfill(mapx, mapy + y, mapx + 127, mapy + y + 11, 1)
-  pb(alert_txt, mapx + 64 - #alert_txt * 2, mapy + y + 4, 9)
+  rectfill(mapx, mapy + y, mapx + 127, mapy + y + 17, 1)
+  spr(100, mapx + 1, mapy + 1 + y, 1, 1, false, false)
+  spr(100, mapx + 1, mapy + 9 + y, 1, 1, false, true)
+  spr(100, mapx + 119, mapy + 9 + y, 1, 1, true, true)
+  spr(100, mapx + 119, mapy + 1 + y, 1, 1, true, false)
+  pb(alert_txt, mapx + 64 - #alert_txt * 2, mapy + y + 6, 9)
 end

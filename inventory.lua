@@ -48,7 +48,7 @@ function show_inventory()
     for i = 1, min(p.keys, 10) do
       local x = mapx + 121 - (i - 1) * 13
       circfill(x, outcubic(text_anim, mapy, 6, 12), 6, 129)
-      spr(206, x - 3, outcubic(text_anim, mapy, 3, 12))
+      sspr(115,96,5,8,x-2,outcubic(text_anim, mapy, 3, 12))
     end
   end
 

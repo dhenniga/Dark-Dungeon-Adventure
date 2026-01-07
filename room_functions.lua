@@ -92,7 +92,7 @@ function draw_player_interact_icon()
               boom(ox, oy, 9, 8, 7, 12, rnd({ 1, 2, 3 }))
               del(active_objects, o)
               local v = split(o.vori, "_")
-              chest_alert("YOU DISCOVERED A " .. v[1] .. " " .. (v[2] or ""))
+              chest_alert("YOU FOUND A " .. v[1] .. " " .. (v[2] or ""))
               add(
                 active_objects, obj("" .. o.vori .. "," .. o.x .. "," .. o.y + 4 .. ", nil, nil, nil, nil, nil, true, false, nil, nil, nil, nil, nil, nil")
               )
@@ -101,7 +101,7 @@ function draw_player_interact_icon()
           end
         end
         if flag.door and flag.solid then
-          if p.keys > 0 then sspr(113, 96, 5, 8, p.x + 8, p.y - 8) end
+          if p.keys > 0 then sspr(115, 96, 5, 8, p.x + 8, p.y - 8) end
           if btnp(BTN_O) then
             if o.locked and p.keys > 0 then
               p.keys = p.keys - 1 unlock_door(o)
@@ -147,7 +147,8 @@ function draw_background_sprites()
       door_lights(ax, ay, afx, afy, a_obj.flp)
     end
     if flag.coin then
-      sspr(112, 104, 8, 6, ax, ay)
+      -- sspr(112, 104, 8, 6, ax, ay)
+      sspr(112, 96, 2, 2, ax, ay)
     end
     if flag.chest then
       if a_obj.active then

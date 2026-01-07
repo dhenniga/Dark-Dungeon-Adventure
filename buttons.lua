@@ -14,7 +14,6 @@ function update_buttons()
       o.pressed = true
       trigger(o.text)
       sfx(50, 3)
-      -- sfx(46, 1)
     end
 
     if o.flags.coin and collision(o) then
