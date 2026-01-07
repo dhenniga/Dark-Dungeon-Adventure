@@ -8,7 +8,6 @@ function get_room_shooters(x, y)
 end
 
 function spawn_arrow(shooter)
-  local direction, vx, vy
   if shooter.flags.s_shoot_v then
     direction = shooter.flp and 1 or 0
     dx = 0
@@ -35,7 +34,7 @@ function update_shooters()
 
   for s in all(shooters) do
     if s.active then
-      s.delay = s.delay - t_increment
+      s.delay -= t_increment
       if s.delay <= 0 then
         spawn_arrow(s)
         s.delay = s.timing
@@ -47,8 +46,8 @@ end
 function update_arrows()
   for arrow in all(arrows) do
     -- move the arrow
-    arrow.x = arrow.x + arrow.dx * t_increment
-    arrow.y = arrow.y + arrow.dy * t_increment
+    arrow.x += arrow.dx * t_increment
+    arrow.y += arrow.dy * t_increment
 
     if solid(arrow.x, arrow.y) then
       del(arrows, arrow)
