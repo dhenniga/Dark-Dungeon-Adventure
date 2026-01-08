@@ -15,17 +15,12 @@ function update_buttons()
       trigger(o.text)
       sfx(50, 3)
     end
-
-    if o.flags.coin and collision(o) then
-      sfx(52, 3)
-      del(active_objects, o)
-    end
   end
 end
 
 function update_events()
   for o in all(active_objects) do
-    local ox,oy = mapx + (o.x or 0), mapy + (o.y or 0)
+    local ox, oy = mapx + (o.x or 0), mapy + (o.y or 0)
     if o.flags.chest and on(o.text) and o.active == false then
       o.flags.solid = true
       o.active = true

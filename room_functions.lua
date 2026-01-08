@@ -74,7 +74,14 @@ function draw_player_interact_icon()
           tb_init(sign_dialog(o.text))
         end
         if flag.sign then sspr(24, 80, 5, 7, p.x + 8, p.y - 8) end
-        if flag.HEALTH_POTION then sspr(24, 80, 5, 7, p.x + 8, p.y - 8) end
+        if flag.HEALTH_POTION then
+          sspr(24, 80, 5, 7, p.x + 8, p.y - 8)
+          if btnp(BTN_O) then
+            p.potions = (p.potions or 0) + 1
+            del(active_objects, o)
+            sfx(18, 3)
+          end
+        end
         if flag.DUNGEON_MAP then sspr(24, 80, 5, 7, p.x + 8, p.y - 8) end
         if flag.GOLDEN_KEY then
           sspr(29, 80, 3, 7, p.x + 8, p.y - 8)
@@ -145,10 +152,6 @@ function draw_background_sprites()
         if a_obj.locked then spr(128, ax, ay, 2, 2, afx, afy) end
       end
       door_lights(ax, ay, afx, afy, a_obj.flp)
-    end
-    if flag.coin then
-      -- sspr(112, 104, 8, 6, ax, ay)
-      sspr(112, 96, 2, 2, ax, ay)
     end
     if flag.chest then
       if a_obj.active then

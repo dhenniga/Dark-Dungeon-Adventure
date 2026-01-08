@@ -1,6 +1,6 @@
 --room_data
 room_objects, door_states, active_objects, arrows, events = {}, {}, {}, {}, {}
-room = function(x, y, t) room_objects[x .. "_" .. y] = t end
+local room = function(x, y, t) room_objects[x .. "_" .. y] = t end
 
 --
 
@@ -99,10 +99,7 @@ room(
     obj "vase,32,96,nil,nil,nil,nil,nil,nil,true,nil,nil,nil,nil,nil,nil",
 
     obj "button,85,7,nil,nil,nil,4,nil,true,nil,nil,show_chest_0_0,nil,nil,nil,nil",
-    obj "chest,48,64,GOLDEN_KEY,nil,nil,nil,nil,false,false,true,show_chest_0_0,false,nil,nil,nil",
-    obj "coin,30,70,nil,nil,nil,nil,nil,nil,nil,nil,nil,false,nil,nil,nil",
-    obj "coin,96,68,nil,nil,nil,nil,nil,nil,nil,nil,nil,false,nil,nil,nil",
-    obj "coin,30,66,nil,nil,nil,nil,nil,nil,nil,nil,nil,false,nil,nil,nil",
+    obj "chest,48,64,HEALTH_POTION,nil,nil,nil,nil,false,false,true,show_chest_0_0,false,nil,nil,nil"
     -- obj "stairs_up,112,96,nil,nil,148,295,true,nil,true,nil,nil,true,nil,nil,nil",
     -- obj "rock,112,80,nil,nil,nil,nil,nil,nil,true,nil,nil,nil,nil,nil,nil"
   }

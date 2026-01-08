@@ -11,6 +11,7 @@ p = {
 	remaining_hearts = 3,
 	fall_dir = nil,
 	keys = 1,
+	potions = 0,
 	engaged = false,
 	moving = false
 }

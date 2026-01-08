@@ -48,7 +48,7 @@ function show_inventory()
     for i = 1, min(p.keys, 10) do
       local x = mapx + 121 - (i - 1) * 13
       circfill(x, outcubic(text_anim, mapy, 6, 12), 6, 129)
-      sspr(115,96,5,8,x-2,outcubic(text_anim, mapy, 3, 12))
+      sspr(115, 96, 5, 8, x - 2, outcubic(text_anim, mapy, 3, 12))
     end
   end
 
@@ -58,6 +58,14 @@ function show_inventory()
       if i == 1 then
         player_light_enabled = not player_light_enabled sfx(12, 3)
       end
+      if i == 3 then
+        sfx(12, 3)
+        if p.potions > 0 then
+          p.remaining_hearts = 5
+          p.potions -= 1
+        end
+      end
+
       item_selected = i
     end
   end
@@ -90,6 +98,17 @@ function show_inventory()
 
   --sword
   spr(72, outelastic(i_transition, p.x, 16, 25), p.y - 8, 2, 2)
+
+  -- health potion
+  if p.potions == 0 then
+    sspr(0, 47, 10, 15, outelastic(i_transition, p.x, -20, 25), p.y - 8)
+  elseif p.potions == 1 then
+    sspr(18, 32, 10, 15, outelastic(i_transition, p.x, -20, 25), p.y - 8)
+  elseif p.potions == 2 then
+    sspr(9, 32, 10, 15, outelastic(i_transition, p.x, -20, 25), p.y - 8)
+  elseif p.potions == 3 then
+    sspr(0, 32, 10, 15, outelastic(i_transition, p.x, -20, 25), p.y - 8)
+  end
 
   -- draw character
   spr(192, p.x - 4, p.y - 8, 2, 2, p.direction)
