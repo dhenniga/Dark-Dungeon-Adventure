@@ -25,11 +25,9 @@ function tb_update()
 	elseif btnp(BTN_O) then
 		if #tb.str > tb.i then
 			tb.i += 1
-			tb.cur = 0
-			tb.char = 0
+			tb.cur, tb.char = 0, 0
 		else
-			reading = false
-			t_increment = 1
+			reading, t_increment = false, 1
 		end
 	end
 end

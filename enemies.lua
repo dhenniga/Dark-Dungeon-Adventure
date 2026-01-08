@@ -122,11 +122,9 @@ function baddie_update(b)
     sfx(16, 3)
   end
 
-  -- apply drag to local velocity
   b.dx *= b.drg
   b.dy *= b.drg
 
-  -- 𝘴𝘦𝘦 / 𝘢𝘭𝘦𝘳𝘵 / 𝘢𝘵𝘵𝘢𝘤𝘬 logic (attack overrides explore)
   if sees(b, l_rad, 0, 1, 1, 0) then
     -- first sight: if coming from explore -> 𝘴𝘵𝘰𝘱/𝘢𝘭𝘦𝘳𝘵
     if b.state ~= "alert" and b.state ~= "attack" then
@@ -134,7 +132,6 @@ function baddie_update(b)
       return
     end
 
-    -- still in stop/alert: countdown
     if b.state == "alert" then
       b.alert_time -= 1
       if b.alert_time <= 0 then
@@ -165,12 +162,10 @@ function baddie_update(b)
       end
     end
   else
-    -- lost sight: revert to explore if needed
     if b.state == "attack" or b.state == "alert" then
       b.state, b.ttl = "explore", 0
     end
 
-    -- 𝘦𝘹𝘱𝘭𝘰𝘳𝘦 behaviour: periodic wander impulses
     if b.ttl <= 0 then
       b.state, b.ttl = "explore", b.pause_between + flr(rnd(b.pause_between))
       local ang = rnd() * 6.28318
@@ -207,6 +202,5 @@ function baddie_update(b)
     end
   end
 
-  -- sanity ttl clamp
   if b.ttl < -300 then b.ttl = 0 end
 end

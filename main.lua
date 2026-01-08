@@ -51,7 +51,7 @@ function _update60()
   end
 
   menuitem(
-    1, "TOGGLE MUSIC", function()
+    1, "toggle music", function()
       music_enabled = not music_enabled
       music(music_enabled and 0 or -1)
     end
@@ -83,9 +83,6 @@ function _update60()
   end
   if raindrops then
     update_rain()
-  end
-  if btn(BTN_X) then
-    chest_alert("THIS IS SOME TEST TEXT")
   end
 end
 
