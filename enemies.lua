@@ -106,6 +106,10 @@ function baddie_update(b)
     b.hp -= 1
   end
 
+  if spr_coll(b) and not player_atk then
+    player_hit()
+  end
+
   if b.hp == 0 then
     boom(b.x, b.y, 8, 4, 9, 11, 3)
     sfx(49, 3)
@@ -126,7 +130,6 @@ function baddie_update(b)
   b.dy *= b.drg
 
   if sees(b, l_rad, 0, 1, 1, 0) then
-    -- first sight: if coming from explore -> 𝘴𝘵𝘰𝘱/𝘢𝘭𝘦𝘳𝘵
     if b.state ~= "alert" and b.state ~= "attack" then
       b.state, b.alert_time, b.dx, b.dy = "alert", b.stop_time, 0, 0
       return

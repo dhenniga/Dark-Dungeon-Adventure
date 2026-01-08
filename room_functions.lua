@@ -77,7 +77,7 @@ function draw_player_interact_icon()
         if flag.HEALTH_POTION then
           sspr(24, 80, 5, 7, p.x + 8, p.y - 8)
           if btnp(BTN_O) then
-            p.potions = (p.potions or 0) + 1
+            p.potions += 1
             del(active_objects, o)
             sfx(18, 3)
           end

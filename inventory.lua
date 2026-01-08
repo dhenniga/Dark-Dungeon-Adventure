@@ -100,15 +100,10 @@ function show_inventory()
   spr(72, outelastic(i_transition, p.x, 16, 25), p.y - 8, 2, 2)
 
   -- health potion
-  if p.potions == 0 then
-    sspr(0, 47, 10, 15, outelastic(i_transition, p.x, -20, 25), p.y - 8)
-  elseif p.potions == 1 then
-    sspr(18, 32, 10, 15, outelastic(i_transition, p.x, -20, 25), p.y - 8)
-  elseif p.potions == 2 then
-    sspr(9, 32, 10, 15, outelastic(i_transition, p.x, -20, 25), p.y - 8)
-  elseif p.potions == 3 then
-    sspr(0, 32, 10, 15, outelastic(i_transition, p.x, -20, 25), p.y - 8)
-  end
+  local sy = 32
+  local sx = p.potions == 1 and 18 or p.potions == 2 and 9 or 0
+  if p.potions == 0 then sy = 47 end
+  sspr(sx, sy, 10, 15, outelastic(i_transition, p.x, -20, 25), p.y - 8)
 
   -- draw character
   spr(192, p.x - 4, p.y - 8, 2, 2, p.direction)

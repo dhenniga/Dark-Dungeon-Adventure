@@ -99,9 +99,12 @@ room(
     obj "vase,32,96,nil,nil,nil,nil,nil,nil,true,nil,nil,nil,nil,nil,nil",
 
     obj "button,85,7,nil,nil,nil,4,nil,true,nil,nil,show_chest_0_0,nil,nil,nil,nil",
-    obj "chest,48,64,HEALTH_POTION,nil,nil,nil,nil,false,false,true,show_chest_0_0,false,nil,nil,nil"
+    obj "chest,48,64,HEALTH_POTION,nil,nil,nil,nil,false,false,true,show_chest_0_0,false,nil,nil,nil",
     -- obj "stairs_up,112,96,nil,nil,148,295,true,nil,true,nil,nil,true,nil,nil,nil",
     -- obj "rock,112,80,nil,nil,nil,nil,nil,nil,true,nil,nil,nil,nil,nil,nil"
+    obj "HEALTH_POTION,96,32,nil,nil,nil,nil,nil,true,true,true,nil,true,nil,nil,nil",
+    obj "HEALTH_POTION,96,48,nil,nil,nil,nil,nil,true,true,true,nil,true,nil,nil,nil",
+    obj "HEALTH_POTION,96,64,nil,nil,nil,nil,nil,true,true,true,nil,true,nil,nil,nil"
   }
 )
 room(
