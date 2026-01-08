@@ -84,6 +84,9 @@ function _update60()
   if raindrops then
     update_rain()
   end
+  if btn(BTN_X) then
+    chest_alert("THIS IS SOME TEST TEXT")
+  end
 end
 
 function _draw()
@@ -131,10 +134,11 @@ function draw_alert()
     alert_txt = nil return
   end
 
-  rectfill(mapx, mapy + y, mapx + 127, mapy + y + 17, 1)
-  spr(100, mapx + 1, mapy + 1 + y, 1, 1, false, false)
-  spr(100, mapx + 1, mapy + 9 + y, 1, 1, false, true)
-  spr(100, mapx + 119, mapy + 9 + y, 1, 1, true, true)
-  spr(100, mapx + 119, mapy + 1 + y, 1, 1, true, false)
-  pb(alert_txt, mapx + 64 - #alert_txt * 2, mapy + y + 6, 9)
+  local x, y2 = mapx, mapy + y
+  rectfill(x, y2, x + 127, y2 + 17, 1)
+  spr(100, x + 1, y2 + 1)
+  spr(100, x + 1, y2 + 9, 1, 1, false, true)
+  spr(100, x + 119, y2 + 9, 1, 1, true, true)
+  spr(100, x + 119, y2 + 1, 1, 1, true)
+  pb(alert_txt, x + 64 - #alert_txt * 2, y2 + 6, 9)
 end
