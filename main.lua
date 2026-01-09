@@ -133,9 +133,9 @@ function draw_alert()
 
   local x, y2 = mapx, mapy + y
   rectfill(x, y2, x + 127, y2 + 17, 1)
-  spr(100, x + 1, y2 + 1)
-  spr(100, x + 1, y2 + 9, 1, 1, false, true)
-  spr(100, x + 119, y2 + 9, 1, 1, true, true)
-  spr(100, x + 119, y2 + 1, 1, 1, true)
+  spr(28, x + 1, y2 + 1)
+  spr(28, x + 1, y2 + 9, 1, 1, false, true)
+  spr(28, x + 119, y2 + 9, 1, 1, true, true)
+  spr(28, x + 119, y2 + 1, 1, 1, true)
   pb(alert_txt, x + 64 - #alert_txt * 2, y2 + 6, 9)
 end
