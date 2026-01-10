@@ -63,12 +63,12 @@ function show_inventory()
         if p.potions > 0 then
           p.remaining_hearts = 5
           p.potions -= 1
-          circfill(0, 120, 5, 8)
-          boom(0, 120, 9, 11, 8, 12)
-          boom(8, 120, 9, 11, 8, 12)
-          boom(16, 120, 9, 11, 8, 12)
-          boom(24, 120, 9, 11, 8, 12)
-          boom(32, 120, 9, 11, 8, 12)
+          local y = mapy + 116
+          boom(mapx + 0, y, 8, 12, 9, 11)
+          boom(mapx + 8, y, 8, 12, 9, 11)
+          boom(mapx + 16, y, 8, 12, 9, 11)
+          boom(mapx + 24, y, 8, 12, 9, 11)
+          boom(mapx + 32, y, 8, 12, 9, 11)
         end
       end
 
