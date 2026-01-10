@@ -79,7 +79,7 @@ function draw_player_interact_icon()
           if btnp(BTN_O) then
             p.potions += 1
             del(active_objects, o)
-            sfx(18, 3)
+            sfx(56, 3)
           end
         end
         if flag.DUNGEON_MAP then sspr(24, 80, 5, 7, p.x + 8, p.y - 8) end

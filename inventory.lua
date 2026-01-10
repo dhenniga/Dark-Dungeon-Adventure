@@ -64,11 +64,11 @@ function show_inventory()
           p.remaining_hearts = 5
           p.potions -= 1
           circfill(0, 120, 5, 8)
-          boom(0, 120, 2, 2, 2, 2)
-          boom(8, 120, 2, 2, 2, 2)
-          boom(16, 120, 2, 2, 2, 2)
-          boom(24, 120, 2, 2, 2, 2)
-          boom(32, 120, 2, 2, 2, 2)
+          boom(0, 120, 9, 11, 8, 12)
+          boom(8, 120, 9, 11, 8, 12)
+          boom(16, 120, 9, 11, 8, 12)
+          boom(24, 120, 9, 11, 8, 12)
+          boom(32, 120, 9, 11, 8, 12)
         end
       end
 
