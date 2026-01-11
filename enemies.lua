@@ -40,7 +40,7 @@ function blob(x, y) return enemy(get_current_room(), { 226 }, x, y, false, 0.8, 
 -- drawing (safe anim advance)
 function baddie_draw(b)
   local bx, by = b.x, b.y
-  -- poison_flames(b.x, b.y)
+  poison_flames(b.x, b.y)
   -- fire_flames(b.x, b.y)
 
   -- animation

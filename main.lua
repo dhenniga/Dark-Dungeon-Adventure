@@ -89,6 +89,7 @@ end
 function _draw()
   draw_background()
   draw_background_sprites()
+  -- draw_smoke()
   baddie_m.draw()
 
   player_attack()
