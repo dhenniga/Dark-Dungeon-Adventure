@@ -14,13 +14,11 @@ end
 
 --
 
-local function convert(v)
-  if v == nil or v == "nil" then return nil end
-  if v == "true" then return true end
-  if v == "false" then return false end
-  local num = tonum(v)
-  if num ~= nil then return num end
-  return v
+function convert(v)
+  if v=="nil" then return end
+  if v=="true" then return true end
+  if v=="false" then return false end
+  return tonum(v) or v
 end
 
 --   level name and type  = 1
@@ -42,9 +40,8 @@ end
 
 function obj(s)
   local t, o = split(s), {}
-  local c = convert
   for i, k in ipairs { "x", "y", "vori", "rad", "flx", "fly", "flp", "interactable", "solid", "locked", "text", "active", "delay", "timing", "speed" } do
-    local v = c(t[i + 1])
+    local v = convert(t[i + 1])
     if v ~= nil then o[k] = v end
   end
   o.flags = { [t[1]] = true, solid = o.solid, interactable = o.interactable, locked = o.locked }
@@ -100,8 +97,8 @@ room(
 
     obj "button,85,7,nil,nil,nil,4,nil,true,nil,nil,show_chest_0_0,nil,nil,nil,nil",
     obj "chest,48,64,GOLDEN_KEY,nil,nil,nil,nil,false,false,true,show_chest_0_0,false,nil,nil,nil",
-    -- obj "stairs_up,112,96,nil,nil,148,295,true,nil,true,nil,nil,true,nil,nil,nil",
-    -- obj "rock,112,80,nil,nil,nil,nil,nil,nil,true,nil,nil,nil,nil,nil,nil"
+    obj "stairs_up,112,96,nil,nil,148,295,true,nil,true,nil,nil,true,nil,nil,nil",
+    obj "rock,112,80,nil,nil,nil,nil,nil,nil,true,nil,nil,nil,nil,nil,nil",
     obj "HEALTH_POTION,96,32,nil,nil,nil,nil,nil,true,true,true,nil,true,nil,nil,nil",
     obj "HEALTH_POTION,96,48,nil,nil,nil,nil,nil,true,true,true,nil,true,nil,nil,nil",
     obj "HEALTH_POTION,96,64,nil,nil,nil,nil,nil,true,true,true,nil,true,nil,nil,nil"

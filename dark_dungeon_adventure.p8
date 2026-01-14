@@ -4,26 +4,6 @@ __lua__
 -- dark dungeon
 -- by david hennigan
 
--- todo
-
--- fight the enemies.
-
--- screen flickrer on entering 
--- room.
---
--- proper spikes that shoot
--- both vertically and 
--- horizontally and raise out
--- of the ground
---
--- simple lights out puzzle
--- game (as a start).
---
--- for some reason, the enemies
--- can't attack me when i'm
--- against the wall
-
-
 #include main.lua
 #include map.lua
 #include player.lua

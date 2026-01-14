@@ -89,7 +89,7 @@ end
 function _draw()
   draw_background()
   draw_background_sprites()
-  -- draw_smoke()
+  draw_smoke()
   baddie_m.draw()
 
   player_attack()
@@ -109,7 +109,7 @@ function _draw()
   tb_draw()
   draw_circle()
   draw_alert()
-  draw_smoke()
+  -- draw_smoke()
 end
 
 alert_txt = nil

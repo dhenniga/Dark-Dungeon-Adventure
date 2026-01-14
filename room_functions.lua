@@ -133,18 +133,16 @@ function draw_background_sprites()
   for a_obj in all(active_objects) do
     local flag, ax, ay, afx, afy = a_obj.flags, mapx + (a_obj.x or 0), mapy + (a_obj.y or 0), a_obj.flx, a_obj.fly
     if flag.rain ~= nil then raindrops = flag.rain end
-    if flag.sewer then
-      palette(sewer)
-    elseif flag.dungeon then
-      palette(dungeon)
-    elseif flag.pit then
-      palette(pit)
-    end
     if flag.vase then spr(172, ax, ay, 2, 2) end
     if flag.sign then spr(170, ax, ay, 2, 2) end
     if flag.GOLDEN_KEY then spr(254, ax, ay, 2, 1) end
     if flag.DUNGEON_MAP then spr(61, ax + 4, ay, 1, 1) end
     if flag.HEALTH_POTION then spr(45, ax + 4, ay, 1, 1) end
+    if flag.rock then spr(134, ax, ay, 2, 2) end
+    if flag.c_rock then spr(136, ax, ay, 2, 2) end
+    if flag.spike then animate_spikes(a_obj) end
+    if flag.flames_back then flames(ax, ay) end
+
     if flag.door then
       if a_obj.flp then
         if a_obj.locked then spr(168, ax, ay, 2, 2, afy, afx) end
@@ -153,6 +151,7 @@ function draw_background_sprites()
       end
       door_lights(ax, ay, afx, afy, a_obj.flp)
     end
+
     if flag.chest then
       if a_obj.active then
         a_obj.flags.interactable = true
@@ -161,13 +160,14 @@ function draw_background_sprites()
         end
       end
     end
-    if flag.rock then spr(134, ax, ay, 2, 2) end
+
     if flag.stairs_down then
       spr(130, ax, ay, 2, 2)
       if stairs_trigger(a_obj) then
         use_transition(a_obj)
       end
     end
+
     if flag.stairs_up then
       if a_obj.active then
         spr(132, ax, ay, 2, 2, a_obj.flp, false)
@@ -176,8 +176,7 @@ function draw_background_sprites()
         end
       end
     end
-    if flag.c_rock then spr(136, ax, ay, 2, 2) end
-    if flag.spike then animate_spikes(a_obj) end
+
     if flag.button then
       if a_obj.pressed then
         spr(111, ax, ay, 1, 1)
@@ -185,7 +184,7 @@ function draw_background_sprites()
         spr(95, ax, ay, 1, 1)
       end
     end
-    if flag.flames_back then flames(ax, ay) end
+
     if flag.s_shoot_v or flag.s_shoot_h then
       local v = flag.s_shoot_v
       sspr(112, v and 56 or 48, v and 8 or 5, v and 5 or 8, ax, ay, v and 8 or 5, v and 5 or 8, v and false or a_obj.flp, v and a_obj.flp or false)
@@ -193,6 +192,7 @@ function draw_background_sprites()
         add(get_room_shooters(cur_room_x, cur_room_y), a_obj) a_obj.added = true
       end
     end
+
     if flag.floor_tile then
       if not a_obj.active then
         spr(43, ax - 16, ay, 2, 2)
@@ -283,14 +283,9 @@ function check_room_change()
     palette(flags.dungeon and dungeon or flags.sewer and sewer or pit)
     current_palette = flags.dungeon and "dungeon" or flags.sewer and "sewer" or "pit"
 
-    dset(0, flr(p.x))
-    dset(1, flr(p.y))
-
-    for o in all(active_objects) do
-      if o.flags.button then
-        add(buttons, o)
-      end
-    end
+    -- save - might do later
+    -- dset(0, flr(p.x))
+    -- dset(1, flr(p.y))
   end
 end
 

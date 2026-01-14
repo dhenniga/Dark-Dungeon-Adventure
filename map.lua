@@ -122,7 +122,7 @@ end
 
 function draw_rain()
   for d in all(r) do
-    local l, c, x, y = 3 - d.v, 13 - d.v, mapx + d.x, mapy + d.y
-    line(x, y, x - l, y - l, c)
+    local l, x, y = 3 - d.v, mapx + d.x, mapy + d.y
+    line(x, y, x - l, y - 1, 1)
   end
 end
